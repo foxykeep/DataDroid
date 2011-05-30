@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.foxykeep.dataproxy.provider.DatabaseContent;
 import com.foxykeep.dataproxypoc.config.LogConfig;
-import com.foxykeep.dataproxypoc.data.provider.PoCContent.Person;
+import com.foxykeep.dataproxypoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonContent.Skeleton;
 
 public class PoCProvider extends ContentProvider {
@@ -53,7 +53,7 @@ public class PoCProvider extends ContentProvider {
     // 0x1000, 0x2000, etc.
 
     private static final String[] TABLE_NAMES = {
-        Person.TABLE_NAME
+        PersonDao.TABLE_NAME
     };
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -62,9 +62,9 @@ public class PoCProvider extends ContentProvider {
         final UriMatcher matcher = sURIMatcher;
 
         // All persons
-        matcher.addURI(AUTHORITY, Person.TABLE_NAME, PERSON);
+        matcher.addURI(AUTHORITY, PersonDao.TABLE_NAME, PERSON);
         // A specific person
-        matcher.addURI(AUTHORITY, Person.TABLE_NAME + "/#", PERSON_ID);
+        matcher.addURI(AUTHORITY, PersonDao.TABLE_NAME + "/#", PERSON_ID);
     }
 
     private SQLiteDatabase mDatabase;
@@ -103,7 +103,7 @@ public class PoCProvider extends ContentProvider {
             if (LogConfig.DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "Skeleton | createTable start");
             }
-            Person.createTable(db);
+            PersonDao.createTable(db);
             if (LogConfig.DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "Skeleton | createSkeletonTable end");
             }
