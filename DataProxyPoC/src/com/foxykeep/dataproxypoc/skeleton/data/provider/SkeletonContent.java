@@ -13,19 +13,19 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
-import com.foxykeep.dataproxy.provider.DatabaseContent;
+import com.foxykeep.dataproxy.provider.util.DatabaseUtil;
 
 /**
  * {@link SkeletonContent} is the superclass of the various classes of content
- * stored by {@link SkeletonProvider}. It adds to {@link DatabaseContent} the
- * {@link #AUTHORITY} and {@link #CONTENT_URI}
+ * stored by {@link SkeletonProvider}.
  * <p>
  * <b>This class is a skeleton of the normal class. Replace the TODOs by your
  * code</b>
  * </p>
  */
-public abstract class SkeletonContent extends DatabaseContent {
+public abstract class SkeletonContent {
     // TODO : Set the SkeletonProvider authority
     public static final Uri CONTENT_URI = Uri.parse("content://" + SkeletonProvider.AUTHORITY);
 
@@ -36,7 +36,7 @@ public abstract class SkeletonContent extends DatabaseContent {
         public static final String COLUMN_NAME_THREE = "columnThree";
     }
 
-    public static final class Skeleton extends SkeletonContent implements SkeletonColumns {
+    public static final class Skeleton extends SkeletonContent implements SkeletonColumns, BaseColumns {
         // TODO : Set the table name
         public static final String TABLE_NAME = "skeleton";
         public static final Uri CONTENT_URI = Uri.parse(SkeletonContent.CONTENT_URI + "/" + TABLE_NAME);
@@ -54,8 +54,7 @@ public abstract class SkeletonContent extends DatabaseContent {
         public static final int CONTENT_COLUMN_NAME_CONSTANT_TWO_COLUMN = 2;
         public static final int CONTENT_COLUMN_NAME_CONSTANT_THREE_COLUMN = 3;
         public static final String[] CONTENT_PROJECTION = new String[] {
-                RECORD_ID, SkeletonColumns.COLUMN_NAME_ONE, SkeletonColumns.COLUMN_NAME_TWO,
-                SkeletonColumns.COLUMN_NAME_THREE
+                _ID, COLUMN_NAME_ONE, COLUMN_NAME_TWO, COLUMN_NAME_THREE
         };
 
         // TODO : Add the other projections (if any) you will use using the same
@@ -65,22 +64,21 @@ public abstract class SkeletonContent extends DatabaseContent {
         // TODO : The following 2 methods are used for creation and upgrade of a
         // table.
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + DatabaseContent.RECORD_ID + " integer primary key autoincrement, "
-                    + SkeletonColumns.COLUMN_NAME_ONE + " text, " + SkeletonColumns.COLUMN_NAME_TWO + " integer, "
-                    + SkeletonColumns.COLUMN_NAME_THREE + " integer " + ");";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + COLUMN_NAME_ONE + " text, "
+                    + COLUMN_NAME_TWO + " integer, " + COLUMN_NAME_THREE + " integer " + ");";
 
-            db.execSQL("create table " + Skeleton.TABLE_NAME + s);
+            db.execSQL("create table " + TABLE_NAME + s);
 
             // TODO : Add the table's indexes (if any) using the
             // getCreateIndexString() method
-            db.execSQL(getCreateIndexString(TABLE_NAME, SkeletonColumns.COLUMN_NAME_ONE));
+            db.execSQL(DatabaseUtil.getCreateIndexString(TABLE_NAME, COLUMN_NAME_ONE));
 
             // TODO : Add the table's triggers (if any)
         }
 
         static void upgradeTable(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
             try {
-                db.execSQL("drop table " + Skeleton.TABLE_NAME);
+                db.execSQL("drop table " + TABLE_NAME);
             } catch (final SQLException e) {
             }
             createTable(db);
@@ -90,23 +88,23 @@ public abstract class SkeletonContent extends DatabaseContent {
         // used if you have more than one insert to do)
         public static String getBulkInsertString() {
             final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
-            sqlRequest.append(Skeleton.TABLE_NAME);
+            sqlRequest.append(TABLE_NAME);
             sqlRequest.append(" ( ");
-            sqlRequest.append(SkeletonColumns.COLUMN_NAME_ONE);
+            sqlRequest.append(COLUMN_NAME_ONE);
             sqlRequest.append(", ");
-            sqlRequest.append(SkeletonColumns.COLUMN_NAME_TWO);
+            sqlRequest.append(COLUMN_NAME_TWO);
             sqlRequest.append(", ");
-            sqlRequest.append(SkeletonColumns.COLUMN_NAME_THREE);
+            sqlRequest.append(COLUMN_NAME_THREE);
             sqlRequest.append(" ) ");
             sqlRequest.append(" VALUES (?, ?, ?)");
             return sqlRequest.toString();
         }
 
         public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
-            final String columnOne = values.getAsString(SkeletonColumns.COLUMN_NAME_ONE);
+            final String columnOne = values.getAsString(COLUMN_NAME_ONE);
             stmt.bindString(1, columnOne != null ? columnOne : "");
-            stmt.bindLong(2, values.getAsInteger(SkeletonColumns.COLUMN_NAME_TWO));
-            stmt.bindLong(3, values.getAsInteger(SkeletonColumns.COLUMN_NAME_THREE));
+            stmt.bindLong(2, values.getAsInteger(COLUMN_NAME_TWO));
+            stmt.bindLong(3, values.getAsInteger(COLUMN_NAME_THREE));
         }
     }
 }

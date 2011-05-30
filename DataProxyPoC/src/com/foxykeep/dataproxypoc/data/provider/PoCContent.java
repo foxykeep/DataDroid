@@ -13,11 +13,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
-import com.foxykeep.dataproxy.provider.DatabaseContent;
+import com.foxykeep.dataproxy.provider.util.DatabaseUtil;
 import com.foxykeep.dataproxypoc.data.model.Person;
 import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonProvider;
-import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonContent.Skeleton;
 
 /**
  * {@link PoCContent} is the superclass of the various classes of content stored
@@ -28,7 +28,7 @@ import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonContent.Skeleton
  * code</b>
  * </p>
  */
-public abstract class PoCContent extends DatabaseContent {
+public abstract class PoCContent {
     public static final Uri CONTENT_URI = Uri.parse("content://" + PoCProvider.AUTHORITY);
 
     public interface PersonDaoColumns {
@@ -41,7 +41,7 @@ public abstract class PoCContent extends DatabaseContent {
         public static final String IS_WORKING = "isWorking";
     }
 
-    public static final class PersonDao extends PoCContent implements PersonDaoColumns {
+    public static final class PersonDao extends PoCContent implements PersonDaoColumns, BaseColumns {
         public static final String TABLE_NAME = "person";
         public static final Uri CONTENT_URI = Uri.parse(PoCContent.CONTENT_URI + "/" + TABLE_NAME);
 
@@ -57,8 +57,7 @@ public abstract class PoCContent extends DatabaseContent {
         public static final int CONTENT_AGE_COLUMN = 6;
         public static final int CONTENT_IS_WORKING_COLUMN = 7;
         public static final String[] CONTENT_PROJECTION = new String[] {
-                RECORD_ID, PersonDaoColumns.FIRST_NAME, PersonDaoColumns.LAST_NAME, PersonDaoColumns.EMAIL,
-                PersonDaoColumns.CITY, PersonDaoColumns.POSTAL_CODE, PersonDaoColumns.AGE, PersonDaoColumns.IS_WORKING
+                _ID, FIRST_NAME, LAST_NAME, EMAIL, CITY, POSTAL_CODE, AGE, IS_WORKING
         };
 
         public static final int CONTENT_NAME_ID_COLUMN = 0;
@@ -66,28 +65,26 @@ public abstract class PoCContent extends DatabaseContent {
         public static final int CONTENT_NAME_LAST_NAME_COLUMN = 2;
         public static final int CONTENT_NAME_AGE_COLUMN = 3;
         public static final String[] CONTENT_NAME_PROJECTION = new String[] {
-                RECORD_ID, PersonDaoColumns.FIRST_NAME, PersonDaoColumns.LAST_NAME, PersonDaoColumns.AGE
+                _ID, FIRST_NAME, LAST_NAME, AGE
         };
 
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + DatabaseContent.RECORD_ID + " integer primary key autoincrement, "
-                    + PersonDaoColumns.FIRST_NAME + " text, " + PersonDaoColumns.FIRST_NAME + " text, "
-                    + PersonDaoColumns.EMAIL + " text, " + PersonDaoColumns.CITY + " text, "
-                    + PersonDaoColumns.POSTAL_CODE + " integer, " + PersonDaoColumns.AGE + " integer, "
-                    + PersonDaoColumns.IS_WORKING + " integer " + ");";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME + " text, " + FIRST_NAME
+                    + " text, " + EMAIL + " text, " + CITY + " text, " + POSTAL_CODE + " integer, " + AGE
+                    + " integer, " + IS_WORKING + " integer " + ");";
 
-            db.execSQL("create table " + Skeleton.TABLE_NAME + s);
+            db.execSQL("create table " + TABLE_NAME + s);
 
             // TODO : Add the table's indexes (if any) using the
             // getCreateIndexString() method
-            db.execSQL(getCreateIndexString(TABLE_NAME, PersonDaoColumns.LAST_NAME));
+            db.execSQL(DatabaseUtil.getCreateIndexString(TABLE_NAME, LAST_NAME));
 
             // TODO : Add the table's triggers (if any)
         }
 
         static void upgradeTable(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
             try {
-                db.execSQL("drop table " + Skeleton.TABLE_NAME);
+                db.execSQL("drop table " + TABLE_NAME);
             } catch (final SQLException e) {
             }
             createTable(db);
@@ -95,21 +92,21 @@ public abstract class PoCContent extends DatabaseContent {
 
         public static String getBulkInsertString() {
             final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
-            sqlRequest.append(PersonDao.TABLE_NAME);
+            sqlRequest.append(TABLE_NAME);
             sqlRequest.append(" ( ");
-            sqlRequest.append(PersonDaoColumns.FIRST_NAME);
+            sqlRequest.append(FIRST_NAME);
             sqlRequest.append(", ");
-            sqlRequest.append(PersonDaoColumns.LAST_NAME);
+            sqlRequest.append(LAST_NAME);
             sqlRequest.append(", ");
-            sqlRequest.append(PersonDaoColumns.EMAIL);
+            sqlRequest.append(EMAIL);
             sqlRequest.append(", ");
-            sqlRequest.append(PersonDaoColumns.CITY);
+            sqlRequest.append(CITY);
             sqlRequest.append(", ");
-            sqlRequest.append(PersonDaoColumns.POSTAL_CODE);
+            sqlRequest.append(POSTAL_CODE);
             sqlRequest.append(", ");
-            sqlRequest.append(PersonDaoColumns.AGE);
+            sqlRequest.append(AGE);
             sqlRequest.append(", ");
-            sqlRequest.append(PersonDaoColumns.IS_WORKING);
+            sqlRequest.append(IS_WORKING);
             sqlRequest.append(" ) ");
             sqlRequest.append(" VALUES (?, ?, ?, ?, ?, ?, ?)");
             return sqlRequest.toString();
@@ -117,28 +114,28 @@ public abstract class PoCContent extends DatabaseContent {
 
         public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
             int i = 1;
-            String value = values.getAsString(PersonDaoColumns.FIRST_NAME);
+            String value = values.getAsString(FIRST_NAME);
             stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(PersonDaoColumns.LAST_NAME);
+            value = values.getAsString(LAST_NAME);
             stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(PersonDaoColumns.EMAIL);
+            value = values.getAsString(EMAIL);
             stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(PersonDaoColumns.CITY);
+            value = values.getAsString(CITY);
             stmt.bindString(i++, value != null ? value : "");
-            stmt.bindLong(i++, values.getAsInteger(PersonDaoColumns.POSTAL_CODE));
-            stmt.bindLong(i++, values.getAsInteger(PersonDaoColumns.AGE));
-            stmt.bindLong(i++, values.getAsInteger(PersonDaoColumns.IS_WORKING));
+            stmt.bindLong(i++, values.getAsInteger(POSTAL_CODE));
+            stmt.bindLong(i++, values.getAsInteger(AGE));
+            stmt.bindLong(i++, values.getAsInteger(IS_WORKING));
         }
 
         public static ContentValues getContentValues(final Person person) {
             ContentValues values = new ContentValues();
-            values.put(PersonDaoColumns.FIRST_NAME, person.firstName);
-            values.put(PersonDaoColumns.LAST_NAME, person.lastName);
-            values.put(PersonDaoColumns.EMAIL, person.email);
-            values.put(PersonDaoColumns.CITY, person.city);
-            values.put(PersonDaoColumns.POSTAL_CODE, person.postalCode);
-            values.put(PersonDaoColumns.AGE, person.age);
-            values.put(PersonDaoColumns.IS_WORKING, person.isWorking ? 1 : 0);
+            values.put(FIRST_NAME, person.firstName);
+            values.put(LAST_NAME, person.lastName);
+            values.put(EMAIL, person.email);
+            values.put(CITY, person.city);
+            values.put(POSTAL_CODE, person.postalCode);
+            values.put(AGE, person.age);
+            values.put(IS_WORKING, person.isWorking ? 1 : 0);
             return values;
         }
     }

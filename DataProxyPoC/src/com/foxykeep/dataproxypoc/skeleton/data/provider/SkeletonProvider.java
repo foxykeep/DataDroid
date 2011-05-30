@@ -18,9 +18,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.foxykeep.dataproxy.provider.DatabaseContent;
 import com.foxykeep.dataproxypoc.config.LogConfig;
 import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonContent.Skeleton;
 
@@ -296,7 +296,7 @@ public class SkeletonProvider extends ContentProvider {
 
     private String whereWithId(final String id, final String selection) {
         final StringBuilder sb = new StringBuilder(256);
-        sb.append(DatabaseContent.RECORD_ID);
+        sb.append(BaseColumns._ID);
         sb.append(" = ");
         sb.append(id);
         if (selection != null) {
