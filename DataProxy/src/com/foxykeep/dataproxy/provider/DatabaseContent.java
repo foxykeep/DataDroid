@@ -11,8 +11,8 @@ package com.foxykeep.dataproxy.provider;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * DatabaseContent is the superclass of the various classes of content stored by
- * the ContentProvider of your project. It is intended to include :
+ * {@link DatabaseContent} is the superclass of the various classes of content
+ * stored by the ContentProvider of your project. It is intended to include :
  * <ol>
  * <li>column definitions for use with the Provider</li>
  * <li>convenience methods for saving and retrieving content from the Provider.</li>
