@@ -30,6 +30,7 @@ import android.util.SparseArray;
 public class SkeletonRequestManager {
 
     // TODO : This constant will be used in your special methods
+    @SuppressWarnings("unused")
     private static final int MAX_RANDOM_REQUEST_ID = 1000000;
 
     // Singleton management
@@ -49,10 +50,12 @@ public class SkeletonRequestManager {
 
     private SparseArray<Intent> mRequestSparseArray;
     // TODO : This variable will be used in your special methods
+    @SuppressWarnings("unused")
     private Context mContext;
     private ArrayList<OnRequestFinishedListener> mListenerList;
     private Handler mHandler = new Handler();
     // TODO : This variable will be used in your special methods
+    @SuppressWarnings("unused")
     private EvalReceiver mEvalReceiver = new EvalReceiver(mHandler);
 
     private SkeletonRequestManager(final Context context) {
@@ -103,8 +106,8 @@ public class SkeletonRequestManager {
      * an {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this {@link SkeletonRequestManager}
-     *            .
+     * @param listener The listener to add to this
+     *            {@link SkeletonRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {

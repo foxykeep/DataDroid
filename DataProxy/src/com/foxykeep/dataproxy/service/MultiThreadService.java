@@ -30,12 +30,12 @@ abstract public class MultiThreadService extends Service {
     private ExecutorService mThreadPool;
     private int mMaxThreads;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private ArrayList<Future> mFutureList;
 
     private Handler mHandler;
 
-    public MultiThreadService(int maxThreads) {
+    public MultiThreadService(final int maxThreads) {
         mMaxThreads = maxThreads;
     }
 
@@ -44,7 +44,7 @@ abstract public class MultiThreadService extends Service {
      */
     final Runnable mHasFinishedWorkingRunnable = new Runnable() {
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("rawtypes")
         public void run() {
             final ArrayList<Future> futureList = mFutureList;
             for (int i = 0; i < futureList.size(); i++) {
@@ -60,7 +60,7 @@ abstract public class MultiThreadService extends Service {
         }
     };
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     @Override
     public void onCreate() {
         super.onCreate();
@@ -70,26 +70,26 @@ abstract public class MultiThreadService extends Service {
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
+    public void onStart(final Intent intent, final int startId) {
         IntentRunnable runnable = new IntentRunnable(intent);
         mFutureList.add(mThreadPool.submit(runnable));
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         onStart(intent, startId);
         return START_STICKY;
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return null;
     }
 
     private class IntentRunnable implements Runnable {
         private Intent mIntent;
 
-        public IntentRunnable(Intent intent) {
+        public IntentRunnable(final Intent intent) {
             mIntent = intent;
         }
 
