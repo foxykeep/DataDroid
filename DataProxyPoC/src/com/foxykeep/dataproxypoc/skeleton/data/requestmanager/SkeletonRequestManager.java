@@ -19,6 +19,8 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.SparseArray;
 
+import com.foxykeep.dataproxy.requestmanager.RequestManager;
+
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use
  * methods to call the service and manages the Intent creation. It also assures
@@ -27,7 +29,7 @@ import android.util.SparseArray;
  * 
  * @author Foxykeep
  */
-public class SkeletonRequestManager {
+public class SkeletonRequestManager extends RequestManager {
 
     // TODO : This constant will be used in your special methods
     @SuppressWarnings("unused")
@@ -44,9 +46,7 @@ public class SkeletonRequestManager {
         return sInstance;
     }
 
-    public static final String RECEIVER_EXTRA_REQUEST_ID = "requestId";
     public static final String RECEIVER_EXTRA_PAYLOAD = "payload";
-    public static final String RECEIVER_EXTRA_RESULT_CODE = "code";
 
     private SparseArray<Intent> mRequestSparseArray;
     // TODO : This variable will be used in your special methods
