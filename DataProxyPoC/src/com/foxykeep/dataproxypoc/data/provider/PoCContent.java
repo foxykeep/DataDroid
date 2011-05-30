@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 
 import com.foxykeep.dataproxy.provider.DatabaseContent;
+import com.foxykeep.dataproxypoc.data.model.Person;
 import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonProvider;
 import com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonContent.Skeleton;
 
@@ -127,6 +128,18 @@ public abstract class PoCContent extends DatabaseContent {
             stmt.bindLong(i++, values.getAsInteger(PersonDaoColumns.POSTAL_CODE));
             stmt.bindLong(i++, values.getAsInteger(PersonDaoColumns.AGE));
             stmt.bindLong(i++, values.getAsInteger(PersonDaoColumns.IS_WORKING));
+        }
+
+        public static ContentValues getContentValues(final Person person) {
+            ContentValues values = new ContentValues();
+            values.put(PersonDaoColumns.FIRST_NAME, person.firstName);
+            values.put(PersonDaoColumns.LAST_NAME, person.lastName);
+            values.put(PersonDaoColumns.EMAIL, person.email);
+            values.put(PersonDaoColumns.CITY, person.city);
+            values.put(PersonDaoColumns.POSTAL_CODE, person.postalCode);
+            values.put(PersonDaoColumns.AGE, person.age);
+            values.put(PersonDaoColumns.IS_WORKING, person.isWorking ? 1 : 0);
+            return values;
         }
     }
 }

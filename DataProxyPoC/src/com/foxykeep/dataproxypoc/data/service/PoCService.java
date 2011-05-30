@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.foxykeep.dataproxy.service.WorkerService;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.dataproxypoc.data.worker.PersonsWorker;
+import com.foxykeep.dataproxypoc.data.worker.PersonWorker;
 
 /**
  * This class is called by the {@link PoCRequestManager} through the
@@ -47,8 +47,8 @@ public class PoCService extends WorkerService {
         try {
             switch (workerType) {
                 case WORKER_TYPE_PERSONS:
-                    sendSuccess(intent, PersonsWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSONS_MIN_AGE, -1),
-                            intent.getIntExtra(INTENT_EXTRA_PERSONS_RETURN_FORMAT, PersonsWorker.RETURN_FORMAT_XML)));
+                    sendSuccess(intent, PersonWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSONS_MIN_AGE, -1),
+                            intent.getIntExtra(INTENT_EXTRA_PERSONS_RETURN_FORMAT, PersonWorker.RETURN_FORMAT_XML)));
                     break;
             }
         } catch (final Exception e) {

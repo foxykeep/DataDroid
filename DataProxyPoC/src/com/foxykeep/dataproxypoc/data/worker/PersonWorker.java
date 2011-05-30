@@ -10,10 +10,17 @@ package com.foxykeep.dataproxypoc.data.worker;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
+
+import org.json.JSONException;
+import org.xml.sax.SAXException;
 
 import com.foxykeep.dataproxy.exception.RestClientException;
 import com.foxykeep.dataproxy.network.NetworkConnection;
@@ -21,14 +28,17 @@ import com.foxykeep.dataproxy.network.NetworkConnection.NetworkConnectionResult;
 import com.foxykeep.dataproxypoc.config.WSConfig;
 import com.foxykeep.dataproxypoc.data.factory.PersonJsonFactory;
 import com.foxykeep.dataproxypoc.data.factory.PersonXmlFactory;
+import com.foxykeep.dataproxypoc.data.model.Person;
+import com.foxykeep.dataproxypoc.data.provider.PoCContent.PersonDao;
 
-public class PersonsWorker {
+public class PersonWorker {
 
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
 
     public static Bundle start(final Context context, final int minAge, final int returnFormat)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+            throws IllegalStateException, IOException, URISyntaxException, RestClientException,
+            ParserConfigurationException, SAXException, JSONException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_PERSONS_PARAM_MIN_AGE, minAge + "");
 
@@ -36,10 +46,21 @@ public class PersonsWorker {
                 returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSONS_URL_XML : WSConfig.WS_PERSONS_URL_JSON,
                 NetworkConnection.METHOD_GET, params);
 
+        ArrayList<Person> personList = null;
         if (returnFormat == RETURN_FORMAT_XML) {
-            PersonXmlFactory.parseResult(wsResult.mWsResponse);
+            personList = PersonXmlFactory.parseResult(wsResult.mWsResponse);
         } else {
-            PersonJsonFactory.parseResult(wsResult.mWsResponse);
+            personList = PersonJsonFactory.parseResult(wsResult.mWsResponse);
+        }
+
+        // Adds the persons in the database
+        final int personListSize = personList.size();
+        if (personList != null && personListSize > 0) {
+            ContentValues[] valuesArray = new ContentValues[personListSize];
+            for (int i = 0; i < personListSize; i++) {
+                valuesArray[i] = PersonDao.getContentValues(personList.get(i));
+            }
+            context.getContentResolver().bulkInsert(PersonDao.CONTENT_URI, valuesArray);
         }
 
         return null;
