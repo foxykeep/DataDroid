@@ -29,9 +29,9 @@ public class HomeActivity extends Activity implements OnClickListener {
     @Override
     public void onClick(final View view) {
         Intent intent = null;
-        // if (view == mButtonPersonList) {
-        // intent = new Intent(this, PersonListActivity.class);
-        // }
+        if (view == mButtonPersonList) {
+            intent = new Intent(this, PersonListActivity.class);
+        }
 
         if (intent != null) {
             startActivity(intent);
