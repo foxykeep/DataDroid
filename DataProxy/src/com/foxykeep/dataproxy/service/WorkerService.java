@@ -99,7 +99,7 @@ abstract public class WorkerService extends MultiThreadService {
     protected void sendResult(final Intent intent, Bundle data, final int code) {
 
         if (LogConfig.DEBUG_LOGS_ENABLED) {
-            Log.d(LOG_TAG, "sendResult");
+            Log.d(LOG_TAG, "sendResult : " + ((code == SUCCESS_CODE) ? "Success" : "Failure"));
         }
 
         ResultReceiver receiver = (ResultReceiver) intent.getParcelableExtra(INTENT_EXTRA_RECEIVER);
