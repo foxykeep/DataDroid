@@ -22,6 +22,7 @@ import android.util.SparseArray;
 
 import com.foxykeep.dataproxy.requestmanager.RequestManager;
 import com.foxykeep.dataproxypoc.data.service.PoCService;
+import com.foxykeep.dataproxypoc.data.worker.PersonWorker;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use
@@ -172,7 +173,8 @@ public class PoCRequestManager extends RequestManager {
      * Gets the list of persons which are at least minAge years old
      * 
      * @param minAge the minimum age
-     * @param returnFormat 0 for XML, 1 for JSON
+     * @param returnFormat {@link PersonWorker#RETURN_FORMAT_XML} for XML,
+     *            {@link PersonWorker#RETURN_FORMAT_JSON} for JSON
      * @return the request Id
      */
     public int getPersons(final int minAge, final int returnFormat) {
@@ -182,13 +184,13 @@ public class PoCRequestManager extends RequestManager {
         for (int i = 0; i < requestSparseArrayLength; i++) {
             final Intent savedIntent = mRequestSparseArray.valueAt(i);
 
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_PERSONS) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_PERSON_LIST) {
                 continue;
             }
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSONS_MIN_AGE, -2) != minAge) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSON_LIST_MIN_AGE, -1) != minAge) {
                 continue;
             }
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSONS_RETURN_FORMAT, -1) != returnFormat) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, -1) != returnFormat) {
                 continue;
             }
             return mRequestSparseArray.keyAt(i);
@@ -197,10 +199,11 @@ public class PoCRequestManager extends RequestManager {
         final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
 
         final Intent intent = new Intent(mContext, PoCService.class);
-        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_PERSONS);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_PERSON_LIST);
         intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
         intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
-        intent.putExtra(PoCService.INTENT_EXTRA_PERSONS_MIN_AGE, minAge);
+        intent.putExtra(PoCService.INTENT_EXTRA_PERSON_LIST_MIN_AGE, minAge);
+        intent.putExtra(PoCService.INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, returnFormat);
         mContext.startService(intent);
 
         mRequestSparseArray.append(requestId, intent);

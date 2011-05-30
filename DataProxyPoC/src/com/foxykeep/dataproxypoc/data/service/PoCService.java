@@ -39,11 +39,12 @@ public class PoCService extends WorkerService {
     private static final int MAX_THREADS = 3;
 
     // Worker types
-    public static final int WORKER_TYPE_PERSONS = 0;
+    public static final int WORKER_TYPE_PERSON_LIST = 0;
 
     // Worker params
-    public static final String INTENT_EXTRA_PERSONS_MIN_AGE = "com.foxykeep.dataproxypoc.extras.personsMinAge";
-    public static final String INTENT_EXTRA_PERSONS_RETURN_FORMAT = "com.foxykeep.dataproxypoc.extras.personsReturnFormat";
+    // - Person WS params
+    public static final String INTENT_EXTRA_PERSON_LIST_MIN_AGE = "com.foxykeep.dataproxypoc.extras.personsMinAge";
+    public static final String INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT = "com.foxykeep.dataproxypoc.extras.personsReturnFormat";
 
     public PoCService() {
         super(MAX_THREADS);
@@ -55,9 +56,10 @@ public class PoCService extends WorkerService {
 
         try {
             switch (workerType) {
-                case WORKER_TYPE_PERSONS:
-                    sendSuccess(intent, PersonWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSONS_MIN_AGE, -1),
-                            intent.getIntExtra(INTENT_EXTRA_PERSONS_RETURN_FORMAT, PersonWorker.RETURN_FORMAT_XML)));
+                case WORKER_TYPE_PERSON_LIST:
+                    PersonWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_MIN_AGE, -1),
+                            intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, PersonWorker.RETURN_FORMAT_XML));
+                    sendSuccess(intent, null);
                     break;
             }
         } catch (final IllegalStateException e) {

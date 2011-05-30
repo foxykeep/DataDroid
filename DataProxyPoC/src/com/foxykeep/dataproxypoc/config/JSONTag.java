@@ -1,7 +1,8 @@
 package com.foxykeep.dataproxypoc.config;
 
 public class JSONTag {
-    // Person
+
+    // PersonList WS tags
     public static final String ELEM_PERSONS = "persons";
     public static final String ELEM_PERSON = "person";
     public static final String ELEM_PERSON_FIRST_NAME = "firstName";

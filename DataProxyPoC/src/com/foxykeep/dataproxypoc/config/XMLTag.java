@@ -1,7 +1,8 @@
 package com.foxykeep.dataproxypoc.config;
 
 public class XMLTag {
-    // Person
+
+    // PersonList WS tags
     public static final String TAG_PERSON = "person";
     public static final String TAG_PERSON_FIRST_NAME = "firstName";
     public static final String TAG_PERSON_LAST_NAME = "lastName";

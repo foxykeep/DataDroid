@@ -17,7 +17,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.os.Bundle;
 
 import org.json.JSONException;
 import org.xml.sax.SAXException;
@@ -36,14 +35,14 @@ public class PersonWorker {
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
 
-    public static Bundle start(final Context context, final int minAge, final int returnFormat)
+    public static void start(final Context context, final int minAge, final int returnFormat)
             throws IllegalStateException, IOException, URISyntaxException, RestClientException,
             ParserConfigurationException, SAXException, JSONException {
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(WSConfig.WS_PERSONS_PARAM_MIN_AGE, minAge + "");
+        params.put(WSConfig.WS_PERSON_LIST_PARAM_MIN_AGE, minAge + "");
 
         NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
-                returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSONS_URL_XML : WSConfig.WS_PERSONS_URL_JSON,
+                returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML : WSConfig.WS_PERSON_LIST_URL_JSON,
                 NetworkConnection.METHOD_GET, params);
 
         ArrayList<Person> personList = null;
@@ -62,7 +61,5 @@ public class PersonWorker {
             }
             context.getContentResolver().bulkInsert(PersonDao.CONTENT_URI, valuesArray);
         }
-
-        return null;
     }
 }
