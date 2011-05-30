@@ -16,6 +16,10 @@ package com.foxykeep.dataproxy.requestmanager;
  */
 public abstract class RequestManager {
 
-    public static final String RECEIVER_EXTRA_REQUEST_ID = "requestId";
-    public static final String RECEIVER_EXTRA_RESULT_CODE = "code";
+    public static final String RECEIVER_EXTRA_REQUEST_ID = "com.foxykeep.dataproxy.extras.requestId";
+    public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.dataproxy.extras.code";
+    public static final String RECEIVER_EXTRA_PAYLOAD = "com.foxykeep.dataproxy.extras.payload";
+    public static final String RECEIVER_EXTRA_ERROR_TYPE = "com.foxykeep.dataproxy.extras.error";
+    public static final int RECEIVER_EXTRA_VALUE_ERROR_TYPE_CONNEXION = 1;
+    public static final int RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA = 2;
 }
