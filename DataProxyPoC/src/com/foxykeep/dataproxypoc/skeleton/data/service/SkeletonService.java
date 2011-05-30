@@ -64,6 +64,9 @@ public class SkeletonService extends WorkerService {
                     sendFailure(intent, null);
                     break;
             }
+            // TODO normally you should replace this catch block with Exception
+            // by specialized block using the method sendConnexionFailure or
+            // sendDataFailure
         } catch (final Exception e) {
             Log.e(LOG_TAG, "Erreur", e);
             sendFailure(intent, null);

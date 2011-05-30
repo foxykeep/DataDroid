@@ -8,9 +8,18 @@
  */
 package com.foxykeep.dataproxypoc.data.service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import android.content.Intent;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.xml.sax.SAXException;
+
+import com.foxykeep.dataproxy.exception.RestClientException;
 import com.foxykeep.dataproxy.service.WorkerService;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.dataproxypoc.data.worker.PersonWorker;
@@ -51,9 +60,27 @@ public class PoCService extends WorkerService {
                             intent.getIntExtra(INTENT_EXTRA_PERSONS_RETURN_FORMAT, PersonWorker.RETURN_FORMAT_XML)));
                     break;
             }
-        } catch (final Exception e) {
-            Log.e(LOG_TAG, "Erreur", e);
-            sendFailure(intent, null);
+        } catch (final IllegalStateException e) {
+            Log.e(LOG_TAG, "IllegalStateException", e);
+            sendConnexionFailure(intent, null);
+        } catch (final IOException e) {
+            Log.e(LOG_TAG, "IOException", e);
+            sendConnexionFailure(intent, null);
+        } catch (final URISyntaxException e) {
+            Log.e(LOG_TAG, "URISyntaxException", e);
+            sendConnexionFailure(intent, null);
+        } catch (final RestClientException e) {
+            Log.e(LOG_TAG, "RestClientException", e);
+            sendConnexionFailure(intent, null);
+        } catch (final ParserConfigurationException e) {
+            Log.e(LOG_TAG, "ParserConfigurationException", e);
+            sendDataFailure(intent, null);
+        } catch (final SAXException e) {
+            Log.e(LOG_TAG, "SAXException", e);
+            sendDataFailure(intent, null);
+        } catch (final JSONException e) {
+            Log.e(LOG_TAG, "JSONException", e);
+            sendDataFailure(intent, null);
         }
     }
 }
