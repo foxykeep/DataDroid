@@ -28,7 +28,7 @@ DataProxy has been developed for Android 1.6 and greater. It may work on Android
 Credits and License
 -------------------
 
-Foxykeep (http://www.foxykeep.com)
+Foxykeep ([http://www.foxykeep.com](http://www.foxykeep.com/))
 
 Licensed under the Beerware License :
 
