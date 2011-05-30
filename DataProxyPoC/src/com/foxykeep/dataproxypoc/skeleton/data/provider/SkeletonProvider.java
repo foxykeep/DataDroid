@@ -39,7 +39,6 @@ public class SkeletonProvider extends ContentProvider {
     // TODO : Set the authority
     public static final String AUTHORITY = "com.foxykeep.dataproxypoc.skeleton.data.provider.SkeletonProvider";
 
-    // TODO : Set the content class name
     public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY + "/integrityCheck");
 
     // TODO : Create the uri constants using the model

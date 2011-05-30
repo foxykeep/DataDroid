@@ -71,8 +71,8 @@ public abstract class SkeletonContent extends DatabaseContent {
 
             db.execSQL("create table " + Skeleton.TABLE_NAME + s);
 
-            // TODO : Add the table's indexes (if any) using the createIndex()
-            // method
+            // TODO : Add the table's indexes (if any) using the
+            // getCreateIndexString() method
             db.execSQL(getCreateIndexString(TABLE_NAME, SkeletonColumns.COLUMN_NAME_ONE));
 
             // TODO : Add the table's triggers (if any)

@@ -46,15 +46,23 @@ public class SkeletonService extends WorkerService {
 
         try {
             switch (workerType) {
-            // TODO : Add a case per worker where you do the following things :
-            // - get the parameters for this worker (if any)
-            // - either call a private method if it is a short work and create
-            // the Bundle to return (if any)
-            // - or create the worker and start the worker and get the returned
-            // Bundle (if any)
-            // - call sendSuccess() with the received Intent and the Bundle (if
-            // any)
-            // See the PoC if you need more information.
+                // TODO : Add a case per worker where you do the following
+                // things :
+                // - get the parameters for this worker (if any)
+                // - either call a private method if it is a short work and
+                // create
+                // the Bundle to return (if any)
+                // - or create the worker and start the worker and get the
+                // returned
+                // Bundle (if any)
+                // - call sendSuccess() with the received Intent and the Bundle
+                // (if
+                // any)
+                // See the PoC if you need more information.
+                default:
+                    Log.e(LOG_TAG, "This worker type is not implemented");
+                    sendFailure(intent, null);
+                    break;
             }
         } catch (final Exception e) {
             Log.e(LOG_TAG, "Erreur", e);
