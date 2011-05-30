@@ -11,6 +11,17 @@
 		android:icon="@drawable/icon"
 		android:label="@string/app_name">
 
+		<activity
+			android:name=".ui.MainActivity"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.MAIN" />
+				<category
+					android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
 		<provider
 			android:name=".data.provider.PoCProvider"
 			android:authorities="com.foxykeep.dataproxypoc.data.provider.PoCProvider"
