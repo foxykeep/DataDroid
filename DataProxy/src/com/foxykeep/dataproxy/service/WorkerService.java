@@ -84,7 +84,7 @@ abstract public class WorkerService extends MultiThreadService {
         if (data == null) {
             data = new Bundle();
         }
-        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_CONNEXION);
+        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA);
         sendResult(intent, data, ERROR_CODE);
     }
 
