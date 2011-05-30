@@ -12,7 +12,7 @@
 		android:label="@string/app_name">
 
 		<activity
-			android:name=".ui.MainActivity"
+			android:name=".ui.HomeActivity"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action
@@ -26,6 +26,5 @@
 			android:name=".data.provider.PoCProvider"
 			android:authorities="com.foxykeep.dataproxypoc.data.provider.PoCProvider"
 			android:exported="false" />
-
 	</application>
 </manifest>
