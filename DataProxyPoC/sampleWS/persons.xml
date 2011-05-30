@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<persons>
+	<person>
+		<firstName>Hedley</firstName>
+		<lastName>Bob</lastName>
+		<email>hedley.bob@gmail.com</email>
+		<city>Branson</city>
+		<postalCode>96163</postalCode>
+		<age>16</age>
+		<isWorking>0</isWorking>
+	</person>
+	<person>
+		<firstName>Hedley</firstName>
+		<lastName>Bob</lastName>
+		<email>hedley.bob@gmail.com</email>
+		<city>Branson</city>
+		<postalCode>96163</postalCode>
+		<age>16</age>
+		<isWorking>0</isWorking>
+	</person>
+</persons>

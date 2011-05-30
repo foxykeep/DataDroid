@@ -1,0 +1,25 @@
+{
+	persons:{
+		person:[
+			{
+				firstname:'Valentine',
+				lastname:'Wells',
+				email:'toto@tutu.edu',
+				city:'Nacogdoches',
+				postalcode:34520,
+				age:15,
+				isWorking:1
+			},
+			{
+				firstname:'Valentine',
+				lastname:'Wells',
+				email:'toto@tutu.edu',
+				city:'Nacogdoches',
+				postalcode:34520,
+				age:15,
+				isWorking:1
+			}
+		]
+	}
+}
+			
