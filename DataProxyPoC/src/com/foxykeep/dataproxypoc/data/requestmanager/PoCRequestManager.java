@@ -10,6 +10,7 @@ package com.foxykeep.dataproxypoc.data.requestmanager;
 
 import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.os.ResultReceiver;
 import android.util.SparseArray;
 
 import com.foxykeep.dataproxy.requestmanager.RequestManager;
+import com.foxykeep.dataproxypoc.data.service.PoCService;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use
@@ -31,8 +33,6 @@ import com.foxykeep.dataproxy.requestmanager.RequestManager;
  */
 public class PoCRequestManager extends RequestManager {
 
-    // TODO : This constant will be used in your special methods
-    @SuppressWarnings("unused")
     private static final int MAX_RANDOM_REQUEST_ID = 1000000;
 
     // Singleton management
@@ -48,14 +48,12 @@ public class PoCRequestManager extends RequestManager {
 
     public static final String RECEIVER_EXTRA_PAYLOAD = "payload";
 
+    private static Random sRandom = new Random();
+
     private SparseArray<Intent> mRequestSparseArray;
-    // TODO : This variable will be used in your special methods
-    @SuppressWarnings("unused")
     private Context mContext;
     private ArrayList<OnRequestFinishedListener> mListenerList;
     private Handler mHandler = new Handler();
-    // TODO : This variable will be used in your special methods
-    @SuppressWarnings("unused")
     private EvalReceiver mEvalReceiver = new EvalReceiver(mHandler);
 
     private PoCRequestManager(final Context context) {
@@ -97,17 +95,16 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this
-     * {@link PoCRequestManager}. Clients may use it in order to listen to
-     * events fired when a request is finished.
+     * Add a {@link OnRequestFinishedListener} to this {@link PoCRequestManager}
+     * . Clients may use it in order to listen to events fired when a request is
+     * finished.
      * <p>
      * <b>Warning !! </b> If it's an {@link Activity} that is used as a
      * Listener, it must be detached when {@link Activity#onPause} is called in
      * an {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this
-     *            {@link PoCRequestManager} .
+     * @param listener The listener to add to this {@link PoCRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
@@ -121,8 +118,7 @@ public class PoCRequestManager extends RequestManager {
      * Remove a {@link OnRequestFinishedListener} to this
      * {@link PoCRequestManager}.
      * 
-     * @param listenerThe listener to remove to this
-     *            {@link PoCRequestManager}.
+     * @param listenerThe listener to remove to this {@link PoCRequestManager}.
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
@@ -165,10 +161,52 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Here begin the special methods
+     * Gets the list of persons without specifying a minimum age
+     * 
+     * @param returnFormat 0 for XML, 1 for JSON
+     * @return the request Id
      */
+    public int getPersons(final int returnFormat) {
+        return getPersons(-1, returnFormat);
+    }
 
-    // TODO : This is where you will add your methods which will call the
-    // service
+    /**
+     * Gets the list of persons which are at least minAge years old
+     * 
+     * @param minAge the minimum age
+     * @param returnFormat 0 for XML, 1 for JSON
+     * @return the request Id
+     */
+    public int getPersons(final int minAge, final int returnFormat) {
 
+        // Check if a request is already launched
+        final int requestSparseArrayLength = mRequestSparseArray.size();
+        for (int i = 0; i < requestSparseArrayLength; i++) {
+            final Intent savedIntent = mRequestSparseArray.valueAt(i);
+
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_PERSONS) {
+                continue;
+            }
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSONS_MIN_AGE, -2) != minAge) {
+                continue;
+            }
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSONS_RETURN_FORMAT, -1) != returnFormat) {
+                continue;
+            }
+            return mRequestSparseArray.keyAt(i);
+        }
+
+        final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
+
+        final Intent intent = new Intent(mContext, PoCService.class);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_PERSONS);
+        intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
+        intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
+        intent.putExtra(PoCService.INTENT_EXTRA_PERSONS_MIN_AGE, minAge);
+        mContext.startService(intent);
+
+        mRequestSparseArray.append(requestId, intent);
+
+        return requestId;
+    }
 }
