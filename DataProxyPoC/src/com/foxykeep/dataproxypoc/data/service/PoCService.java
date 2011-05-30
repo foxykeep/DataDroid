@@ -33,8 +33,8 @@ public class PoCService extends WorkerService {
     public static final int WORKER_TYPE_PERSONS = 0;
 
     // Worker params
-    public static final String INTENT_EXTRA_PERSONS_MIN_AGE = "personsMinAge";
-    public static final String INTENT_EXTRA_PERSONS_RETURN_FORMAT = "personsReturnFormat";
+    public static final String INTENT_EXTRA_PERSONS_MIN_AGE = "com.foxykeep.dataproxypoc.extras.personsMinAge";
+    public static final String INTENT_EXTRA_PERSONS_RETURN_FORMAT = "com.foxykeep.dataproxypoc.extras.personsReturnFormat";
 
     public PoCService() {
         super(MAX_THREADS);

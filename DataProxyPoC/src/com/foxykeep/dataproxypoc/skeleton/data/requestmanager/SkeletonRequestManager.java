@@ -46,8 +46,6 @@ public class SkeletonRequestManager extends RequestManager {
         return sInstance;
     }
 
-    public static final String RECEIVER_EXTRA_PAYLOAD = "payload";
-
     private SparseArray<Intent> mRequestSparseArray;
     // TODO : This variable will be used in your special methods
     @SuppressWarnings("unused")

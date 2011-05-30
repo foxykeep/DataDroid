@@ -46,8 +46,6 @@ public class PoCRequestManager extends RequestManager {
         return sInstance;
     }
 
-    public static final String RECEIVER_EXTRA_PAYLOAD = "payload";
-
     private static Random sRandom = new Random();
 
     private SparseArray<Intent> mRequestSparseArray;
