@@ -1,7 +1,7 @@
 DataProxy
 =========
 
-This project is a development library for the Android platform. The purpose of this library is to ease the use of webservices in an Android application. It is based on the first solution shown in the presentation ["Developing RESTful Android applications"](http://www.google.com/events/io/2010/sessions/developing-RESTful-android-apps.html) that was given at Google I/O 2010.
+This project is a development library for the Android platform. The purpose of this library is to ease the use of webservices in an Android application. It is based on the first solution shown in the presentation "[Developing RESTful Android applications](http://www.google.com/events/io/2010/sessions/developing-RESTful-android-apps.html)" that was given at Google I/O 2010.
 
 
 ***
@@ -10,7 +10,7 @@ How to use DataProxy in your project
 
 In order to use DataProxy in your project you have to do the following steps :
 
-1.    Download the current version of the DataProxy project on your computer using git (`git clone http://github.com/foxykeep/DataProxy.git`). The repository contains the following folder
+1.    Download the current version of the DataProxy project on your computer using git (`git clone http://github.com/foxykeep/DataProxy.git`). The repository contains the following folders :
     * DataProxy : the library. You'll import this library in your project
     * DataProxyPoC : the demonstration application. This project contains code showing how to use the DataProxy as well as skeleton classes you can fill for your project.
 2. Import the project DataProxy in your Eclipse workspace.
@@ -32,4 +32,4 @@ Foxykeep (http://www.foxykeep.com)
 
 Licensed under the Beerware License :
 
-    You can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return.
+> You can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return.
