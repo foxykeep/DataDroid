@@ -77,7 +77,7 @@ public class NetworkConnection {
          * @param resultHeader
          * @param result
          */
-        public NetworkConnectionResult(Header[] resultHeader, String result) {
+        public NetworkConnectionResult(final Header[] resultHeader, final String result) {
             mResultHeader = resultHeader;
             mWsResponse = result;
         }
@@ -93,7 +93,7 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url) throws IllegalStateException,
+    public static NetworkConnectionResult retrieveResponseFromService(final String url) throws IllegalStateException,
             IOException, URISyntaxException, RestClientException {
         return retrieveResponseFromService(url, METHOD_GET);
     }
@@ -111,7 +111,7 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url, int method)
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method)
             throws IllegalStateException, IOException, URISyntaxException, RestClientException {
         return retrieveResponseFromService(url, method, null);
     }
@@ -131,8 +131,8 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url, int method,
-            Map<String, String> parameters) throws IllegalStateException, IOException, URISyntaxException,
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method,
+            final Map<String, String> parameters) throws IllegalStateException, IOException, URISyntaxException,
             RestClientException {
         return retrieveResponseFromService(url, method, parameters, null);
     }
@@ -153,9 +153,9 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url, int method,
-            Map<String, String> parameters, ArrayList<Header> headers) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method,
+            final Map<String, String> parameters, final ArrayList<Header> headers) throws IllegalStateException,
+            IOException, URISyntaxException, RestClientException {
         return retrieveResponseFromService(url, method, parameters, null, false);
     }
 
@@ -176,8 +176,8 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url, int method,
-            Map<String, String> parameters, ArrayList<Header> headers, boolean isGzipEnabled)
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method,
+            final Map<String, String> parameters, final ArrayList<Header> headers, final boolean isGzipEnabled)
             throws IllegalStateException, IOException, URISyntaxException, RestClientException {
         return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, null);
     }
@@ -201,9 +201,9 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url, int method,
-            Map<String, String> parameters, ArrayList<Header> headers, boolean isGzipEnabled, String userAgent)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method,
+            final Map<String, String> parameters, final ArrayList<Header> headers, final boolean isGzipEnabled,
+            final String userAgent) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
 
         return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, null);
     }
@@ -229,9 +229,10 @@ public class NetworkConnection {
      * @throws URISyntaxException
      * @throws RestClientException
      */
-    public static NetworkConnectionResult retrieveResponseFromService(String url, int method,
-            Map<String, String> parameters, ArrayList<Header> headers, boolean isGzipEnabled, String userAgent,
-            String postText) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method,
+            final Map<String, String> parameters, final ArrayList<Header> headers, final boolean isGzipEnabled,
+            final String userAgent, final String postText) throws IllegalStateException, IOException,
+            URISyntaxException, RestClientException {
         // Get the request URL
         if (url == null) {
             if (LogConfig.ERROR_LOGS_ENABLED) {
@@ -246,9 +247,8 @@ public class NetworkConnection {
         // Get the request method
         if (method != METHOD_GET && method != METHOD_POST && method != METHOD_PUT && method != METHOD_DELETE) {
             if (LogConfig.ERROR_LOGS_ENABLED) {
-                Log
-                        .e(LOG_TAG,
-                                "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                Log.e(LOG_TAG,
+                        "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
             }
             throw new IllegalArgumentException(
                     "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
@@ -265,8 +265,9 @@ public class NetworkConnection {
 
         // Get the request headers
         if (LogConfig.DEBUG_LOGS_ENABLED) {
-            Log.d(LOG_TAG, "retrieveResponseFromService - Request headers (number) : "
-                    + ((headers != null) ? headers.size() : ""));
+            Log.d(LOG_TAG,
+                    "retrieveResponseFromService - Request headers (number) : "
+                            + ((headers != null) ? headers.size() : ""));
         }
 
         // Create the Request
@@ -294,7 +295,7 @@ public class NetworkConnection {
 
                         sb.append(URLEncoder.encode(key, "UTF-8"));
                         sb.append("=");
-                        sb.append(parameters.get(key));
+                        sb.append(URLEncoder.encode(parameters.get(key), "UTF-8"));
                         sb.append("&");
                     }
                 }
@@ -325,9 +326,7 @@ public class NetworkConnection {
                     }
 
                     if (LogConfig.INFO_LOGS_ENABLED) {
-                        Log
-                                .i(LOG_TAG,
-                                        "retrieveResponseFromService - POST Request - parameters list (key => value) : ");
+                        Log.i(LOG_TAG, "retrieveResponseFromService - POST Request - parameters list (key => value) : ");
 
                         final int postRequestParametersLength = postRequestParameters.size();
                         for (int i = 0; i < postRequestParametersLength; i++) {
@@ -375,9 +374,8 @@ public class NetworkConnection {
                 // TODO Delete
             } else {
                 if (LogConfig.ERROR_LOGS_ENABLED) {
-                    Log
-                            .e(LOG_TAG,
-                                    "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                    Log.e(LOG_TAG,
+                            "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
                 }
                 throw new IllegalArgumentException(
                         "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
@@ -443,20 +441,20 @@ public class NetworkConnection {
             if (entity != null) {
                 if (method == METHOD_GET) {
                     result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_GET, (int) entity
-                            .getContentLength());
+                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_GET,
+                            (int) entity.getContentLength());
                 } else if (method == METHOD_POST) {
                     result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_POST, (int) entity
-                            .getContentLength());
+                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_POST,
+                            (int) entity.getContentLength());
                 } else if (method == METHOD_PUT) {
                     result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_PUT, (int) entity
-                            .getContentLength());
+                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_PUT,
+                            (int) entity.getContentLength());
                 } else if (method == METHOD_DELETE) {
                     result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_DELETE, (int) entity
-                            .getContentLength());
+                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_DELETE,
+                            (int) entity.getContentLength());
                 }
             }
 
@@ -478,8 +476,8 @@ public class NetworkConnection {
      * @return String from the InputStream
      * @throws IOException If a problem occurs while reading the InputStream
      */
-    private static String convertStreamToString(InputStream is, boolean isGzipEnabled, int method, int contentLength)
-            throws IOException {
+    private static String convertStreamToString(final InputStream is, final boolean isGzipEnabled, final int method,
+            final int contentLength) throws IOException {
         InputStream cleanedIs = is;
         if (isGzipEnabled) {
             cleanedIs = new GZIPInputStream(is);
