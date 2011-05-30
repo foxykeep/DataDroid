@@ -40,6 +40,9 @@ public abstract class SkeletonContent {
         // TODO : Set the table name
         public static final String TABLE_NAME = "skeleton";
         public static final Uri CONTENT_URI = Uri.parse(SkeletonContent.CONTENT_URI + "/" + TABLE_NAME);
+        // TODO : Set the elem and dir types
+        public static final String TYPE_ELEM_TYPE = "vnd.android.cursor.item/com.foxykeep.dataproxypoc.skeleton.data.provider.Skeleton";
+        public static final String TYPE_DIR_TYPE = "vnd.android.cursor.dir/com.foxykeep.dataproxypoc.skeleton.data.provider.Skeleton";
 
         // TODO : Add constants for the selection/sort order you will use in
         // your project

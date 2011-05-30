@@ -168,9 +168,9 @@ public class SkeletonProvider extends ContentProvider {
         // TODO : Add lines for your tables
         switch (match) {
             case SKELETON_ID:
-                return "vnd.android.cursor.item/skeleton";
+                return Skeleton.TYPE_ELEM_TYPE;
             case SKELETON:
-                return "vnd.android.cursor.dir/skeleton";
+                return Skeleton.TYPE_DIR_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
