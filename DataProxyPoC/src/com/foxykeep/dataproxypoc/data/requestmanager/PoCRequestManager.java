@@ -22,7 +22,7 @@ import android.util.SparseArray;
 
 import com.foxykeep.dataproxy.requestmanager.RequestManager;
 import com.foxykeep.dataproxypoc.data.service.PoCService;
-import com.foxykeep.dataproxypoc.data.worker.PersonWorker;
+import com.foxykeep.dataproxypoc.data.worker.PersonListWorker;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use
@@ -165,19 +165,19 @@ public class PoCRequestManager extends RequestManager {
      * @param returnFormat 0 for XML, 1 for JSON
      * @return the request Id
      */
-    public int getPersons(final int returnFormat) {
-        return getPersons(-1, returnFormat);
+    public int getPersonList(final int returnFormat) {
+        return getPersonList(-1, returnFormat);
     }
 
     /**
      * Gets the list of persons which are at least minAge years old
      * 
      * @param minAge the minimum age
-     * @param returnFormat {@link PersonWorker#RETURN_FORMAT_XML} for XML,
-     *            {@link PersonWorker#RETURN_FORMAT_JSON} for JSON
+     * @param returnFormat {@link PersonListWorker#RETURN_FORMAT_XML} for XML,
+     *            {@link PersonListWorker#RETURN_FORMAT_JSON} for JSON
      * @return the request Id
      */
-    public int getPersons(final int minAge, final int returnFormat) {
+    public int getPersonList(final int minAge, final int returnFormat) {
 
         // Check if a request is already launched
         final int requestSparseArrayLength = mRequestSparseArray.size();
