@@ -2,5 +2,13 @@
 <resources>
     <string name="app_name">DataProxyPoC</string>
     
+    <!--  Dialog texts -->
+    <string name="dialog_error_connexion_error_title">Connexion error</string>
+    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>
+    <string name="dialog_button_retry">Retry</string>
+    
+    <!-- HomeActivity texts -->
     <string name="b_person_list">Person List</string>
+    
+    <!--  -->
 </resources>
