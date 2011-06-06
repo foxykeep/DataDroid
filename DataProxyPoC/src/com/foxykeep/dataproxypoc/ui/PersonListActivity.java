@@ -1,5 +1,6 @@
 package com.foxykeep.dataproxypoc.ui;
 
+import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -26,8 +27,11 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ARE_PERSONS_LOADED = "savedStateArePersonsLoaded";
+    private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
+    private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
 
     private static final int DIALOG_CONNEXION_ERROR = 1;
+    private static final int DIALOG_ERROR = 2;
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
@@ -37,6 +41,9 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     private NotifyingAsyncQueryHandler mQueryHandler;
 
     private LayoutInflater mInflater;
+
+    private String mErrorDialogTitle;
+    private String mErrorDialogMessage;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -48,6 +55,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
             mArePersonsLoaded = savedInstanceState.getBoolean(SAVED_STATE_ARE_PERSONS_LOADED, false);
+            mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
+            mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
         }
 
         mRequestManager = PoCRequestManager.getInstance(this);
@@ -91,6 +100,9 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         super.onSaveInstanceState(outState);
 
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
+        outState.putBoolean(SAVED_STATE_ARE_PERSONS_LOADED, mArePersonsLoaded);
+        outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
+        outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
     }
 
     private void bindViews() {
@@ -102,6 +114,13 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     protected Dialog onCreateDialog(final int id) {
         Builder b;
         switch (id) {
+            case DIALOG_ERROR:
+                b = new Builder(this);
+                b.setTitle(mErrorDialogTitle);
+                b.setMessage(mErrorDialogMessage);
+                b.setCancelable(false);
+                b.setNeutralButton(android.R.string.ok, null);
+                return b.create();
             case DIALOG_CONNEXION_ERROR:
                 b = new Builder(this);
                 b.setCancelable(false);
@@ -116,6 +135,19 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 return b.create();
             default:
                 return super.onCreateDialog(id);
+        }
+    }
+
+    @Override
+    protected void onPrepareDialog(final int id, final Dialog dialog) {
+        switch (id) {
+            case DIALOG_ERROR:
+                dialog.setTitle(mErrorDialogTitle);
+                ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
+                break;
+            default:
+                super.onPrepareDialog(id, dialog);
+                break;
         }
     }
 
@@ -134,12 +166,9 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 if (payload != null) {
                     final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
-                        // TODO gérer ce cas
-                        // mErrorDialogTitle =
-                        // getString(R.string.dialog_error_data_error_title);
-                        // mErrorDialogMessage =
-                        // getString(R.string.dialog_error_data_error_message);
-                        // showDialog(DIALOG_ERROR);
+                        mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
+                        mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
+                        showDialog(DIALOG_ERROR);
                     } else {
                         showDialog(DIALOG_CONNEXION_ERROR);
                     }
