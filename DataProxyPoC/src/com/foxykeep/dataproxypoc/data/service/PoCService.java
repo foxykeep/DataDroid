@@ -43,7 +43,6 @@ public class PoCService extends WorkerService {
 
     // Worker params
     // - Person WS params
-    public static final String INTENT_EXTRA_PERSON_LIST_MIN_AGE = "com.foxykeep.dataproxypoc.extras.personsMinAge";
     public static final String INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT = "com.foxykeep.dataproxypoc.extras.personsReturnFormat";
 
     public PoCService() {
@@ -57,8 +56,8 @@ public class PoCService extends WorkerService {
         try {
             switch (workerType) {
                 case WORKER_TYPE_PERSON_LIST:
-                    PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_MIN_AGE, -1),
-                            intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, PersonListWorker.RETURN_FORMAT_XML));
+                    PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT,
+                            PersonListWorker.RETURN_FORMAT_XML));
                     sendSuccess(intent, null);
                     break;
             }

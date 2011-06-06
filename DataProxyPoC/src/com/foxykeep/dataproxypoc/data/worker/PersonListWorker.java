@@ -11,7 +11,6 @@ package com.foxykeep.dataproxypoc.data.worker;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -35,15 +34,12 @@ public class PersonListWorker {
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
 
-    public static void start(final Context context, final int minAge, final int returnFormat)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException,
-            ParserConfigurationException, SAXException, JSONException {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put(WSConfig.WS_PERSON_LIST_PARAM_MIN_AGE, minAge + "");
+    public static void start(final Context context, final int returnFormat) throws IllegalStateException, IOException,
+            URISyntaxException, RestClientException, ParserConfigurationException, SAXException, JSONException {
 
         NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
                 returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML : WSConfig.WS_PERSON_LIST_URL_JSON,
-                NetworkConnection.METHOD_GET, params);
+                NetworkConnection.METHOD_GET);
 
         ArrayList<Person> personList = null;
         if (returnFormat == RETURN_FORMAT_XML) {
@@ -51,6 +47,9 @@ public class PersonListWorker {
         } else {
             personList = PersonJsonFactory.parseResult(wsResult.mWsResponse);
         }
+
+        // Clear the table
+        context.getContentResolver().delete(PersonDao.CONTENT_URI, null, null);
 
         // Adds the persons in the database
         final int personListSize = personList.size();
