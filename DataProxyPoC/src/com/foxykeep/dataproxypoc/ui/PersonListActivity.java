@@ -72,8 +72,12 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 setProgressBarIndeterminateVisibility(true);
             } else {
                 mRequestId = -1;
+
+                // Get the number of persons in the database
+                int number = 1;
                 // TODO gestion des infos en base pour voir si requete OK
-                if (!true) {
+
+                if (number > 1) {
                     showDialog(DIALOG_CONNEXION_ERROR);
                 } else {
                     mArePersonsLoaded = true;
