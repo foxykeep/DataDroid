@@ -159,19 +159,19 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Gets the list of persons without specifying a minimum age
+     * Gets the list of persons and save it in the database
      * 
      * @param returnFormat 0 for XML, 1 for JSON
      * @return the request Id
      */
-    public int getPersonList(final int returnFormat) {
+    public int getDbPersonList(final int returnFormat) {
 
         // Check if a match to this request is already launched
         final int requestSparseArrayLength = mRequestSparseArray.size();
         for (int i = 0; i < requestSparseArrayLength; i++) {
             final Intent savedIntent = mRequestSparseArray.valueAt(i);
 
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_PERSON_LIST) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_PERSON_LIST_DB) {
                 continue;
             }
             if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, -1) != returnFormat) {
@@ -183,7 +183,7 @@ public class PoCRequestManager extends RequestManager {
         final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
 
         final Intent intent = new Intent(mContext, PoCService.class);
-        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_PERSON_LIST);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_PERSON_LIST_DB);
         intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
         intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
         intent.putExtra(PoCService.INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, returnFormat);

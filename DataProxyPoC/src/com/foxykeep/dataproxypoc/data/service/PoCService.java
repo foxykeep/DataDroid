@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 import com.foxykeep.dataproxy.exception.RestClientException;
 import com.foxykeep.dataproxy.service.WorkerService;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.dataproxypoc.data.worker.PersonListWorker;
+import com.foxykeep.dataproxypoc.data.worker.PersonListDbWorker;
 
 /**
  * This class is called by the {@link PoCRequestManager} through the
@@ -39,7 +39,7 @@ public class PoCService extends WorkerService {
     private static final int MAX_THREADS = 3;
 
     // Worker types
-    public static final int WORKER_TYPE_PERSON_LIST = 0;
+    public static final int WORKER_TYPE_PERSON_LIST_DB = 0;
 
     // Worker params
     // - Person WS params
@@ -55,9 +55,9 @@ public class PoCService extends WorkerService {
 
         try {
             switch (workerType) {
-                case WORKER_TYPE_PERSON_LIST:
-                    PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT,
-                            PersonListWorker.RETURN_FORMAT_XML));
+                case WORKER_TYPE_PERSON_LIST_DB:
+                    PersonListDbWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT,
+                            PersonListDbWorker.RETURN_FORMAT_XML));
                     sendSuccess(intent, null);
                     break;
             }

@@ -29,7 +29,7 @@ import com.foxykeep.dataproxypoc.data.factory.PersonXmlFactory;
 import com.foxykeep.dataproxypoc.data.model.Person;
 import com.foxykeep.dataproxypoc.data.provider.PoCContent.PersonDao;
 
-public class PersonListWorker {
+public class PersonListDbWorker {
 
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
