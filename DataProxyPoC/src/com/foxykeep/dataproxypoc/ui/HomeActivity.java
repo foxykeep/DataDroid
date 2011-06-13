@@ -30,7 +30,7 @@ public class HomeActivity extends Activity implements OnClickListener {
     public void onClick(final View view) {
         Intent intent = null;
         if (view == mButtonPersonList) {
-            intent = new Intent(this, PersonListActivity.class);
+            intent = new Intent(this, PersonDbListActivity.class);
         }
 
         if (intent != null) {

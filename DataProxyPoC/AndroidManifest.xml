@@ -22,7 +22,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ui.PersonListActivity"/>
+			android:name=".ui.PersonListDbActivity"/>
 
 		<provider
 			android:name=".data.provider.PoCProvider"

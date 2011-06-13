@@ -19,14 +19,13 @@ import com.foxykeep.dataproxypoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.dataproxypoc.data.service.PoCService;
-import com.foxykeep.dataproxypoc.data.worker.PersonListWorker;
+import com.foxykeep.dataproxypoc.data.worker.PersonListDbWorker;
 import com.foxykeep.dataproxypoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.dataproxypoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class PersonListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener {
+public class PersonDbListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
-    private static final String SAVED_STATE_ARE_PERSONS_LOADED = "savedStateArePersonsLoaded";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
 
@@ -35,8 +34,6 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
-
-    private boolean mArePersonsLoaded = false;
 
     private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -54,13 +51,13 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
 
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
-            mArePersonsLoaded = savedInstanceState.getBoolean(SAVED_STATE_ARE_PERSONS_LOADED, false);
             mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
         }
 
         mRequestManager = PoCRequestManager.getInstance(this);
         mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
+        mInflater = getLayoutInflater();
     }
 
     @Override
@@ -77,17 +74,16 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 int number = 1;
                 // TODO gestion des infos en base pour voir si requete OK
 
-                if (number > 1) {
+                if (number < 1) {
+                    // We don't have a way to know if the request was correctly
+                    // executed with 0 result or if an error occurred.
+                    // Here I choose to display an error but it's up to you
                     showDialog(DIALOG_CONNEXION_ERROR);
                 } else {
-                    mArePersonsLoaded = true;
-
-                    mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_NAME_PROJECTION,
+                    mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
                             PersonDao.LAST_NAME_ORDER_BY);
                 }
             }
-        } else if (!mArePersonsLoaded) {
-            callPersonListWS();
         }
     }
 
@@ -104,14 +100,11 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         super.onSaveInstanceState(outState);
 
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
-        outState.putBoolean(SAVED_STATE_ARE_PERSONS_LOADED, mArePersonsLoaded);
         outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
         outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
     }
 
     private void bindViews() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -158,7 +151,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     private void callPersonListWS() {
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getPersonList(PersonListWorker.RETURN_FORMAT_XML);
+        mRequestId = mRequestManager.getDbPersonList(PersonListDbWorker.RETURN_FORMAT_XML);
     }
 
     @Override
@@ -180,9 +173,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                     showDialog(DIALOG_CONNEXION_ERROR);
                 }
             } else {
-                mArePersonsLoaded = true;
-
-                mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_NAME_PROJECTION,
+                mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
                         PersonDao.LAST_NAME_ORDER_BY);
             }
         }
@@ -207,13 +198,11 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
 
         @Override
         public void bindView(final View view, final Context context, final Cursor cursor) {
-            // TODO Auto-generated method stub
-
+            return;
         }
 
         @Override
         public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-            // TODO Auto-generated method stub
             return null;
         }
     }
