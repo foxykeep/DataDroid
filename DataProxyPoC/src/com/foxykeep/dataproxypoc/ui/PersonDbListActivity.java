@@ -10,20 +10,24 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.foxykeep.dataproxypoc.R;
 import com.foxykeep.dataproxypoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.dataproxypoc.data.service.PoCService;
-import com.foxykeep.dataproxypoc.data.worker.PersonListDbWorker;
 import com.foxykeep.dataproxypoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.dataproxypoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class PersonDbListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener {
+public class PersonDbListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
+        OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -31,6 +35,10 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
 
     private static final int DIALOG_CONNEXION_ERROR = 1;
     private static final int DIALOG_ERROR = 2;
+
+    private Spinner mSpinnerReturnFormat;
+    private Button mButtonLoad;
+    private Button mButtonClearDb;
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
@@ -47,6 +55,7 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
+        setContentView(R.layout.person_db_list);
         bindViews();
 
         if (savedInstanceState != null) {
@@ -105,6 +114,13 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
     }
 
     private void bindViews() {
+        mSpinnerReturnFormat = (Spinner) findViewById(R.id.sp_return_format);
+
+        mButtonLoad = (Button) findViewById(R.id.b_load);
+        mButtonLoad.setOnClickListener(this);
+
+        mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
+        mButtonClearDb.setOnClickListener(this);
     }
 
     @Override
@@ -151,7 +167,16 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
     private void callPersonListWS() {
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getDbPersonList(PersonListDbWorker.RETURN_FORMAT_XML);
+        mRequestId = mRequestManager.getDbPersonList(mSpinnerReturnFormat.getSelectedItemPosition());
+    }
+
+    @Override
+    public void onClick(final View view) {
+        if (view == mButtonLoad) {
+            callPersonListWS();
+        } else {
+            mQueryHandler.startDelete(PersonDao.CONTENT_URI);
+        }
     }
 
     @Override
