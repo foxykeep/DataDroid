@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -215,6 +216,45 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
         }
     }
 
+    class ViewHolder {
+        private TextView mTextViewFirstName;
+        private CharArrayBuffer mCharArrayBufferFirstName;
+        private TextView mTextViewLastName;
+        private CharArrayBuffer mCharArrayBufferLastName;
+        private TextView mTextViewAge;
+        private TextView mTextViewEmail;
+        private CharArrayBuffer mCharArrayBufferEmail;
+        private TextView mTextViewPostalCode;
+        private TextView mTextViewCity;
+        private CharArrayBuffer mCharArrayBufferCity;
+
+        public ViewHolder(final View view) {
+            mTextViewFirstName = (TextView) findViewById(R.id.tv_first_name);
+            mTextViewLastName = (TextView) findViewById(R.id.tv_last_name);
+            mTextViewAge = (TextView) findViewById(R.id.tv_age);
+            mTextViewEmail = (TextView) findViewById(R.id.tv_email);
+            mTextViewCity = (TextView) findViewById(R.id.tv_city);
+        }
+
+        public void populateView(final Cursor c) {
+            c.copyStringToBuffer(PersonDao.CONTENT_FIRST_NAME_COLUMN, mCharArrayBufferFirstName);
+            mTextViewFirstName.setText(mCharArrayBufferFirstName.data, 0, mCharArrayBufferFirstName.sizeCopied);
+
+            c.copyStringToBuffer(PersonDao.CONTENT_LAST_NAME_COLUMN, mCharArrayBufferLastName);
+            mTextViewLastName.setText(mCharArrayBufferLastName.data, 0, mCharArrayBufferLastName.sizeCopied);
+
+            mTextViewAge.setText(String.valueOf(c.getInt(PersonDao.CONTENT_AGE_COLUMN)));
+
+            c.copyStringToBuffer(PersonDao.CONTENT_EMAIL_COLUMN, mCharArrayBufferEmail);
+            mTextViewEmail.setText(mCharArrayBufferEmail.data, 0, mCharArrayBufferEmail.sizeCopied);
+
+            mTextViewPostalCode.setText(String.valueOf(c.getInt(PersonDao.CONTENT_POSTAL_CODE_COLUMN)));
+
+            c.copyStringToBuffer(PersonDao.CONTENT_CITY_COLUMN, mCharArrayBufferCity);
+            mTextViewCity.setText(mCharArrayBufferCity.data, 0, mCharArrayBufferCity.sizeCopied);
+        }
+    }
+
     class PersonListAdapter extends CursorAdapter {
 
         public PersonListAdapter(final Context context, final Cursor c) {
@@ -223,12 +263,14 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
 
         @Override
         public void bindView(final View view, final Context context, final Cursor cursor) {
-            return;
+            ((ViewHolder) view.getTag()).populateView(cursor);
         }
 
         @Override
         public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-            return null;
+            View view = mInflater.inflate(R.layout.person_db_list_item, null);
+            view.setTag(new ViewHolder(view));
+            return view;
         }
     }
 }
