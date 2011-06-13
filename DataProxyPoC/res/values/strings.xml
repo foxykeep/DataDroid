@@ -10,7 +10,7 @@
     <string name="dialog_button_retry">Retry</string>
     
     <!-- HomeActivity texts -->
-    <string name="b_person_list">Person List</string>
+    <string name="home_b_person_db_list">Person List (DB)</string>
     
     <!--  -->
 </resources>

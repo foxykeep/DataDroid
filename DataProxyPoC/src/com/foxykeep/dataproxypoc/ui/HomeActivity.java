@@ -22,7 +22,7 @@ public class HomeActivity extends Activity implements OnClickListener {
     }
 
     private void bindViews() {
-        mButtonPersonList = (Button) findViewById(R.id.b_person_list);
+        mButtonPersonList = (Button) findViewById(R.id.b_person_db_list);
         mButtonPersonList.setOnClickListener(this);
     }
 
