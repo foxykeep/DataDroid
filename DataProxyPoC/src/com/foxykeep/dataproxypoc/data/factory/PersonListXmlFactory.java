@@ -17,7 +17,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.foxykeep.dataproxypoc.config.XMLTag;
 import com.foxykeep.dataproxypoc.data.model.Person;
 
-public class PersonXmlFactory {
+public class PersonListXmlFactory {
 
     public static ArrayList<Person> parseResult(final String wsContent) throws ParserConfigurationException,
             SAXException, IOException {

@@ -5,8 +5,8 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
 	<Button
-		android:id="@+id/b_person_db_list"
+		android:id="@+id/b_person_list"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/home_b_person_db_list" />
+		android:text="@string/home_b_person_list" />
 </LinearLayout>

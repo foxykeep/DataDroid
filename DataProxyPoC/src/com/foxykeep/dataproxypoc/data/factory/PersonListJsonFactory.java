@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import com.foxykeep.dataproxypoc.config.JSONTag;
 import com.foxykeep.dataproxypoc.data.model.Person;
 
-public class PersonJsonFactory {
+public class PersonListJsonFactory {
 
     public static ArrayList<Person> parseResult(final String wsResponse) throws JSONException {
         final ArrayList<Person> personList = new ArrayList<Person>();

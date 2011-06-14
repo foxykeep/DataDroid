@@ -27,7 +27,7 @@ import com.foxykeep.dataproxypoc.data.service.PoCService;
 import com.foxykeep.dataproxypoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.dataproxypoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class PersonDbListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
+public class PersonListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
         OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
@@ -56,7 +56,7 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-        setContentView(R.layout.person_db_list);
+        setContentView(R.layout.person_list);
         bindViews();
 
         if (savedInstanceState != null) {
@@ -168,7 +168,7 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
     private void callPersonListWS() {
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getDbPersonList(mSpinnerReturnFormat.getSelectedItemPosition());
+        mRequestId = mRequestManager.getPersonList(mSpinnerReturnFormat.getSelectedItemPosition());
     }
 
     @Override
@@ -268,7 +268,7 @@ public class PersonDbListActivity extends ListActivity implements OnRequestFinis
 
         @Override
         public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-            View view = mInflater.inflate(R.layout.person_db_list_item, null);
+            View view = mInflater.inflate(R.layout.person_list_item, null);
             view.setTag(new ViewHolder(view));
             return view;
         }
