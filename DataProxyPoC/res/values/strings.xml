@@ -11,6 +11,7 @@
     
     <!-- HomeActivity texts -->
     <string name="home_b_person_list">Person List (DB)</string>
+    <string name="home_b_city_list">City List (Memory)</string>
     
     <!-- PersonDbListActivity texts -->
     <string name="person_list_sp_return_format_prompt">Webservice return format</string>
