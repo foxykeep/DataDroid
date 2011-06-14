@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>DataProxyPoC</name>
+	<name>DataDroidPoC</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -32,9 +32,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>DataProxy_src</name>
+			<name>DataDroid_src</name>
 			<type>2</type>
-			<locationURI>_android_DataProxy_60f544c4/src</locationURI>
+			<locationURI>_android_DataDroid_604c28d2/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

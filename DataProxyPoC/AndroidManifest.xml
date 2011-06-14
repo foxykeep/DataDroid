@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.foxykeep.dataproxypoc"
+	package="com.foxykeep.datadroidpoc"
 	android:versionCode="1"
 	android:versionName="1.0">
 	<uses-sdk
@@ -22,11 +22,11 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ui.PersonListDbActivity"/>
+			android:name="ui.PersonListDbActivity"/>
 
 		<provider
-			android:name=".data.provider.PoCProvider"
-			android:authorities="com.foxykeep.dataproxypoc.data.provider.PoCProvider"
+			android:name="data.provider.PoCProvider"
+			android:authorities="com.foxykeep.datadroidpoc.data.provider.PoCProvider"
 			android:exported="false" />
 	</application>
 </manifest>
