@@ -43,9 +43,9 @@ public class PersonListWorker {
 
         ArrayList<Person> personList = null;
         if (returnFormat == RETURN_FORMAT_XML) {
-            personList = PersonListXmlFactory.parseResult(wsResult.mWsResponse);
+            personList = PersonListXmlFactory.parseResult(wsResult.wsResponse);
         } else {
-            personList = PersonListJsonFactory.parseResult(wsResult.mWsResponse);
+            personList = PersonListJsonFactory.parseResult(wsResult.wsResponse);
         }
 
         // Clear the table

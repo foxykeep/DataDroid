@@ -68,8 +68,8 @@ public class NetworkConnection {
      */
     public static class NetworkConnectionResult {
 
-        public Header[] mResultHeader;
-        public String mWsResponse;
+        public Header[] headerArray;
+        public String wsResponse;
 
         /**
          * Http response result container.
@@ -78,8 +78,8 @@ public class NetworkConnection {
          * @param result
          */
         public NetworkConnectionResult(final Header[] resultHeader, final String result) {
-            mResultHeader = resultHeader;
-            mWsResponse = result;
+            headerArray = resultHeader;
+            wsResponse = result;
         }
     }
 
