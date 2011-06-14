@@ -12,4 +12,12 @@ public class JSONTag {
     public static final String ELEM_PERSON_POSTAL_CODE = "postalCode";
     public static final String ELEM_PERSON_AGE = "age";
     public static final String ELEM_PERSON_IS_WORKING = "isWorking";
+
+    // CityList WS tags
+    public static final String CITY_LIST_ELEM_CITIES = "cities";
+    public static final String CITY_LIST_ELEM_CITY = "city";
+    public static final String CITY_LIST_ELEM_CITY_NAME = "name";
+    public static final String CITY_LIST_ELEM_CITY_POSTAL_CODE = "postalCode";
+    public static final String CITY_LIST_ELEM_CITY_DEPARTEMENT_NUMBER = "departementNumber";
+    public static final String CITY_LIST_ELEM_CITY_DEPARTEMENT_NAME = "departementName";
 }

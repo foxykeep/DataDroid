@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 import com.foxykeep.dataproxy.exception.RestClientException;
 import com.foxykeep.dataproxy.service.WorkerService;
 import com.foxykeep.dataproxypoc.data.requestmanager.PoCRequestManager;
+import com.foxykeep.dataproxypoc.data.worker.CityListWorker;
 import com.foxykeep.dataproxypoc.data.worker.PersonListWorker;
 
 /**
@@ -40,6 +41,7 @@ public class PoCService extends WorkerService {
 
     // Worker types
     public static final int WORKER_TYPE_PERSON_LIST = 0;
+    public static final int WORKER_TYPE_CITY_LIST = 1;
 
     // Worker params
     // - Person WS params
@@ -59,6 +61,9 @@ public class PoCService extends WorkerService {
                     PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT,
                             PersonListWorker.RETURN_FORMAT_XML));
                     sendSuccess(intent, null);
+                    break;
+                case WORKER_TYPE_CITY_LIST:
+                    sendSuccess(intent, CityListWorker.start());
                     break;
             }
         } catch (final IllegalStateException e) {

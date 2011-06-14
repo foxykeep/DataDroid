@@ -21,6 +21,7 @@ import android.os.ResultReceiver;
 import android.util.SparseArray;
 
 import com.foxykeep.dataproxy.requestmanager.RequestManager;
+import com.foxykeep.dataproxypoc.data.memprovider.MemoryProvider;
 import com.foxykeep.dataproxypoc.data.service.PoCService;
 
 /**
@@ -46,6 +47,8 @@ public class PoCRequestManager extends RequestManager {
         return sInstance;
     }
 
+    public static final String RECEIVER_EXTRA_CITY_LIST = "com.foxykeep.dataproxypoc.extras.cityList";
+
     private static Random sRandom = new Random();
 
     private SparseArray<Intent> mRequestSparseArray;
@@ -53,6 +56,7 @@ public class PoCRequestManager extends RequestManager {
     private ArrayList<OnRequestFinishedListener> mListenerList;
     private Handler mHandler = new Handler();
     private EvalReceiver mEvalReceiver = new EvalReceiver(mHandler);
+    private MemoryProvider mMemoryProvider = MemoryProvider.getInstance();
 
     private PoCRequestManager(final Context context) {
         mContext = context;
@@ -147,6 +151,19 @@ public class PoCRequestManager extends RequestManager {
         // Get the request Id
         final int requestId = resultData.getInt(RECEIVER_EXTRA_REQUEST_ID);
 
+        // Retrieve the transfered data and saved it in the MemoryProvider for
+        // the case when the calling activity is in background
+        // /!\ Only for the WS calls which save data in the MemoryProvider. For
+        // the database ones, the data is already saved in the database
+        final Intent intent = mRequestSparseArray.get(requestId);
+        switch (intent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1)) {
+            case PoCService.WORKER_TYPE_CITY_LIST:
+                if (resultCode == PoCService.SUCCESS_CODE) {
+                    mMemoryProvider.cityList = resultData.getParcelableArrayList(RECEIVER_EXTRA_CITY_LIST);
+                }
+                break;
+        }
+
         // Remove the request Id from the "in progress" request list
         mRequestSparseArray.remove(requestId);
 
@@ -190,6 +207,40 @@ public class PoCRequestManager extends RequestManager {
         mContext.startService(intent);
 
         mRequestSparseArray.append(requestId, intent);
+
+        return requestId;
+    }
+
+    /**
+     * Gets the list of cities and save it in the memory provider
+     * 
+     * @return the request Id
+     */
+    public int getCityList() {
+
+        // Check if a match to this request is already launched
+        final int requestSparseArrayLength = mRequestSparseArray.size();
+        for (int i = 0; i < requestSparseArrayLength; i++) {
+            final Intent savedIntent = mRequestSparseArray.valueAt(i);
+
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CITY_LIST) {
+                continue;
+            }
+            return mRequestSparseArray.keyAt(i);
+        }
+
+        final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
+
+        final Intent intent = new Intent(mContext, PoCService.class);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CITY_LIST);
+        intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
+        intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
+        mContext.startService(intent);
+
+        mRequestSparseArray.append(requestId, intent);
+
+        // Reset the cityList in the provider
+        mMemoryProvider.cityList = null;
 
         return requestId;
     }

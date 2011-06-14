@@ -1,0 +1,19 @@
+{
+	cities:{
+		city:[
+			{
+				name:'Saint Herblain',
+				postalcode:44800,
+				departementNumber:44,
+				departementName:'Loire Atlantique'
+			},
+			{
+				name:'Cesson Sévigné',
+				postalcode:35510,
+				departementNumber:35,
+				departementName:'Ille et Vilaine'
+			}
+		]
+	}
+}
+			
