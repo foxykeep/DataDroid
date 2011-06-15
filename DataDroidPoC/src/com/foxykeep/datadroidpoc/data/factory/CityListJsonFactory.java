@@ -27,8 +27,8 @@ public class CityListJsonFactory {
 
             city.name = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_NAME);
             city.postalCode = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_POSTAL_CODE);
-            city.departementNumber = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_DEPARTEMENT_NUMBER);
-            city.departementName = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_DEPARTEMENT_NAME);
+            city.countyNumber = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_COUNTY_NUMBER);
+            city.countyName = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_COUNTY_NAME);
 
             cityList.add(city);
         }

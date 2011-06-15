@@ -7,8 +7,8 @@ public class City implements Parcelable {
 
     public String name;
     public int postalCode;
-    public int departementNumber; // TODO a traduire en anglais
-    public String departementName; // TODO a traduire en anglais
+    public int countyNumber;
+    public String countyName;
 
     public City() {
     }
@@ -17,8 +17,8 @@ public class City implements Parcelable {
     private City(final Parcel in) {
         name = in.readString();
         postalCode = in.readInt();
-        departementNumber = in.readInt();
-        departementName = in.readString();
+        countyNumber = in.readInt();
+        countyName = in.readString();
     }
 
     public int describeContents() {
@@ -28,8 +28,8 @@ public class City implements Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(name);
         dest.writeInt(postalCode);
-        dest.writeInt(departementNumber);
-        dest.writeString(departementName);
+        dest.writeInt(countyNumber);
+        dest.writeString(countyName);
 
     }
 
