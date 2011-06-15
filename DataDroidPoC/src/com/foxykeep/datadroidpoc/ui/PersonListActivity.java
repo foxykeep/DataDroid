@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.config.DialogConfig;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
@@ -33,9 +34,6 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
-
-    private static final int DIALOG_CONNEXION_ERROR = 1;
-    private static final int DIALOG_ERROR = 2;
 
     private Spinner mSpinnerReturnFormat;
     private Button mButtonLoad;
@@ -88,7 +86,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                     // We don't have a way to know if the request was correctly
                     // executed with 0 result or if an error occurred.
                     // Here I choose to display an error but it's up to you
-                    showDialog(DIALOG_CONNEXION_ERROR);
+                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 } else {
                     mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
                             PersonDao.LAST_NAME_ORDER_BY);
@@ -128,16 +126,16 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     protected Dialog onCreateDialog(final int id) {
         Builder b;
         switch (id) {
-            case DIALOG_ERROR:
+            case DialogConfig.DIALOG_ERROR:
                 b = new Builder(this);
                 b.setTitle(mErrorDialogTitle);
                 b.setMessage(mErrorDialogMessage);
-                b.setCancelable(false);
+                b.setCancelable(true);
                 b.setNeutralButton(android.R.string.ok, null);
                 return b.create();
-            case DIALOG_CONNEXION_ERROR:
+            case DialogConfig.DIALOG_CONNEXION_ERROR:
                 b = new Builder(this);
-                b.setCancelable(false);
+                b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
                 b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -155,7 +153,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     @Override
     protected void onPrepareDialog(final int id, final Dialog dialog) {
         switch (id) {
-            case DIALOG_ERROR:
+            case DialogConfig.DIALOG_ERROR:
                 dialog.setTitle(mErrorDialogTitle);
                 ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
                 break;
@@ -175,7 +173,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     public void onClick(final View view) {
         if (view == mButtonLoad) {
             callPersonListWS();
-        } else {
+        } else if (view == mButtonClearDb) {
             mQueryHandler.startDelete(PersonDao.CONTENT_URI);
         }
     }
@@ -185,18 +183,19 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         if (requestId == mRequestId) {
             setProgressBarIndeterminateVisibility(false);
             mRequestId = -1;
+            mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
                     final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
-                        showDialog(DIALOG_ERROR);
+                        showDialog(DialogConfig.DIALOG_ERROR);
                     } else {
-                        showDialog(DIALOG_CONNEXION_ERROR);
+                        showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                     }
                 } else {
-                    showDialog(DIALOG_CONNEXION_ERROR);
+                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
             } else {
                 mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
