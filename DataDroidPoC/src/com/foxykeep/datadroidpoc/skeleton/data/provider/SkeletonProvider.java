@@ -231,8 +231,10 @@ public class SkeletonProvider extends ContentProvider {
         try {
             switch (match) {
                 case SKELETON:
+                    // TODO : Change Skeleton by your DAO class
                     insertStmt = db.compileStatement(Skeleton.getBulkInsertString());
                     for (final ContentValues value : values) {
+                        // TODO : Change Skeleton by your DAO class
                         Skeleton.bindValuesInBulkInsert(insertStmt, value);
                         insertStmt.execute();
                         insertStmt.clearBindings();
