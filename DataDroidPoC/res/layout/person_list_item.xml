@@ -3,25 +3,29 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="fill_parent"
-	android:padding="5dp">
+	android:padding="5dp"
+	android:paddingRight="?android:attr/scrollbarSize">
 	<TextView
 		android:id="@+id/tv_first_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true" />
+		android:layout_alignParentTop="true"
+		android:textAppearance="?android:attr/textAppearanceLarge" />
 	<TextView
 		android:id="@+id/tv_last_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBaseline="@id/tv_first_name"
-		android:layout_toRightOf="@id/tv_first_name"/>
+		android:layout_toRightOf="@id/tv_first_name"
+		android:textAppearance="?android:attr/textAppearanceLarge" />
 	<TextView
 		android:id="@+id/tv_age"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true" />
+		android:layout_alignParentTop="true"
+		android:textAppearance="?android:attr/textAppearanceLarge" />
 	<TextView
 		android:id="@+id/tv_email"
 		android:layout_width="wrap_content"
