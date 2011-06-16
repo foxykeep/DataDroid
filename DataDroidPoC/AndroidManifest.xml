@@ -26,10 +26,15 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="ui.PersonListDbActivity"/>
+			android:name=".ui.PersonListActivity"/>
+		<activity
+			android:name=".ui.CityListActivity"/>
+
+		<service
+			android:name=".data.service.PoCService" />
 
 		<provider
-			android:name="data.provider.PoCProvider"
+			android:name=".data.provider.PoCProvider"
 			android:authorities="com.foxykeep.datadroidpoc.data.provider.PoCProvider"
 			android:exported="false" />
 	</application>
