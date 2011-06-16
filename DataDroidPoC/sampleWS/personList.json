@@ -4,18 +4,18 @@
 			{
 				firstname:'Valentine',
 				lastname:'Wells',
-				email:'toto@tutu.edu',
+                email:'arcu@loremegetmollis.edu',
 				city:'Nacogdoches',
 				postalcode:34520,
 				age:15,
 				isWorking:1
 			},
 			{
-				firstname:'Valentine',
-				lastname:'Wells',
-				email:'toto@tutu.edu',
-				city:'Nacogdoches',
-				postalcode:34520,
+                firstname:'Ciaran',
+                lastname:'Boyd',
+                email:'dui@ut.com',
+                city:'Lomita',
+                postalcode:23818
 				age:15,
 				isWorking:1
 			}
