@@ -71,17 +71,13 @@ public abstract class PoCContent {
         };
 
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME + " text, " + FIRST_NAME
+            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME + " text, " + LAST_NAME
                     + " text, " + EMAIL + " text, " + CITY + " text, " + POSTAL_CODE + " integer, " + AGE
                     + " integer, " + IS_WORKING + " integer " + ");";
 
             db.execSQL("create table " + TABLE_NAME + s);
 
-            // TODO : Add the table's indexes (if any) using the
-            // getCreateIndexString() method
             db.execSQL(DatabaseUtil.getCreateIndexString(TABLE_NAME, LAST_NAME));
-
-            // TODO : Add the table's triggers (if any)
         }
 
         static void upgradeTable(final SQLiteDatabase db, final int oldVersion, final int newVersion) {

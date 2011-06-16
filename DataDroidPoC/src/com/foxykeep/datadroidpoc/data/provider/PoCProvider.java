@@ -23,7 +23,6 @@ import android.util.Log;
 
 import com.foxykeep.datadroidpoc.config.LogConfig;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
-import com.foxykeep.datadroidpoc.skeleton.data.provider.SkeletonContent.Skeleton;
 
 public class PoCProvider extends ContentProvider {
 
@@ -219,9 +218,9 @@ public class PoCProvider extends ContentProvider {
         try {
             switch (match) {
                 case PERSON:
-                    insertStmt = db.compileStatement(Skeleton.getBulkInsertString());
+                    insertStmt = db.compileStatement(PersonDao.getBulkInsertString());
                     for (final ContentValues value : values) {
-                        Skeleton.bindValuesInBulkInsert(insertStmt, value);
+                        PersonDao.bindValuesInBulkInsert(insertStmt, value);
                         insertStmt.execute();
                         insertStmt.clearBindings();
                     }
