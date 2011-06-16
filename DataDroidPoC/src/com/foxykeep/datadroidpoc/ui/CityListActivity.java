@@ -52,14 +52,13 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
 
         setContentView(R.layout.city_list);
         bindViews();
+        setListAdapter(new CityListAdapter(this));
 
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
             mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
         }
-
-        getListView().setAdapter(new CityListAdapter(this));
 
         mRequestManager = PoCRequestManager.getInstance(this);
         mInflater = getLayoutInflater();
@@ -158,6 +157,8 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
     }
 
     private void callCityListWS() {
+        ((CityListAdapter) getListAdapter()).clear();
+
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
         mRequestId = mRequestManager.getCityList();
@@ -213,13 +214,13 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
         private TextView mTextViewCountyName;
 
         public ViewHolder(final View view) {
-            mTextViewName = (TextView) findViewById(R.id.tv_name);
-            mTextViewPostalCode = (TextView) findViewById(R.id.tv_postal_code);
-            mTextViewCountyNumber = (TextView) findViewById(R.id.tv_county_number);
-            mTextViewCountyName = (TextView) findViewById(R.id.tv_county_name);
+            mTextViewName = (TextView) view.findViewById(R.id.tv_name);
+            mTextViewPostalCode = (TextView) view.findViewById(R.id.tv_postal_code);
+            mTextViewCountyNumber = (TextView) view.findViewById(R.id.tv_county_number);
+            mTextViewCountyName = (TextView) view.findViewById(R.id.tv_county_name);
         }
 
-        public void populateView(final City city) {
+        public void populateViews(final City city) {
             mTextViewName.setText(city.name);
             mTextViewPostalCode.setText(String.valueOf(city.postalCode));
             mTextViewCountyNumber.setText(String.valueOf(city.countyNumber));
@@ -245,7 +246,7 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.populateView(getItem(position));
+            viewHolder.populateViews(getItem(position));
 
             return convertView;
         }

@@ -66,6 +66,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         mRequestManager = PoCRequestManager.getInstance(this);
         mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
         mInflater = getLayoutInflater();
+
+        mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION, PersonDao.LAST_NAME_ORDER_BY);
     }
 
     @Override
@@ -228,11 +230,17 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         private CharArrayBuffer mCharArrayBufferCity;
 
         public ViewHolder(final View view) {
-            mTextViewFirstName = (TextView) findViewById(R.id.tv_first_name);
-            mTextViewLastName = (TextView) findViewById(R.id.tv_last_name);
-            mTextViewAge = (TextView) findViewById(R.id.tv_age);
-            mTextViewEmail = (TextView) findViewById(R.id.tv_email);
-            mTextViewCity = (TextView) findViewById(R.id.tv_city);
+            mTextViewFirstName = (TextView) view.findViewById(R.id.tv_first_name);
+            mTextViewLastName = (TextView) view.findViewById(R.id.tv_last_name);
+            mTextViewAge = (TextView) view.findViewById(R.id.tv_age);
+            mTextViewEmail = (TextView) view.findViewById(R.id.tv_email);
+            mTextViewPostalCode = (TextView) view.findViewById(R.id.tv_postal_code);
+            mTextViewCity = (TextView) view.findViewById(R.id.tv_city);
+
+            mCharArrayBufferFirstName = new CharArrayBuffer(20);
+            mCharArrayBufferLastName = new CharArrayBuffer(20);
+            mCharArrayBufferEmail = new CharArrayBuffer(20);
+            mCharArrayBufferCity = new CharArrayBuffer(20);
         }
 
         public void populateView(final Cursor c) {
@@ -242,7 +250,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
             c.copyStringToBuffer(PersonDao.CONTENT_LAST_NAME_COLUMN, mCharArrayBufferLastName);
             mTextViewLastName.setText(mCharArrayBufferLastName.data, 0, mCharArrayBufferLastName.sizeCopied);
 
-            mTextViewAge.setText(String.valueOf(c.getInt(PersonDao.CONTENT_AGE_COLUMN)));
+            mTextViewAge.setText(getString(R.string.person_list_item_tv_age_format,
+                    c.getInt(PersonDao.CONTENT_AGE_COLUMN)));
 
             c.copyStringToBuffer(PersonDao.CONTENT_EMAIL_COLUMN, mCharArrayBufferEmail);
             mTextViewEmail.setText(mCharArrayBufferEmail.data, 0, mCharArrayBufferEmail.sizeCopied);

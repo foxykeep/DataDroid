@@ -18,6 +18,7 @@
     <string name="person_list_b_load">Load</string>
     <string name="person_list_b_clear_db">Clear DB</string>
     <string name="person_list_tv_empty">0 person found</string>
+    <string name="person_list_item_tv_age_format">%1$d yrs old</string>
     
     <!-- CityListActivity texts -->
     <string name="city_list_b_load">Load</string>
