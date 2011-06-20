@@ -1,0 +1,7 @@
+CRUD
+
+creation d'un userId unique lors du 1er get de l'appli
+	Le serveur genere alors 2 entrées par defaut dans la table 
+Toute recuperation ulterieure fourni l'userId unique afin de recuperer les elements specifiques a une install de l'appli.
+	Le serveur repond aux requetes en prenant uniquement les elements correspondant a cet userId
+	Si l'userId ne correspond pas a un userId valable sur un POST/PUT/DELETE => erreur

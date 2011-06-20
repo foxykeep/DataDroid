@@ -1,0 +1,71 @@
+CRUD
+
+ERRORS
+{
+	serverError:{
+		code:134
+		title:'Name already present'
+		message:'A phone with this name is already present'
+	}
+}
+
+GET
+http://foxykeep.com/projects/datadroid/crud/phoneList.php?userId=X
+{
+	phones:{
+		phone:[
+			{
+				id:146
+				name:'Nexus One',
+				manufacturer:'Google',
+				androidVersion:'2.3.4',
+				screenSize:3.8,
+				price:400
+			},
+			{
+				id:147
+				name:'HTC Sensation',
+				manufacturer:'HTC',
+				androidVersion:'2.3',
+				screenSize:4.0,
+				price:550
+			}
+		]
+	}
+}
+
+POST
+http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userId=X&name=X&manufacturer=X&androidVersion=X&screenSize=X&price=X
+{
+	phone:{
+		id:148
+		name:'Nexus S',
+		manufacturer:'Google',
+		androidVersion:'2.3.4',
+		screenSize:4.3,
+		price:600
+	}
+}
+
+PUT	
+http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userId=X&id=X&name=X&manufacturer=X&androidVersion=X&screenSize=X&price=X
+{
+	phone:{
+		id:148
+		name:'Nexus S',
+		manufacturer:'Google',
+		androidVersion:'2.3.4',
+		screenSize:4.3,
+		price:600
+	}
+}
+
+DELETE
+http://foxykeep.com/projects/datadroid/crud/deletePhone.php?userId=X&id=X
+{
+	phone:{
+		id:128
+	}
+}
+
+	
