@@ -20,4 +20,14 @@ public class JSONTag {
     public static final String CITY_LIST_ELEM_CITY_POSTAL_CODE = "postalCode";
     public static final String CITY_LIST_ELEM_CITY_COUNTY_NUMBER = "countyNumber";
     public static final String CITY_LIST_ELEM_CITY_COUNTY_NAME = "countyName";
+
+    // CrudPhoneList WS tags
+    public static final String CRUD_PHONE_LIST_ELEM_PHONES = "phones";
+    public static final String CRUD_PHONE_LIST_ELEM_PHONE = "phone";
+    public static final String CRUD_PHONE_LIST_ELEM_ID = "id";
+    public static final String CRUD_PHONE_LIST_ELEM_NAME = "name";
+    public static final String CRUD_PHONE_LIST_ELEM_MANUFACTURER = "manufacturer";
+    public static final String CRUD_PHONE_LIST_ELEM_ANDROID_VERSION = "androidVersion";
+    public static final String CRUD_PHONE_LIST_ELEM_SCREEN_SIZE = "screenSize";
+    public static final String CRUD_PHONE_LIST_ELEM_PRICE = "price";
 }

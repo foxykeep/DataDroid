@@ -244,4 +244,39 @@ public class PoCRequestManager extends RequestManager {
 
         return requestId;
     }
+
+    /**
+     * Gets the list of phones and save it in the database
+     * 
+     * @return the request Id
+     */
+    public int getPhoneList(final String userId) {
+
+        // Check if a match to this request is already launched
+        final int requestSparseArrayLength = mRequestSparseArray.size();
+        for (int i = 0; i < requestSparseArrayLength; i++) {
+            final Intent savedIntent = mRequestSparseArray.valueAt(i);
+
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CRUD_PHONE_LIST) {
+                continue;
+            }
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_PHONE_LIST_USER_ID).equals(userId)) {
+                continue;
+            }
+            return mRequestSparseArray.keyAt(i);
+        }
+
+        final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
+
+        final Intent intent = new Intent(mContext, PoCService.class);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CRUD_PHONE_LIST);
+        intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
+        intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_PHONE_LIST_USER_ID, userId);
+        mContext.startService(intent);
+
+        mRequestSparseArray.append(requestId, intent);
+
+        return requestId;
+    }
 }

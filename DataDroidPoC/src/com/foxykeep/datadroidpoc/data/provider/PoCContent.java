@@ -17,6 +17,7 @@ import android.provider.BaseColumns;
 
 import com.foxykeep.datadroid.provider.util.DatabaseUtil;
 import com.foxykeep.datadroidpoc.data.model.Person;
+import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.skeleton.data.provider.SkeletonProvider;
 
 /**
@@ -134,6 +135,106 @@ public abstract class PoCContent {
             values.put(POSTAL_CODE, person.postalCode);
             values.put(AGE, person.age);
             values.put(IS_WORKING, person.isWorking ? 1 : 0);
+            return values;
+        }
+    }
+
+    public interface PhoneDaoColumns {
+        public static final String SERVER_ID = "serverId";
+        public static final String NAME = "name";
+        public static final String MANUFACTURER = "manufacturer";
+        public static final String ANDROID_VERSION = "androidVersion";
+        public static final String SCREEN_SIZE = "screenSize";
+        public static final String PRICE = "price";
+    }
+
+    public static final class PhoneDao extends PoCContent implements PhoneDaoColumns, BaseColumns {
+        public static final String TABLE_NAME = "phone";
+        public static final Uri CONTENT_URI = Uri.parse(PoCContent.CONTENT_URI + "/" + TABLE_NAME);
+        public static final String TYPE_ELEM_TYPE = "vnd.android.cursor.item/com.foxykeep.datadroidpoc.data.provider.phone";
+        public static final String TYPE_DIR_TYPE = "vnd.android.cursor.dir/com.foxykeep.datadroidpoc.data.provider.phone";
+
+        public static final String NAME_ORDER_BY = NAME + " ASC";
+
+        public static final int CONTENT_ID_COLUMN = 0;
+        public static final int CONTENT_SERVER_ID_COLUMN = 1;
+        public static final int CONTENT_NAME_COLUMN = 2;
+        public static final int CONTENT_MANUFACTURER_COLUMN = 3;
+        public static final int CONTENT_ANDROID_VERSION_COLUMN = 4;
+        public static final int CONTENT_SCREEN_SIZE_COLUMN = 5;
+        public static final int CONTENT_PRICE_COLUMN = 6;
+        public static final String[] CONTENT_PROJECTION = new String[] {
+                _ID, SERVER_ID, NAME, MANUFACTURER, ANDROID_VERSION, SCREEN_SIZE, PRICE
+        };
+
+        public static final int CONTENT_LIST_ID_COLUMN = 0;
+        public static final int CONTENT_LIST_NAME_COLUMN = 1;
+        public static final int CONTENT_LIST_MANUFACTURER_COLUMN = 2;
+        public static final String[] CONTENT_LIST_PROJECTION = new String[] {
+                _ID, NAME, MANUFACTURER
+        };
+
+        static void createTable(final SQLiteDatabase db) {
+            final String s = " (" + _ID + " integer primary key autoincrement, " + SERVER_ID + " integer, " + NAME
+                    + " text, " + MANUFACTURER + " text, " + ANDROID_VERSION + " text, " + SCREEN_SIZE + " text, "
+                    + SCREEN_SIZE + " integer );";
+
+            db.execSQL("create table " + TABLE_NAME + s);
+
+            db.execSQL(DatabaseUtil.getCreateIndexString(TABLE_NAME, NAME));
+
+        }
+
+        static void upgradeTable(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+            try {
+                db.execSQL("drop table " + TABLE_NAME);
+            } catch (final SQLException e) {
+            }
+            createTable(db);
+        }
+
+        public static String getBulkInsertString() {
+            final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
+            sqlRequest.append(TABLE_NAME);
+            sqlRequest.append(" ( ");
+            sqlRequest.append(SERVER_ID);
+            sqlRequest.append(", ");
+            sqlRequest.append(NAME);
+            sqlRequest.append(", ");
+            sqlRequest.append(MANUFACTURER);
+            sqlRequest.append(", ");
+            sqlRequest.append(ANDROID_VERSION);
+            sqlRequest.append(", ");
+            sqlRequest.append(SCREEN_SIZE);
+            sqlRequest.append(", ");
+            sqlRequest.append(PRICE);
+            sqlRequest.append(" ) ");
+            sqlRequest.append(" VALUES (?, ?, ?, ?, ?, ?)");
+            return sqlRequest.toString();
+        }
+
+        public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
+            int i = 1;
+            stmt.bindLong(i++, values.getAsInteger(SERVER_ID));
+            String value = values.getAsString(NAME);
+            stmt.bindString(i++, value != null ? value : "");
+            value = values.getAsString(MANUFACTURER);
+            stmt.bindString(i++, value != null ? value : "");
+            value = values.getAsString(ANDROID_VERSION);
+            stmt.bindString(i++, value != null ? value : "");
+            value = values.getAsString(SCREEN_SIZE);
+            stmt.bindString(i++, value != null ? value : "");
+            stmt.bindLong(i++, values.getAsInteger(PRICE));
+        }
+
+        public static ContentValues getContentValues(final Phone phone) {
+            ContentValues values = new ContentValues();
+            values.put(SERVER_ID, phone.serverId);
+            values.put(NAME, phone.name);
+            values.put(MANUFACTURER, phone.manufacturer);
+            values.put(ANDROID_VERSION, phone.androidVersion);
+            values.put(SCREEN_SIZE, phone.screenSize);
+            values.put(PRICE, phone.price);
             return values;
         }
     }

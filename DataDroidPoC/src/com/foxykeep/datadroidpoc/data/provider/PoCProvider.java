@@ -23,6 +23,7 @@ import android.util.Log;
 
 import com.foxykeep.datadroidpoc.config.LogConfig;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
+import com.foxykeep.datadroidpoc.data.provider.PoCContent.PhoneDao;
 
 public class PoCProvider extends ContentProvider {
 
@@ -42,17 +43,16 @@ public class PoCProvider extends ContentProvider {
     private static final int PERSON = PERSON_BASE;
     private static final int PERSON_ID = PERSON_BASE + 1;
 
-    // Example for the next table
-    // private static final int PERIOD_BASE = 0x1000;
-    // private static final int PERIOD = PERIOD_BASE;
-    // private static final int PERIOD_ID = PERIOD_BASE + 1;
+    private static final int PHONE_BASE = 0x1000;
+    private static final int PHONE = PHONE_BASE;
+    private static final int PHONE_ID = PHONE_BASE + 1;
 
     private static final int BASE_SHIFT = 12; // DO NOT TOUCH ! 12 bits to the
     // base type: 0,
     // 0x1000, 0x2000, etc.
 
     private static final String[] TABLE_NAMES = {
-        PersonDao.TABLE_NAME
+            PersonDao.TABLE_NAME, PhoneDao.TABLE_NAME
     };
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -64,6 +64,11 @@ public class PoCProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, PersonDao.TABLE_NAME, PERSON);
         // A specific person
         matcher.addURI(AUTHORITY, PersonDao.TABLE_NAME + "/#", PERSON_ID);
+
+        // All phones
+        matcher.addURI(AUTHORITY, PhoneDao.TABLE_NAME, PHONE);
+        // A specific phone
+        matcher.addURI(AUTHORITY, PhoneDao.TABLE_NAME + "/#", PHONE_ID);
     }
 
     private SQLiteDatabase mDatabase;
@@ -100,11 +105,16 @@ public class PoCProvider extends ContentProvider {
 
             // Creates all tables here; each class has its own method
             if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
-                Log.d(LOG_TAG, "Skeleton | createTable start");
+                Log.d(LOG_TAG, "PoCProvider | createPersonTable start");
             }
             PersonDao.createTable(db);
             if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
-                Log.d(LOG_TAG, "Skeleton | createSkeletonTable end");
+                Log.d(LOG_TAG, "PoCProvider | createPersonTable end");
+                Log.d(LOG_TAG, "PoCProvider | createPhoneTable start");
+            }
+            PhoneDao.createTable(db);
+            if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
+                Log.d(LOG_TAG, "PoCProvider | createPhoneTable end");
             }
         }
 
@@ -136,12 +146,12 @@ public class PoCProvider extends ContentProvider {
 
         switch (match) {
             case PERSON_ID:
-                // case PROGRAM_ID:
+            case PHONE_ID:
                 id = uri.getPathSegments().get(1);
                 result = db.delete(TABLE_NAMES[table], whereWithId(id, selection), selectionArgs);
                 break;
             case PERSON:
-                // case PROGRAM:
+            case PHONE:
                 result = db.delete(TABLE_NAMES[table], selection, selectionArgs);
                 break;
             default:
@@ -160,6 +170,10 @@ public class PoCProvider extends ContentProvider {
                 return PersonDao.TYPE_ELEM_TYPE;
             case PERSON:
                 return PersonDao.TYPE_DIR_TYPE;
+            case PHONE_ID:
+                return PhoneDao.TYPE_ELEM_TYPE;
+            case PHONE:
+                return PhoneDao.TYPE_DIR_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -184,7 +198,7 @@ public class PoCProvider extends ContentProvider {
 
         switch (match) {
             case PERSON:
-                // case PROGRAM:
+            case PHONE:
                 id = db.insert(TABLE_NAMES[table], "foo", values);
                 resultUri = ContentUris.withAppendedId(uri, id);
                 break;
@@ -228,6 +242,17 @@ public class PoCProvider extends ContentProvider {
                     db.setTransactionSuccessful();
                     numberInserted = values.length;
                     break;
+                case PHONE:
+                    insertStmt = db.compileStatement(PhoneDao.getBulkInsertString());
+                    for (final ContentValues value : values) {
+                        PhoneDao.bindValuesInBulkInsert(insertStmt, value);
+                        insertStmt.execute();
+                        insertStmt.clearBindings();
+                    }
+                    insertStmt.close();
+                    db.setTransactionSuccessful();
+                    numberInserted = values.length;
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown URI " + uri);
             }
@@ -260,13 +285,13 @@ public class PoCProvider extends ContentProvider {
 
         switch (match) {
             case PERSON_ID:
-                // case PROGRAM_ID:
+            case PHONE_ID:
                 id = uri.getPathSegments().get(1);
                 c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null,
                         sortOrder);
                 break;
             case PERSON:
-                // case PROGRAM:
+            case PHONE:
                 c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
@@ -308,12 +333,12 @@ public class PoCProvider extends ContentProvider {
 
         switch (match) {
             case PERSON_ID:
-                // case PROGRAM_ID:
+            case PHONE_ID:
                 final String id = uri.getPathSegments().get(1);
                 result = db.update(TABLE_NAMES[table], values, whereWithId(id, selection), selectionArgs);
                 break;
             case PERSON:
-                // case PROGRAM:
+            case PHONE:
                 result = db.update(TABLE_NAMES[table], values, selection, selectionArgs);
                 break;
             default:

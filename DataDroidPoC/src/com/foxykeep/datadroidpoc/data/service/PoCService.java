@@ -23,6 +23,7 @@ import com.foxykeep.datadroid.exception.RestClientException;
 import com.foxykeep.datadroid.service.WorkerService;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.worker.CityListWorker;
+import com.foxykeep.datadroidpoc.data.worker.CrudPhoneListWorker;
 import com.foxykeep.datadroidpoc.data.worker.PersonListWorker;
 
 /**
@@ -42,10 +43,13 @@ public class PoCService extends WorkerService {
     // Worker types
     public static final int WORKER_TYPE_PERSON_LIST = 0;
     public static final int WORKER_TYPE_CITY_LIST = 1;
+    public static final int WORKER_TYPE_CRUD_PHONE_LIST = 2;
 
     // Worker params
-    // - Person WS params
+    // - PersonList WS params
     public static final String INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT = "com.foxykeep.datadroidpoc.extras.personsReturnFormat";
+    // - CrudPhoneList WS params
+    public static final String INTENT_EXTRA_CRUD_PHONE_LIST_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneListUserID";
 
     public PoCService() {
         super(MAX_THREADS);
@@ -64,6 +68,10 @@ public class PoCService extends WorkerService {
                     break;
                 case WORKER_TYPE_CITY_LIST:
                     sendSuccess(intent, CityListWorker.start());
+                    break;
+                case WORKER_TYPE_CRUD_PHONE_LIST:
+                    CrudPhoneListWorker.start(this, intent.getStringExtra(INTENT_EXTRA_CRUD_PHONE_LIST_USER_ID));
+                    sendSuccess(intent, null);
                     break;
             }
         } catch (final IllegalStateException e) {
