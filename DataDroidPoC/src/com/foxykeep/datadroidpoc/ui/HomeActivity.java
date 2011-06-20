@@ -13,12 +13,14 @@ public class HomeActivity extends Activity implements OnClickListener {
 
     private Button mButtonPersonList;
     private Button mButtonCityList;
+    private Button mButtonPhonesCrudSync;
+    private Button mButtonPhonesCrudAsync;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main);
+        setContentView(R.layout.home);
         bindViews();
     }
 
@@ -28,6 +30,12 @@ public class HomeActivity extends Activity implements OnClickListener {
 
         mButtonCityList = (Button) findViewById(R.id.b_city_list);
         mButtonCityList.setOnClickListener(this);
+
+        mButtonPhonesCrudSync = (Button) findViewById(R.id.b_phones_crud_sync);
+        mButtonPhonesCrudSync.setOnClickListener(this);
+
+        mButtonPhonesCrudAsync = (Button) findViewById(R.id.b_phones_crud_async);
+        mButtonPhonesCrudAsync.setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +45,12 @@ public class HomeActivity extends Activity implements OnClickListener {
             intent = new Intent(this, PersonListActivity.class);
         } else if (view == mButtonCityList) {
             intent = new Intent(this, CityListActivity.class);
+        } else if (view == mButtonPhonesCrudSync) {
+            intent = new Intent(this, CrudPhoneListActivity.class);
+            intent.putExtra(CrudPhoneListActivity.INTENT_EXTRA_IS_SYNC, true);
+        } else if (view == mButtonPhonesCrudAsync) {
+            intent = new Intent(this, CrudPhoneListActivity.class);
+            intent.putExtra(CrudPhoneListActivity.INTENT_EXTRA_IS_SYNC, false);
         }
 
         if (intent != null) {

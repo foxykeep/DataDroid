@@ -3,8 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:padding="5dp">
+	android:orientation="vertical">
 	<Button
 		android:id="@+id/b_person_list"
 		android:layout_width="fill_parent"
@@ -15,4 +14,14 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/home_b_city_list" />
+	<Button
+		android:id="@+id/b_phones_crud_sync"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/home_b_crud_phone_list_sync" />
+	<Button
+		android:id="@+id/b_phones_crud_async"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/home_b_crud_phone_list_async" />
 </LinearLayout>

@@ -12,6 +12,8 @@
     <!-- HomeActivity texts -->
     <string name="home_b_person_list">Person List (DB)</string>
     <string name="home_b_city_list">City List (Memory)</string>
+    <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
+    <string name="home_b_crud_phone_list_async">Phones (CRUD) (Async)</string>
     
     <!-- PersonListActivity texts -->
     <string name="person_list_sp_return_format_prompt">Webservice return format</string>

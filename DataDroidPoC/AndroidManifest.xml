@@ -29,6 +29,8 @@
 			android:name=".ui.PersonListActivity"/>
 		<activity
 			android:name=".ui.CityListActivity"/>
+		<activity
+			android:name=".ui.CrudPhoneListActivity"/>
 
 		<service
 			android:name=".data.service.PoCService" />
