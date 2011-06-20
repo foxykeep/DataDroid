@@ -4,7 +4,7 @@
 	package="com.foxykeep.datadroidpoc"
 	android:versionCode="1"
 	android:versionName="1.0">
-	
+
 	<uses-sdk
 		android:minSdkVersion="4" />
 
@@ -13,8 +13,9 @@
 
 	<application
 		android:icon="@drawable/icon"
-		android:label="@string/app_name">
-
+		android:label="@string/app_name"
+		android:name=".DataDroidApplication"
+		android:theme="@style/Theme.DataDroid">
 		<activity
 			android:name=".ui.HomeActivity"
 			android:label="@string/app_name">
@@ -26,14 +27,15 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ui.PersonListActivity"/>
+			android:name=".ui.PersonListActivity" />
 		<activity
-			android:name=".ui.CityListActivity"/>
+			android:name=".ui.CityListActivity" />
 		<activity
-			android:name=".ui.CrudPhoneListActivity"/>
+			android:name=".ui.CrudPhoneListActivity" />
 
 		<service
-			android:name=".data.service.PoCService" />
+			android:name=".data.service.PoCService"
+			android:exported="false" />
 
 		<provider
 			android:name=".data.provider.PoCProvider"

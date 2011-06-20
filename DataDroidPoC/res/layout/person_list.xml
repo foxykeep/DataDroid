@@ -1,50 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<greendroid.widget.ActionBarHost
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@id/gd_action_bar_host"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:padding="5dp">
+	android:orientation="vertical">
+	<!-- Layout height/width and background are set here. This is a hack to 
+		apply a default style to the ActionBar. Indeed, no style can be applied to 
+		a LinearLayout -->
+	<greendroid.widget.ActionBar
+		android:id="@id/gd_action_bar"
+		android:layout_height="@dimen/gd_action_bar_height"
+		android:layout_width="fill_parent"
+		android:background="?attr/gdActionBarBackground" />
 	<LinearLayout
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		<Spinner
-			android:id="@+id/sp_return_format"
-			android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:padding="5dp">
+		<LinearLayout
+			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:prompt="@string/person_list_sp_return_format_prompt"
-			android:entries="@array/return_format" />
-		<Button
-			android:id="@+id/b_load"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/person_list_b_load" />
-		<Button
-			android:id="@+id/b_clear_db"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/person_list_b_clear_db" />
+			android:orientation="horizontal">
+			<Spinner
+				android:id="@+id/sp_return_format"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:prompt="@string/person_list_sp_return_format_prompt"
+				android:entries="@array/return_format" />
+			<Button
+				android:id="@+id/b_load"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/person_list_b_load" />
+			<Button
+				android:id="@+id/b_clear_db"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/person_list_b_clear_db" />
+		</LinearLayout>
+		<View
+			android:layout_width="fill_parent"
+			android:layout_height="2dp"
+			android:background="?android:attr/listDivider" />
+		<FrameLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			<ListView
+				android:id="@android:id/list"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent" />
+			<TextView
+				android:id="@android:id/empty"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="30dp"
+				android:gravity="center"
+				android:text="@string/person_list_tv_empty" />
+		</FrameLayout>
 	</LinearLayout>
-	<View
-		android:layout_width="fill_parent"
-		android:layout_height="2dp"
-		android:background="?android:attr/listDivider" />
-	<FrameLayout
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-		<ListView
-			android:id="@android:id/list"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent" />
-		<TextView
-			android:id="@android:id/empty"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingTop="30dp"
-			android:gravity="center"
-			android:text="@string/person_list_tv_empty" />
-	</FrameLayout>
-
-</LinearLayout>
+</greendroid.widget.ActionBarHost>

@@ -1,11 +1,12 @@
 package com.foxykeep.datadroidpoc.ui;
 
+import greendroid.app.GDListActivity;
+
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,7 +26,7 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 
-public class CityListActivity extends ListActivity implements OnRequestFinishedListener, OnClickListener {
+public class CityListActivity extends GDListActivity implements OnRequestFinishedListener, OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -48,7 +48,6 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setContentView(R.layout.city_list);
         bindViews();
@@ -70,7 +69,7 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
         if (mRequestId != -1) {
             if (mRequestManager.isRequestInProgress(mRequestId)) {
                 mRequestManager.addOnRequestFinishedListener(this);
-                setProgressBarIndeterminateVisibility(true);
+                // TODO manage the progress loader
             } else {
                 mRequestId = -1;
 
@@ -159,7 +158,7 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
     private void callCityListWS() {
         ((CityListAdapter) getListAdapter()).clear();
 
-        setProgressBarIndeterminateVisibility(true);
+        // TODO manage the progress loader
         mRequestManager.addOnRequestFinishedListener(this);
         mRequestId = mRequestManager.getCityList();
     }
@@ -177,7 +176,7 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
     @Override
     public void onRequestFinished(final int requestId, final int resultCode, final Bundle payload) {
         if (requestId == mRequestId) {
-            setProgressBarIndeterminateVisibility(false);
+            // TODO manage the progress loader
             mRequestId = -1;
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {

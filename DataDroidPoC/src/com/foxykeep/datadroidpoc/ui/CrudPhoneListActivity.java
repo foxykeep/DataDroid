@@ -1,9 +1,10 @@
 package com.foxykeep.datadroidpoc.ui;
 
+import greendroid.app.GDListActivity;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.CharArrayBuffer;
@@ -12,7 +13,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -26,7 +26,7 @@ import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudPhoneListActivity extends ListActivity implements AsyncQueryListener, OnRequestFinishedListener {
+public class CrudPhoneListActivity extends GDListActivity implements AsyncQueryListener, OnRequestFinishedListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -47,9 +47,6 @@ public class CrudPhoneListActivity extends ListActivity implements AsyncQueryLis
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-        setContentView(R.layout.person_list);
 
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);

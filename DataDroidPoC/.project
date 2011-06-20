@@ -36,5 +36,10 @@
 			<type>2</type>
 			<locationURI>_android_DataDroid_604c28d2/src</locationURI>
 		</link>
+		<link>
+			<name>GreenDroid_src</name>
+			<type>2</type>
+			<locationURI>_android_GreenDroid_612cb559/src</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

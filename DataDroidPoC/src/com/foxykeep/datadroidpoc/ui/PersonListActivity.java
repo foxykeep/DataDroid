@@ -1,9 +1,10 @@
 package com.foxykeep.datadroidpoc.ui;
 
+import greendroid.app.GDListActivity;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.CharArrayBuffer;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.Spinner;
@@ -28,7 +28,7 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class PersonListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
+public class PersonListActivity extends GDListActivity implements OnRequestFinishedListener, AsyncQueryListener,
         OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
@@ -52,7 +52,6 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setContentView(R.layout.person_list);
         bindViews();
@@ -76,7 +75,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         if (mRequestId != -1) {
             if (mRequestManager.isRequestInProgress(mRequestId)) {
                 mRequestManager.addOnRequestFinishedListener(this);
-                setProgressBarIndeterminateVisibility(true);
+                // TODO manage the progress loader
             } else {
                 mRequestId = -1;
 
@@ -166,7 +165,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     }
 
     private void callPersonListWS() {
-        setProgressBarIndeterminateVisibility(true);
+        // TODO manage the progress loader
         mRequestManager.addOnRequestFinishedListener(this);
         mRequestId = mRequestManager.getPersonList(mSpinnerReturnFormat.getSelectedItemPosition());
     }
@@ -183,7 +182,7 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
     @Override
     public void onRequestFinished(final int requestId, final int resultCode, final Bundle payload) {
         if (requestId == mRequestId) {
-            setProgressBarIndeterminateVisibility(false);
+            // TODO manage the progress loader
             mRequestId = -1;
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {

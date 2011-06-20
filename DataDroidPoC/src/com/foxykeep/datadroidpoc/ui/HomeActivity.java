@@ -1,6 +1,7 @@
 package com.foxykeep.datadroidpoc.ui;
 
-import android.app.Activity;
+import greendroid.app.GDActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.widget.Button;
 
 import com.foxykeep.datadroidpoc.R;
 
-public class HomeActivity extends Activity implements OnClickListener {
+public class HomeActivity extends GDActivity implements OnClickListener {
 
     private Button mButtonPersonList;
     private Button mButtonCityList;
@@ -20,7 +21,7 @@ public class HomeActivity extends Activity implements OnClickListener {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.home);
+        setActionBarContentView(R.layout.home);
         bindViews();
     }
 
