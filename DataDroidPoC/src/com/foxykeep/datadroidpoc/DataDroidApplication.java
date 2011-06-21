@@ -1,4 +1,4 @@
-package com.foxykeep.datadroid;
+package com.foxykeep.datadroidpoc;
 
 import greendroid.app.GDApplication;
 
