@@ -8,11 +8,10 @@
  */
 package com.foxykeep.datadroidpoc.ui;
 
-import greendroid.app.GDListActivity;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.CharArrayBuffer;
@@ -34,7 +33,7 @@ import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudPhoneListActivity extends GDListActivity implements AsyncQueryListener, OnRequestFinishedListener {
+public class CrudPhoneListActivity extends ListActivity implements AsyncQueryListener, OnRequestFinishedListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";

@@ -13,9 +13,7 @@
 
 	<application
 		android:icon="@drawable/icon"
-		android:label="@string/app_name"
-		android:name=".DataDroidApplication"
-		android:theme="@style/Theme.DataDroid">
+		android:label="@string/app_name">
 		<activity
 			android:name=".ui.HomeActivity"
 			android:label="@string/app_name">

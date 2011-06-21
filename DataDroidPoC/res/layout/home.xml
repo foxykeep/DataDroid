@@ -3,7 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:paddingTop="5dp">
 	<Button
 		android:id="@+id/b_person_list"
 		android:layout_width="fill_parent"

@@ -1,64 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<greendroid.widget.ActionBarHost
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@id/gd_action_bar_host"
-	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical">
-	<!-- Layout height/width and background are set here. This is a hack to 
-		apply a default style to the ActionBar. Indeed, no style can be applied to 
-		a LinearLayout -->
-	<greendroid.widget.ActionBar
-		android:id="@id/gd_action_bar"
-		android:layout_height="@dimen/gd_action_bar_height"
+	android:layout_width="fill_parent"
+	android:orientation="vertical"
+	android:padding="5dp">
+	<LinearLayout
 		android:layout_width="fill_parent"
-		android:background="?attr/gdActionBarBackground" />
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/b_load"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.5"
+			android:text="@string/city_list_b_load" />
+		<Button
+			android:id="@+id/b_clear_memory"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.5"
+			android:text="@string/city_list_b_clear_memory" />
+	</LinearLayout>
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="2dp"
+		android:background="?android:attr/listDivider" />
 	<FrameLayout
-		android:id="@id/gd_action_bar_content_view"
-		android:layout_height="0dp"
 		android:layout_width="fill_parent"
-		android:layout_weight="1">
-		<LinearLayout
-			android:layout_height="fill_parent"
+		android:layout_height="fill_parent">
+		<ListView
+			android:id="@android:id/list"
 			android:layout_width="fill_parent"
-			android:orientation="vertical"
-			android:padding="5dp">
-			<LinearLayout
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
-				<Button
-					android:id="@+id/b_load"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="0.5"
-					android:text="@string/city_list_b_load" />
-				<Button
-					android:id="@+id/b_clear_memory"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="0.5"
-					android:text="@string/city_list_b_clear_memory" />
-			</LinearLayout>
-			<View
-				android:layout_width="fill_parent"
-				android:layout_height="2dp"
-				android:background="?android:attr/listDivider" />
-			<FrameLayout
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent">
-				<ListView
-					android:id="@android:id/list"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
-				<TextView
-					android:id="@android:id/empty"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
-					android:paddingTop="30dp"
-					android:gravity="center"
-					android:text="@string/city_list_tv_empty" />
-			</FrameLayout>
-		</LinearLayout>
+			android:layout_height="fill_parent" />
+		<TextView
+			android:id="@android:id/empty"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="30dp"
+			android:gravity="center"
+			android:text="@string/city_list_tv_empty" />
 	</FrameLayout>
-</greendroid.widget.ActionBarHost>
+</LinearLayout>
