@@ -97,10 +97,9 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                     // executed with 0 result or if an error occurred.
                     // Here I choose to display an error but it's up to you
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                } else {
-                    mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
-                            PersonDao.LAST_NAME_ORDER_BY);
                 }
+                // Nothing to do if it works as the cursor is automatically
+                // updated
             }
         }
     }
@@ -207,10 +206,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 } else {
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
-            } else {
-                mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
-                        PersonDao.LAST_NAME_ORDER_BY);
             }
+            // Nothing to do if it works as the cursor is automatically updated
         }
     }
 
