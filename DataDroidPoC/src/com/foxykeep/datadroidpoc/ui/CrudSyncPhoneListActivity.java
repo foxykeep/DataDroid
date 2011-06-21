@@ -18,6 +18,9 @@ import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -141,6 +144,19 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
+            case DialogConfig.DELETE_ALL_CONFIRM:
+                b = new Builder(this);
+                b.setIcon(android.R.drawable.ic_dialog_alert);
+                b.setTitle(R.string.crud_phone_list_dialog_delete_all_confirm_title);
+                b.setMessage(R.string.crud_phone_list_dialog_delete_all_confirm_message);
+                b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        mQueryHandler.startDelete(PhoneDao.CONTENT_URI);
+                    }
+                });
+                b.setNegativeButton(android.R.string.cancel, null);
+                return b.create();
             default:
                 return super.onCreateDialog(id);
         }
@@ -156,6 +172,30 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
             default:
                 super.onPrepareDialog(id, dialog);
                 break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.crud_phone_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.menu_add:
+                // Intent intent = new Intent(this, WishActivity.class);
+                // startActivity(intent);
+                return true;
+            case R.id.menu_delete_all:
+                showDialog(DialogConfig.DELETE_ALL_CONFIRM);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 
