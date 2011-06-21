@@ -59,7 +59,7 @@ public class CityListActivity extends GDListActivity implements OnRequestFinishe
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
         }
 
-        mRequestManager = PoCRequestManager.getInstance(this);
+        mRequestManager = PoCRequestManager.from(this);
         mInflater = getLayoutInflater();
     }
 

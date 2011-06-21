@@ -8,6 +8,7 @@
  */
 package com.foxykeep.datadroidpoc.data.requestmanager;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.Random;
@@ -23,6 +24,7 @@ import android.util.SparseArray;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestManager;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use
@@ -39,7 +41,7 @@ public class PoCRequestManager extends RequestManager {
     // Singleton management
     private static PoCRequestManager sInstance;
 
-    public static PoCRequestManager getInstance(final Context context) {
+    public static PoCRequestManager from(final Context context) {
         if (sInstance == null) {
             sInstance = new PoCRequestManager(context);
         }
@@ -53,15 +55,15 @@ public class PoCRequestManager extends RequestManager {
 
     private SparseArray<Intent> mRequestSparseArray;
     private Context mContext;
-    private ArrayList<OnRequestFinishedListener> mListenerList;
+    private ArrayList<WeakReference<OnRequestFinishedListener>> mListenerList;
     private Handler mHandler = new Handler();
     private EvalReceiver mEvalReceiver = new EvalReceiver(mHandler);
     private MemoryProvider mMemoryProvider = MemoryProvider.getInstance();
 
     private PoCRequestManager(final Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mRequestSparseArray = new SparseArray<Intent>();
-        mListenerList = new ArrayList<OnRequestFinishedListener>();
+        mListenerList = new ArrayList<WeakReference<OnRequestFinishedListener>>();
     }
 
     /**
@@ -97,34 +99,37 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this {@link PoCRequestManager}
-     * . Clients may use it in order to listen to events fired when a request is
-     * finished.
+     * Add a {@link OnRequestFinishedListener} to this
+     * {@link SkeletonRequestManager}. Clients may use it in order to listen to
+     * events fired when a request is finished.
      * <p>
      * <b>Warning !! </b> If it's an {@link Activity} that is used as a
      * Listener, it must be detached when {@link Activity#onPause} is called in
      * an {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this {@link PoCRequestManager} .
+     * @param listener The listener to add to this
+     *            {@link SkeletonRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
+        WeakReference<OnRequestFinishedListener> weakRef = new WeakReference<OnRequestFinishedListener>(listener);
         synchronized (mListenerList) {
-            if (!mListenerList.contains(listener)) {
-                mListenerList.add(listener);
+            if (!mListenerList.contains(weakRef)) {
+                mListenerList.add(weakRef);
             }
         }
     }
 
     /**
      * Remove a {@link OnRequestFinishedListener} to this
-     * {@link PoCRequestManager}.
+     * {@link SkeletonRequestManager}.
      * 
-     * @param listenerThe listener to remove to this {@link PoCRequestManager}.
+     * @param listenerThe listener to remove to this
+     *            {@link SkeletonRequestManager}.
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
-            mListenerList.remove(listener);
+            mListenerList.remove(new WeakReference<OnRequestFinishedListener>(listener));
         }
     }
 
@@ -151,26 +156,16 @@ public class PoCRequestManager extends RequestManager {
         // Get the request Id
         final int requestId = resultData.getInt(RECEIVER_EXTRA_REQUEST_ID);
 
-        // Retrieve the transfered data and saved it in the MemoryProvider for
-        // the case when the calling activity is in background
-        // /!\ Only for the WS calls which save data in the MemoryProvider. For
-        // the database ones, the data is already saved in the database
-        final Intent intent = mRequestSparseArray.get(requestId);
-        switch (intent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1)) {
-            case PoCService.WORKER_TYPE_CITY_LIST:
-                if (resultCode == PoCService.SUCCESS_CODE) {
-                    mMemoryProvider.cityList = resultData.getParcelableArrayList(RECEIVER_EXTRA_CITY_LIST);
-                }
-                break;
-        }
-
         // Remove the request Id from the "in progress" request list
         mRequestSparseArray.remove(requestId);
 
         // Call the available listeners
         synchronized (mListenerList) {
-            for (OnRequestFinishedListener listener : mListenerList) {
-                listener.onRequestFinished(requestId, resultCode, resultData);
+            for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
+                OnRequestFinishedListener listener = weakRef.get();
+                if (listener != null) {
+                    listener.onRequestFinished(requestId, resultCode, resultData);
+                }
             }
         }
     }

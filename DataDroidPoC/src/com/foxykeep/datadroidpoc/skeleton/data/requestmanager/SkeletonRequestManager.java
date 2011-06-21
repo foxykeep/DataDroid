@@ -8,6 +8,7 @@
  */
 package com.foxykeep.datadroidpoc.skeleton.data.requestmanager;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.EventListener;
 
@@ -38,7 +39,7 @@ public class SkeletonRequestManager extends RequestManager {
     // Singleton management
     private static SkeletonRequestManager sInstance;
 
-    public static SkeletonRequestManager getInstance(final Context context) {
+    public static SkeletonRequestManager from(final Context context) {
         if (sInstance == null) {
             sInstance = new SkeletonRequestManager(context);
         }
@@ -50,16 +51,16 @@ public class SkeletonRequestManager extends RequestManager {
     // TODO : This variable will be used in your special methods
     @SuppressWarnings("unused")
     private Context mContext;
-    private ArrayList<OnRequestFinishedListener> mListenerList;
+    private ArrayList<WeakReference<OnRequestFinishedListener>> mListenerList;
     private Handler mHandler = new Handler();
     // TODO : This variable will be used in your special methods
     @SuppressWarnings("unused")
     private EvalReceiver mEvalReceiver = new EvalReceiver(mHandler);
 
     private SkeletonRequestManager(final Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mRequestSparseArray = new SparseArray<Intent>();
-        mListenerList = new ArrayList<OnRequestFinishedListener>();
+        mListenerList = new ArrayList<WeakReference<OnRequestFinishedListener>>();
     }
 
     /**
@@ -108,9 +109,10 @@ public class SkeletonRequestManager extends RequestManager {
      *            {@link SkeletonRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
+        WeakReference<OnRequestFinishedListener> weakRef = new WeakReference<OnRequestFinishedListener>(listener);
         synchronized (mListenerList) {
-            if (!mListenerList.contains(listener)) {
-                mListenerList.add(listener);
+            if (!mListenerList.contains(weakRef)) {
+                mListenerList.add(weakRef);
             }
         }
     }
@@ -124,7 +126,7 @@ public class SkeletonRequestManager extends RequestManager {
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
-            mListenerList.remove(listener);
+            mListenerList.remove(new WeakReference<OnRequestFinishedListener>(listener));
         }
     }
 
@@ -156,8 +158,11 @@ public class SkeletonRequestManager extends RequestManager {
 
         // Call the available listeners
         synchronized (mListenerList) {
-            for (OnRequestFinishedListener listener : mListenerList) {
-                listener.onRequestFinished(requestId, resultCode, resultData);
+            for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
+                OnRequestFinishedListener listener = weakRef.get();
+                if (weakRef != null) {
+                    listener.onRequestFinished(requestId, resultCode, resultData);
+                }
             }
         }
     }

@@ -62,7 +62,7 @@ public class PersonListActivity extends GDListActivity implements OnRequestFinis
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
         }
 
-        mRequestManager = PoCRequestManager.getInstance(this);
+        mRequestManager = PoCRequestManager.from(this);
         mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
         mInflater = getLayoutInflater();
 
