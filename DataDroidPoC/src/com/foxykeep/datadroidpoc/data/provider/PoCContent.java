@@ -177,7 +177,7 @@ public abstract class PoCContent {
         static void createTable(final SQLiteDatabase db) {
             final String s = " (" + _ID + " integer primary key autoincrement, " + SERVER_ID + " integer, " + NAME
                     + " text, " + MANUFACTURER + " text, " + ANDROID_VERSION + " text, " + SCREEN_SIZE + " text, "
-                    + SCREEN_SIZE + " integer );";
+                    + PRICE + " integer );";
 
             db.execSQL("create table " + TABLE_NAME + s);
 
