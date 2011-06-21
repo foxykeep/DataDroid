@@ -54,11 +54,8 @@ public class HomeActivity extends Activity implements OnClickListener {
         } else if (view == mButtonCityList) {
             intent = new Intent(this, CityListActivity.class);
         } else if (view == mButtonPhonesCrudSync) {
-            intent = new Intent(this, CrudPhoneListActivity.class);
-            intent.putExtra(CrudPhoneListActivity.INTENT_EXTRA_IS_SYNC, true);
+            intent = new Intent(this, CrudSyncPhoneListActivity.class);
         } else if (view == mButtonPhonesCrudAsync) {
-            intent = new Intent(this, CrudPhoneListActivity.class);
-            intent.putExtra(CrudPhoneListActivity.INTENT_EXTRA_IS_SYNC, false);
         }
 
         if (intent != null) {

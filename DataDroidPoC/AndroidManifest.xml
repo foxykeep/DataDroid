@@ -29,7 +29,7 @@
 		<activity
 			android:name=".ui.CityListActivity" />
 		<activity
-			android:name=".ui.CrudPhoneListActivity" />
+			android:name=".ui.CrudSyncPhoneListActivity" />
 
 		<service
 			android:name=".data.service.PoCService"

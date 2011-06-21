@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -33,16 +34,17 @@ import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudPhoneListActivity extends ListActivity implements AsyncQueryListener, OnRequestFinishedListener {
+public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQueryListener, OnRequestFinishedListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
-
-    public static final String INTENT_EXTRA_IS_SYNC = "com.foxykeep.datadroidpoc.ui.extras.isSync";
+    private static final String SAVED_STATE_IS_RESULT_LOADED = "savedStateIsResultLoaded";
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
+
+    private boolean mIsResultLoaded = false;
 
     private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -54,11 +56,13 @@ public class CrudPhoneListActivity extends ListActivity implements AsyncQueryLis
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
             mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
+            mIsResultLoaded = savedInstanceState.getBoolean(SAVED_STATE_IS_RESULT_LOADED, false);
         }
 
         mRequestManager = PoCRequestManager.from(this);
@@ -88,10 +92,11 @@ public class CrudPhoneListActivity extends ListActivity implements AsyncQueryLis
                     // Here I choose to display an error but it's up to you
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 } else {
-                    mQueryHandler.startQuery(PhoneDao.CONTENT_URI, PhoneDao.CONTENT_LIST_PROJECTION,
-                            PhoneDao.NAME_ORDER_BY);
+                    mIsResultLoaded = true;
                 }
             }
+        } else if (!mIsResultLoaded) {
+            callPhoneListWS();
         }
     }
 
@@ -110,6 +115,7 @@ public class CrudPhoneListActivity extends ListActivity implements AsyncQueryLis
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
         outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
         outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
+        outState.putBoolean(SAVED_STATE_IS_RESULT_LOADED, mIsResultLoaded);
     }
 
     @Override
@@ -179,8 +185,7 @@ public class CrudPhoneListActivity extends ListActivity implements AsyncQueryLis
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
             } else {
-                mQueryHandler
-                        .startQuery(PhoneDao.CONTENT_URI, PhoneDao.CONTENT_LIST_PROJECTION, PhoneDao.NAME_ORDER_BY);
+                mIsResultLoaded = true;
             }
         }
     }
