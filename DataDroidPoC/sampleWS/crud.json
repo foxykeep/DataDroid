@@ -10,7 +10,7 @@ ERRORS
 }
 
 GET
-http://foxykeep.com/projects/datadroid/crud/phoneList.php?userId=X
+http://foxykeep.com/projects/datadroid/crud/phoneList.php?userUdid=X
 {
 	phones:{
 		phone:[
@@ -35,7 +35,7 @@ http://foxykeep.com/projects/datadroid/crud/phoneList.php?userId=X
 }
 
 POST
-http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userId=X&name=X&manufacturer=X&androidVersion=X&screenSize=X&price=X
+http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userUdid=X&name=X&manufacturer=X&androidVersion=X&screenSize=X&price=X
 {
 	phone:{
 		id:148
@@ -48,7 +48,7 @@ http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userId=X&name=X&m
 }
 
 PUT	
-http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userId=X&id=X&name=X&manufacturer=X&androidVersion=X&screenSize=X&price=X
+http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userUdid=X&id=X&name=X&manufacturer=X&androidVersion=X&screenSize=X&price=X
 {
 	phone:{
 		id:148
@@ -61,7 +61,7 @@ http://foxykeep.com/projects/datadroid/crud/addModifyPhone.php?userId=X&id=X&nam
 }
 
 DELETE
-http://foxykeep.com/projects/datadroid/crud/deletePhone.php?userId=X&id=X
+http://foxykeep.com/projects/datadroid/crud/deletePhone.php?userUdid=X&id=X
 {
 	phone:{
 		id:128
