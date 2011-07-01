@@ -8,14 +8,14 @@
  */
 package com.foxykeep.datadroidpoc.ui;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.CharArrayBuffer;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,32 +24,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.CursorAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.config.DialogConfig;
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.PhoneDao;
+import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
+import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
-import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
-import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQueryListener, OnRequestFinishedListener {
+public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
-    private static final String SAVED_STATE_IS_RESULT_LOADED = "savedStateIsResultLoaded";
+    private static final String SAVED_STATE_ARE_PHONES_LOADED = "savedStateIsResultLoaded";
+    private static final String SAVED_STATE_PHONE_ARRAY_LIST = "savedStatePhoneArrayList";
+
+    private TextView mTextViewEmpty;
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
 
-    private boolean mIsResultLoaded = false;
+    private boolean mArePhonesLoaded = false;
 
-    private NotifyingAsyncQueryHandler mQueryHandler;
+    private MemoryProvider mMemoryProvider = MemoryProvider.getInstance();
 
     private LayoutInflater mInflater;
 
@@ -61,18 +63,29 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
+        setContentView(R.layout.crud_phone_list);
+        bindViews();
+
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
             mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
-            mIsResultLoaded = savedInstanceState.getBoolean(SAVED_STATE_IS_RESULT_LOADED, false);
+            mArePhonesLoaded = savedInstanceState.getBoolean(SAVED_STATE_ARE_PHONES_LOADED, false);
+
+            final ArrayList<Phone> phoneArrayList = savedInstanceState
+                    .getParcelableArrayList(SAVED_STATE_PHONE_ARRAY_LIST);
+            if (phoneArrayList != null && phoneArrayList.size() > 0) {
+                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                adapter.setNotifyOnChange(false);
+                for (Phone phone : phoneArrayList) {
+                    adapter.add(phone);
+                }
+                adapter.notifyDataSetChanged();
+            }
         }
 
         mRequestManager = PoCRequestManager.from(this);
-        mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
         mInflater = getLayoutInflater();
-
-        mQueryHandler.startQuery(PhoneDao.CONTENT_URI, PhoneDao.CONTENT_LIST_PROJECTION, PhoneDao.NAME_ORDER_BY);
     }
 
     @Override
@@ -85,21 +98,28 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
             } else {
                 mRequestId = -1;
 
-                // Get the number of persons in the database
-                int number = 1;
-                // TODO gestion des infos en base pour voir si requete OK
-
-                if (number < 1) {
-                    // We don't have a way to know if the request was correctly
-                    // executed with 0 result or if an error occurred.
-                    // Here I choose to display an error but it's up to you
+                if (mMemoryProvider.syncPhoneList == null) {
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 } else {
-                    mIsResultLoaded = true;
+                    mArePhonesLoaded = true;
+
+                    final ArrayList<Phone> syncPhoneList = mMemoryProvider.syncPhoneList;
+
+                    if (syncPhoneList.size() == 0) {
+                        mTextViewEmpty.setText(R.string.crud_phone_list_tv_empty_no_results);
+                        return;
+                    }
+
+                    final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                    adapter.setNotifyOnChange(false);
+                    for (Phone phone : syncPhoneList) {
+                        adapter.add(phone);
+                    }
+                    adapter.notifyDataSetChanged();
                 }
             }
-        } else if (!mIsResultLoaded) {
-            callPhoneListWS();
+        } else if (!mArePhonesLoaded) {
+            callSyncPhoneListWS();
         }
     }
 
@@ -118,7 +138,13 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
         outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
         outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
-        outState.putBoolean(SAVED_STATE_IS_RESULT_LOADED, mIsResultLoaded);
+        outState.putBoolean(SAVED_STATE_ARE_PHONES_LOADED, mArePhonesLoaded);
+    }
+
+    private void bindViews() {
+        mTextViewEmpty = (TextView) findViewById(android.R.id.empty);
+
+        setListAdapter(new PhoneListAdapter(this));
     }
 
     @Override
@@ -138,7 +164,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
                 b.setNeutralButton(getString(android.R.string.ok), null);
                 b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int which) {
-                        callPhoneListWS();
+                        callSyncPhoneListWS();
                     }
                 });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
@@ -152,7 +178,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
-                        mQueryHandler.startDelete(PhoneDao.CONTENT_URI);
+                        // TODO
                     }
                 });
                 b.setNegativeButton(android.R.string.cancel, null);
@@ -188,7 +214,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
         final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.menu_add:
-                // Intent intent = new Intent(this, WishActivity.class);
+                // TODO
+                // Intent intent = new Intent(this, Activity.class);
                 // startActivity(intent);
                 return true;
             case R.id.menu_delete_all:
@@ -199,10 +226,10 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
         }
     }
 
-    private void callPhoneListWS() {
+    private void callSyncPhoneListWS() {
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getPhoneList(UserManager.getUserId(this));
+        mRequestId = mRequestManager.getSyncPhoneList(UserManager.getUserId(this));
     }
 
     @Override
@@ -225,65 +252,58 @@ public class CrudSyncPhoneListActivity extends ListActivity implements AsyncQuer
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
             } else {
-                mIsResultLoaded = true;
+                mArePhonesLoaded = true;
+
+                final ArrayList<Phone> syncPhoneList = payload
+                        .getParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_SYNC_PHONE_LIST);
+
+                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                adapter.setNotifyOnChange(false);
+                for (Phone phone : syncPhoneList) {
+                    adapter.add(phone);
+                }
+                adapter.notifyDataSetChanged();
             }
         }
     }
 
-    @Override
-    public void onQueryComplete(final int token, final Object cookie, final Cursor cursor) {
-        PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
-        if (adapter == null) {
-            adapter = new PhoneListAdapter(this, cursor);
-            setListAdapter(adapter);
-        } else {
-            adapter.changeCursor(cursor);
-        }
-    }
-
     class ViewHolder {
-        private long id;
+        private Phone mPhone;
         private TextView mTextViewName;
-        private CharArrayBuffer mCharArrayBufferName;
         private TextView mTextViewManufacturer;
-        private CharArrayBuffer mCharArrayBufferManufacturer;
 
         public ViewHolder(final View view) {
             mTextViewName = (TextView) view.findViewById(R.id.tv_name);
             mTextViewManufacturer = (TextView) view.findViewById(R.id.tv_manufacturer);
-
-            mCharArrayBufferName = new CharArrayBuffer(20);
-            mCharArrayBufferManufacturer = new CharArrayBuffer(20);
         }
 
-        public void populateView(final Cursor c) {
-            id = c.getLong(PhoneDao.CONTENT_LIST_ID_COLUMN);
-
-            c.copyStringToBuffer(PhoneDao.CONTENT_LIST_NAME_COLUMN, mCharArrayBufferName);
-            mTextViewName.setText(mCharArrayBufferName.data, 0, mCharArrayBufferName.sizeCopied);
-
-            c.copyStringToBuffer(PhoneDao.CONTENT_LIST_MANUFACTURER_COLUMN, mCharArrayBufferManufacturer);
-            mTextViewManufacturer
-                    .setText(mCharArrayBufferManufacturer.data, 0, mCharArrayBufferManufacturer.sizeCopied);
+        public void populateView(final Phone phone) {
+            mPhone = phone;
+            mTextViewName.setText(phone.name);
+            mTextViewManufacturer.setText(phone.manufacturer);
         }
     }
 
-    class PhoneListAdapter extends CursorAdapter {
+    class PhoneListAdapter extends ArrayAdapter<Phone> {
 
-        public PhoneListAdapter(final Context context, final Cursor c) {
-            super(context, c);
+        public PhoneListAdapter(final Context context) {
+            super(context, -1);
         }
 
         @Override
-        public void bindView(final View view, final Context context, final Cursor cursor) {
-            ((ViewHolder) view.getTag()).populateView(cursor);
-        }
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            ViewHolder viewHolder;
 
-        @Override
-        public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-            View view = mInflater.inflate(R.layout.crud_phone_list_item, null);
-            view.setTag(new ViewHolder(view));
-            return view;
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.crud_phone_list_item, null);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            viewHolder.populateView(getItem(position));
+            return super.getView(position, convertView, parent);
         }
     }
 }
