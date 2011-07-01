@@ -25,11 +25,14 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ui.PersonListActivity" />
+			android:name=".ui.PersonListActivity"
+			android:label="@string/person_list_title" />
 		<activity
-			android:name=".ui.CityListActivity" />
+			android:name=".ui.CityListActivity"
+			android:label="@string/city_list_title" />
 		<activity
-			android:name=".ui.CrudSyncPhoneListActivity" />
+			android:name=".ui.CrudSyncPhoneListActivity"
+			android:label="@string/crud_sync_phone_list_title" />
 
 		<service
 			android:name=".data.service.PoCService"

@@ -16,6 +16,7 @@
     <string name="home_b_crud_phone_list_async">Phones (CRUD) (Async)</string>
     
     <!-- PersonListActivity texts -->
+    <string name="person_list_title">DataDroid > Person List (DB)</string>
     <string name="person_list_sp_return_format_prompt">Webservice return format</string>
     <string name="person_list_b_load">Load</string>
     <string name="person_list_b_clear_db">Clear DB</string>
@@ -23,6 +24,7 @@
     <string name="person_list_item_tv_age_format">%1$d yrs old</string>
     
     <!-- CityListActivity texts -->
+    <string name="city_list_title">DataDroid > City List (Memory)</string>
     <string name="city_list_b_load">Load</string>
     <string name="city_list_b_clear_memory">Clear memory</string>
     <string name="city_list_tv_empty">0 city found</string>
@@ -37,4 +39,6 @@
     <string name="crud_phone_list_dialog_delete_all_confirm_message">All the phones will be deleted.</string>
     <string name="crud_phone_list_dialog_delete_confirm_title">Delete</string>
     <string name="crud_phone_list_dialog_delete_confirm_message">%1$s will be deleted.</string>
+    <!-- CrudSyncPhoneListActivity texts -->
+    <string name="crud_sync_phone_list_title">DataDroid > Phones (CRUD) (Sync)</string>
 </resources>
