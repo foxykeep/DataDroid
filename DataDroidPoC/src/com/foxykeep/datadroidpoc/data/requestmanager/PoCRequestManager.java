@@ -50,6 +50,7 @@ public class PoCRequestManager extends RequestManager {
     }
 
     public static final String RECEIVER_EXTRA_CITY_LIST = "com.foxykeep.datadroidpoc.extras.cityList";
+    public static final String RECEIVER_EXTRA_SYNC_PHONE_LIST = "com.foxykeep.datadroidpoc.extras.syncPhoneList";
 
     private static Random sRandom = new Random();
 
@@ -156,6 +157,20 @@ public class PoCRequestManager extends RequestManager {
         // Get the request Id
         final int requestId = resultData.getInt(RECEIVER_EXTRA_REQUEST_ID);
 
+        final Intent intent = mRequestSparseArray.get(requestId);
+        switch (intent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1)) {
+            case PoCService.WORKER_TYPE_CITY_LIST:
+                if (resultCode == PoCService.SUCCESS_CODE) {
+                    mMemoryProvider.cityList = resultData.getParcelableArrayList(RECEIVER_EXTRA_CITY_LIST);
+                }
+                break;
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
+                if (resultCode == PoCService.SUCCESS_CODE) {
+                    mMemoryProvider.syncPhoneList = resultData.getParcelableArrayList(RECEIVER_EXTRA_SYNC_PHONE_LIST);
+                }
+                break;
+        }
+
         // Remove the request Id from the "in progress" request list
         mRequestSparseArray.remove(requestId);
 
@@ -245,17 +260,17 @@ public class PoCRequestManager extends RequestManager {
      * 
      * @return the request Id
      */
-    public int getPhoneList(final String userId) {
+    public int getSyncPhoneList(final String userId) {
 
         // Check if a match to this request is already launched
         final int requestSparseArrayLength = mRequestSparseArray.size();
         for (int i = 0; i < requestSparseArrayLength; i++) {
             final Intent savedIntent = mRequestSparseArray.valueAt(i);
 
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CRUD_PHONE_LIST) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_LIST) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_PHONE_LIST_USER_ID).equals(userId)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID).equals(userId)) {
                 continue;
             }
             return mRequestSparseArray.keyAt(i);
@@ -264,10 +279,10 @@ public class PoCRequestManager extends RequestManager {
         final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
 
         final Intent intent = new Intent(mContext, PoCService.class);
-        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CRUD_PHONE_LIST);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_LIST);
         intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
         intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_PHONE_LIST_USER_ID, userId);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID, userId);
         mContext.startService(intent);
 
         mRequestSparseArray.append(requestId, intent);

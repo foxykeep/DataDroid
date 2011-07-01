@@ -11,6 +11,7 @@ package com.foxykeep.datadroidpoc.data.memprovider;
 import java.util.ArrayList;
 
 import com.foxykeep.datadroidpoc.data.model.City;
+import com.foxykeep.datadroidpoc.data.model.Phone;
 
 public class MemoryProvider {
 
@@ -33,4 +34,7 @@ public class MemoryProvider {
 
     // CityList WS
     public ArrayList<City> cityList;
+
+    // SyncPhoneList WS
+    public ArrayList<Phone> syncPhoneList;
 }

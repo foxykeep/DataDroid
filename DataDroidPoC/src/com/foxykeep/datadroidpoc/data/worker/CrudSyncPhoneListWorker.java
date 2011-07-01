@@ -13,8 +13,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.content.ContentValues;
 import android.content.Context;
+import android.os.Bundle;
 
 import org.json.JSONException;
 
@@ -24,11 +24,11 @@ import com.foxykeep.datadroid.network.NetworkConnection.NetworkConnectionResult;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.PhoneListFactory;
 import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.PhoneDao;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 
-public class CrudPhoneListWorker {
+public class CrudSyncPhoneListWorker {
 
-    public static void start(final Context context, final String userId) throws IllegalStateException, IOException,
+    public static Bundle start(final Context context, final String userId) throws IllegalStateException, IOException,
             URISyntaxException, RestClientException, JSONException {
 
         HashMap<String, String> params = new HashMap<String, String>();
@@ -39,17 +39,8 @@ public class CrudPhoneListWorker {
 
         ArrayList<Phone> phoneList = PhoneListFactory.parseResult(wsResult.wsResponse);
 
-        // Clear the table
-        context.getContentResolver().delete(PhoneDao.CONTENT_URI, null, null);
-
-        // Adds the persons in the database
-        final int phoneListSize = phoneList.size();
-        if (phoneList != null && phoneListSize > 0) {
-            ContentValues[] valuesArray = new ContentValues[phoneListSize];
-            for (int i = 0; i < phoneListSize; i++) {
-                valuesArray[i] = PhoneDao.getContentValues(phoneList.get(i));
-            }
-            context.getContentResolver().bulkInsert(PhoneDao.CONTENT_URI, valuesArray);
-        }
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_SYNC_PHONE_LIST, phoneList);
+        return bundle;
     }
 }
