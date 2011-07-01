@@ -23,4 +23,10 @@ public class WSConfig {
     public static final String WS_CRUD_PHONE_LIST_URL = ROOT_URL + "crud/list.php";
 
     public static final String WS_CRUD_PHONE_LIST_PROPERTY_USER_ID = "userId";
+
+    // CrudPhoneDelete WS
+    public static final String WS_CRUD_PHONE_DELETE_URL = ROOT_URL + "crud/delete.php";
+
+    public static final String WS_CRUD_PHONE_DELETE_PROPERTY_USER_ID = "userId";
+    public static final String WS_CRUD_PHONE_DELETE_PROPERTY_IDS = "ids";
 }

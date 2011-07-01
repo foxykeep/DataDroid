@@ -34,13 +34,13 @@ public class CrudSyncPhoneListWorker {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_ID, userId);
 
-        NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(WSConfig.WS_CITY_LIST_URL,
-                NetworkConnection.METHOD_GET, params);
+        NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
+                WSConfig.WS_CRUD_PHONE_LIST_URL, NetworkConnection.METHOD_GET, params);
 
         ArrayList<Phone> phoneList = PhoneListFactory.parseResult(wsResult.wsResponse);
 
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_SYNC_PHONE_LIST, phoneList);
+        bundle.putParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_PHONE_LIST, phoneList);
         return bundle;
     }
 }

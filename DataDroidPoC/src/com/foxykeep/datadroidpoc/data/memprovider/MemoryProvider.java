@@ -37,4 +37,7 @@ public class MemoryProvider {
 
     // SyncPhoneList WS
     public ArrayList<Phone> syncPhoneList;
+
+    // SyncPhoneDelete WS
+    public long[] syncPhoneDeleteData;
 }

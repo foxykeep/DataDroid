@@ -23,6 +23,7 @@ import com.foxykeep.datadroid.exception.RestClientException;
 import com.foxykeep.datadroid.service.WorkerService;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.worker.CityListWorker;
+import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneDeleteWorker;
 import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneListWorker;
 import com.foxykeep.datadroidpoc.data.worker.PersonListWorker;
 
@@ -44,12 +45,16 @@ public class PoCService extends WorkerService {
     public static final int WORKER_TYPE_PERSON_LIST = 0;
     public static final int WORKER_TYPE_CITY_LIST = 1;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_LIST = 2;
+    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_DELETE = 3;
 
     // Worker params
     // - PersonList WS params
     public static final String INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT = "com.foxykeep.datadroidpoc.extras.personsReturnFormat";
-    // - CrudPhoneList WS params
-    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneListUserID";
+    // - CrudSyncPhoneList WS params
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneListUserId";
+    // - CrudSyncPhoneDelete WS params
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneDeleteUserId";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST = "com.foxykeep.datadroidpoc.extras.crudPhoneDeletePhoneIdList";
 
     public PoCService() {
         super(MAX_THREADS);
@@ -70,7 +75,14 @@ public class PoCService extends WorkerService {
                     sendSuccess(intent, CityListWorker.start());
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
-                    CrudSyncPhoneListWorker.start(this, intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID));
+                    CrudSyncPhoneListWorker.start(this,
+                            intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID));
+                    sendSuccess(intent, null);
+                    break;
+                case WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
+                    CrudSyncPhoneDeleteWorker.start(this,
+                            intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
+                            intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST));
                     sendSuccess(intent, null);
                     break;
             }

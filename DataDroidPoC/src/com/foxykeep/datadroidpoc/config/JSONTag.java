@@ -38,4 +38,9 @@ public class JSONTag {
     public static final String CRUD_PHONE_LIST_ELEM_ANDROID_VERSION = "androidVersion";
     public static final String CRUD_PHONE_LIST_ELEM_SCREEN_SIZE = "screenSize";
     public static final String CRUD_PHONE_LIST_ELEM_PRICE = "price";
+
+    // CrudPhoneDelete WS tags
+    public static final String CRUD_PHONE_DELETE_ELEM_PHONES = "phones";
+    public static final String CRUD_PHONE_DELETE_ELEM_PHONE = "phone";
+    public static final String CRUD_PHONE_DELETE_ELEM_ID = "id";
 }
