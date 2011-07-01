@@ -37,6 +37,11 @@
 		<activity
 			android:name=".ui.CrudSyncPhoneListActivity"
 			android:label="@string/crud_sync_phone_list_title" />
+		<activity
+			android:name=".ui.CrudSyncPhoneViewActivity"
+			android:label="@string/crud_sync_phone_view_title" />
+		<activity
+			android:name=".ui.CrudSyncPhoneAddEditActivity" />
 
 		<service
 			android:name=".data.service.PoCService"

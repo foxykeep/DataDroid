@@ -49,4 +49,7 @@
     
     <!-- CrudSyncPhoneListActivity texts -->
     <string name="crud_sync_phone_list_title">DataDroid > Phones (CRUD) (Sync)</string>
+    
+    <!-- CrudSyncPhoneViewActivity texts -->
+    <string name="crud_sync_phone_view_title">DataDroid > Phone (CRUD) (Sync)</string>
 </resources>

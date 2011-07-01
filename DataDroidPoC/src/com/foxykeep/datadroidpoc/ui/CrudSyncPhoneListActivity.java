@@ -16,7 +16,10 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +27,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.foxykeep.datadroidpoc.R;
@@ -36,11 +43,12 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequest
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener {
+public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
+    private static final String SAVED_STATE_POSITION_TO_DELETE = "savedStatePositionToDelete";
     private static final String SAVED_STATE_ARE_PHONES_LOADED = "savedStateIsResultLoaded";
     private static final String SAVED_STATE_PHONE_ARRAY_LIST = "savedStatePhoneArrayList";
 
@@ -57,6 +65,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
 
     private String mErrorDialogTitle;
     private String mErrorDialogMessage;
+    private int mPositionToDelete;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -70,6 +79,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
             mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
+            mPositionToDelete = savedInstanceState.getInt(SAVED_STATE_POSITION_TO_DELETE);
             mArePhonesLoaded = savedInstanceState.getBoolean(SAVED_STATE_ARE_PHONES_LOADED, false);
 
             final ArrayList<Phone> phoneArrayList = savedInstanceState
@@ -111,6 +121,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     }
 
                     final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                    adapter.clear();
                     adapter.setNotifyOnChange(false);
                     for (Phone phone : syncPhoneList) {
                         adapter.add(phone);
@@ -138,13 +149,27 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
         outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
         outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
+        outState.putInt(SAVED_STATE_POSITION_TO_DELETE, mPositionToDelete);
         outState.putBoolean(SAVED_STATE_ARE_PHONES_LOADED, mArePhonesLoaded);
+
+        final ArrayList<Phone> phoneArrayList = new ArrayList<Phone>();
+        final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+
+        final int adapterCount = adapter.getCount();
+        for (int i = 0; i < adapterCount; i++) {
+            phoneArrayList.add(adapter.getItem(i));
+        }
+        outState.putParcelableArrayList(SAVED_STATE_PHONE_ARRAY_LIST, phoneArrayList);
     }
 
     private void bindViews() {
         mTextViewEmpty = (TextView) findViewById(android.R.id.empty);
 
         setListAdapter(new PhoneListAdapter(this));
+
+        final ListView listView = getListView();
+        listView.setOnItemClickListener(this);
+        registerForContextMenu(listView);
     }
 
     @Override
@@ -170,7 +195,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
-            case DialogConfig.DELETE_ALL_CONFIRM:
+            case DialogConfig.DIALOG_DELETE_ALL_CONFIRM:
                 b = new Builder(this);
                 b.setIcon(android.R.drawable.ic_dialog_alert);
                 b.setTitle(R.string.crud_phone_list_dialog_delete_all_confirm_title);
@@ -178,7 +203,22 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
-                        // TODO
+                        callSyncPhoneDeleteAllWS();
+                    }
+                });
+                b.setNegativeButton(android.R.string.cancel, null);
+                return b.create();
+            case DialogConfig.DIALOG_DELETE_CONFIRM:
+                Phone phone = ((PhoneListAdapter) getListAdapter()).getItem(mPositionToDelete);
+
+                b = new Builder(this);
+                b.setIcon(android.R.drawable.ic_dialog_alert);
+                b.setTitle(R.string.crud_phone_list_dialog_delete_confirm_title);
+                b.setMessage(getString(R.string.crud_phone_list_dialog_delete_confirm_message, phone.name));
+                b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        callSyncPhoneDeleteMonoWS();
                     }
                 });
                 b.setNegativeButton(android.R.string.cancel, null);
@@ -194,6 +234,10 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
             case DialogConfig.DIALOG_ERROR:
                 dialog.setTitle(mErrorDialogTitle);
                 ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
+                break;
+            case DialogConfig.DIALOG_DELETE_CONFIRM:
+                ((AlertDialog) dialog).setMessage(getString(R.string.crud_phone_list_dialog_delete_confirm_message,
+                        ((PhoneListAdapter) getListAdapter()).getItem(mPositionToDelete).name));
                 break;
             default:
                 super.onPrepareDialog(id, dialog);
@@ -214,12 +258,10 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.menu_add:
-                // TODO
-                // Intent intent = new Intent(this, Activity.class);
-                // startActivity(intent);
+                startActivity(new Intent(this, CrudSyncPhoneAddEditActivity.class));
                 return true;
             case R.id.menu_delete_all:
-                showDialog(DialogConfig.DELETE_ALL_CONFIRM);
+                showDialog(DialogConfig.DIALOG_DELETE_ALL_CONFIRM);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -230,6 +272,60 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
         mRequestId = mRequestManager.getSyncPhoneList(UserManager.getUserId(this));
+    }
+
+    private void callSyncPhoneDeleteMonoWS() {
+        // TODO get id to delete
+        callSyncPhoneDeleteWS("");
+    }
+
+    private void callSyncPhoneDeleteAllWS() {
+        // TODO get all ids
+        callSyncPhoneDeleteWS("");
+    }
+
+    private void callSyncPhoneDeleteWS(final String idList) {
+        // TODO call requestManager
+    }
+
+    @Override
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+        if (parent == getListView()) {
+            Intent intent = new Intent(this, CrudSyncPhoneViewActivity.class);
+            intent.putExtra(CrudSyncPhoneViewActivity.INTENT_EXTRA_PHONE,
+                    ((PhoneListAdapter) getListAdapter()).getItem(position));
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.crud_phone_list_context, menu);
+
+        menu.setHeaderTitle(((PhoneListAdapter) getListAdapter()).getItem(((AdapterContextMenuInfo) menuInfo).position).name);
+    }
+
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+        final int itemId = item.getItemId();
+
+        final int position = ((AdapterContextMenuInfo) item.getMenuInfo()).position;
+
+        switch (itemId) {
+            case R.id.menu_edit:
+                Phone phone = ((PhoneListAdapter) getListAdapter()).getItem(position);
+                Intent intent = new Intent(this, CrudSyncPhoneAddEditActivity.class);
+                intent.putExtra(CrudSyncPhoneAddEditActivity.INTENT_EXTRA_PHONE, phone);
+                startActivity(intent);
+                return true;
+            case R.id.menu_delete:
+                mPositionToDelete = position;
+                showDialog(DialogConfig.DIALOG_DELETE_CONFIRM);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override
@@ -258,6 +354,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                         .getParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_SYNC_PHONE_LIST);
 
                 final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                adapter.clear();
                 adapter.setNotifyOnChange(false);
                 for (Phone phone : syncPhoneList) {
                     adapter.add(phone);
@@ -268,7 +365,6 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     }
 
     class ViewHolder {
-        private Phone mPhone;
         private TextView mTextViewName;
         private TextView mTextViewManufacturer;
 
@@ -278,7 +374,6 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         }
 
         public void populateView(final Phone phone) {
-            mPhone = phone;
             mTextViewName.setText(phone.name);
             mTextViewManufacturer.setText(phone.manufacturer);
         }

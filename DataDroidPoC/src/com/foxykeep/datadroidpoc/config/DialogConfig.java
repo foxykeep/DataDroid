@@ -13,5 +13,6 @@ public class DialogConfig {
     public static final int DIALOG_ERROR = 1;
     public static final int DIALOG_CONNEXION_ERROR = 2;
     public static final int DIALOG_PROGRESS = 3;
-    public static final int DELETE_ALL_CONFIRM = 4;
+    public static final int DIALOG_DELETE_ALL_CONFIRM = 4;
+    public static final int DIALOG_DELETE_CONFIRM = 5;
 }
