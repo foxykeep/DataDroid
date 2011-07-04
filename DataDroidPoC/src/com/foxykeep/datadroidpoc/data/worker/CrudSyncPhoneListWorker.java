@@ -32,7 +32,7 @@ public class CrudSyncPhoneListWorker {
             URISyntaxException, RestClientException, JSONException {
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_ID, userId);
+        params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_UDID, userId);
 
         NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
                 WSConfig.WS_CRUD_PHONE_LIST_URL, NetworkConnection.METHOD_GET, params);

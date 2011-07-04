@@ -1,3 +1,11 @@
+/*
+ * 2011 Foxykeep (http://www.foxykeep.com)
+ *
+ * Licensed under the Beerware License :
+ * 
+ *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
+ *   this stuff is worth it, you can buy me a beer in return
+ */
 package com.foxykeep.datadroidpoc.data.worker;
 
 import java.io.IOException;
@@ -22,7 +30,7 @@ public class CrudSyncPhoneDeleteWorker {
             throws IllegalStateException, IOException, URISyntaxException, RestClientException, JSONException {
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_USER_ID, userId);
+        params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_USER_UDID, userId);
         params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_IDS, phoneIdList);
 
         NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(

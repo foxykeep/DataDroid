@@ -22,11 +22,22 @@ public class WSConfig {
     // CrudPhoneList WS
     public static final String WS_CRUD_PHONE_LIST_URL = ROOT_URL + "crud/list.php";
 
-    public static final String WS_CRUD_PHONE_LIST_PROPERTY_USER_ID = "userId";
+    public static final String WS_CRUD_PHONE_LIST_PROPERTY_USER_UDID = "userUdid";
 
     // CrudPhoneDelete WS
     public static final String WS_CRUD_PHONE_DELETE_URL = ROOT_URL + "crud/delete.php";
 
-    public static final String WS_CRUD_PHONE_DELETE_PROPERTY_USER_ID = "userId";
+    public static final String WS_CRUD_PHONE_DELETE_PROPERTY_USER_UDID = "userUdid";
     public static final String WS_CRUD_PHONE_DELETE_PROPERTY_IDS = "ids";
+
+    // CrudPhoneAddEdit WS
+    public static final String WS_CRUD_PHONE_ADD_EDIT_URL = ROOT_URL + "crud/addEdit.php";
+
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_USER_UDID = "userUdid";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ID = "id";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_NAME = "name";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_MANUFACTURER = "manufacturer";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ANDROID_VERSION = "androidVersion";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_SCREEN_SIZE = "screenSize";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_PRICE = "price";
 }

@@ -23,6 +23,7 @@ import com.foxykeep.datadroid.exception.RestClientException;
 import com.foxykeep.datadroid.service.WorkerService;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.worker.CityListWorker;
+import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneAddEditWorker;
 import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneDeleteWorker;
 import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneListWorker;
 import com.foxykeep.datadroidpoc.data.worker.PersonListWorker;
@@ -46,6 +47,7 @@ public class PoCService extends WorkerService {
     public static final int WORKER_TYPE_CITY_LIST = 1;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_LIST = 2;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_DELETE = 3;
+    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_ADD = 4;
 
     // Worker params
     // - PersonList WS params
@@ -55,6 +57,13 @@ public class PoCService extends WorkerService {
     // - CrudSyncPhoneDelete WS params
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneDeleteUserId";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST = "com.foxykeep.datadroidpoc.extras.crudPhoneDeletePhoneIdList";
+    // - CrudSyncPhoneAdd WS params
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneAddUserId";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME = "com.foxykeep.datadroidpoc.extras.crudPhoneAddName";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER = "com.foxykeep.datadroidpoc.extras.crudPhoneAddManufacturer";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION = "com.foxykeep.datadroidpoc.extras.crudPhoneAddAndroidVersion";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.crudPhoneAddScreenSize";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE = "com.foxykeep.datadroidpoc.extras.crudPhoneAddPrice";
 
     public PoCService() {
         super(MAX_THREADS);
@@ -75,15 +84,28 @@ public class PoCService extends WorkerService {
                     sendSuccess(intent, CityListWorker.start());
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
-                    CrudSyncPhoneListWorker.start(this,
-                            intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID));
-                    sendSuccess(intent, null);
+                    sendSuccess(
+                            intent,
+                            CrudSyncPhoneListWorker.start(this,
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID)));
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
-                    CrudSyncPhoneDeleteWorker.start(this,
-                            intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
-                            intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST));
-                    sendSuccess(intent, null);
+                    sendSuccess(
+                            intent,
+                            CrudSyncPhoneDeleteWorker.start(this,
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST)));
+                    break;
+                case WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
+                    sendSuccess(
+                            intent,
+                            CrudSyncPhoneAddEditWorker.start(this,
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID), -1,
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME),
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER),
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION),
+                                    intent.getDoubleExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, -1),
+                                    intent.getIntExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE, -1)));
                     break;
             }
         } catch (final IllegalStateException e) {

@@ -40,4 +40,7 @@ public class MemoryProvider {
 
     // SyncPhoneDelete WS
     public long[] syncPhoneDeleteData;
+
+    // SyncPhoneAdd WS
+    public Phone syncPhoneAddData;
 }
