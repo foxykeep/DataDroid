@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,21 +42,30 @@ import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.util.ArrayUtils;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
 public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
+    private static final String SAVED_STATE_REQUEST_TYPE = "savedStateRequestType";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
     private static final String SAVED_STATE_POSITION_TO_DELETE = "savedStatePositionToDelete";
     private static final String SAVED_STATE_ARE_PHONES_LOADED = "savedStateIsResultLoaded";
     private static final String SAVED_STATE_PHONE_ARRAY_LIST = "savedStatePhoneArrayList";
 
+    private static final int REQUEST_TYPE_LIST = 0;
+    private static final int REQUEST_TYPE_DELETE_MONO = 1;
+    private static final int REQUEST_TYPE_DELETE_ALL = 2;
+
     private TextView mTextViewEmpty;
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
+    private int mRequestType = -1;
+
+    private String mUserId;
 
     private boolean mArePhonesLoaded = false;
 
@@ -77,6 +87,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
 
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
+            mRequestType = savedInstanceState.getInt(SAVED_STATE_REQUEST_TYPE, -1);
             mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
             mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
             mPositionToDelete = savedInstanceState.getInt(SAVED_STATE_POSITION_TO_DELETE);
@@ -96,6 +107,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
 
         mRequestManager = PoCRequestManager.from(this);
         mInflater = getLayoutInflater();
+        mUserId = UserManager.getUserId(this);
     }
 
     @Override
@@ -104,30 +116,56 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         if (mRequestId != -1) {
             if (mRequestManager.isRequestInProgress(mRequestId)) {
                 mRequestManager.addOnRequestFinishedListener(this);
-                setProgressBarIndeterminateVisibility(true);
-            } else {
-                mRequestId = -1;
-
-                if (mMemoryProvider.syncPhoneList == null) {
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                } else {
-                    mArePhonesLoaded = true;
-
-                    final ArrayList<Phone> syncPhoneList = mMemoryProvider.syncPhoneList;
-
-                    if (syncPhoneList.size() == 0) {
-                        mTextViewEmpty.setText(R.string.crud_phone_list_tv_empty_no_results);
-                        return;
-                    }
-
-                    final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
-                    adapter.clear();
-                    adapter.setNotifyOnChange(false);
-                    for (Phone phone : syncPhoneList) {
-                        adapter.add(phone);
-                    }
-                    adapter.notifyDataSetChanged();
+                if (mRequestType == REQUEST_TYPE_LIST) {
+                    setProgressBarIndeterminateVisibility(true);
+                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                    showDialog(DialogConfig.DIALOG_PROGRESS);
                 }
+            } else {
+                if (mRequestType == REQUEST_TYPE_LIST) {
+                    if (mMemoryProvider.syncPhoneList == null) {
+                        showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
+                    } else {
+                        mRequestType = -1;
+
+                        mArePhonesLoaded = true;
+
+                        final ArrayList<Phone> syncPhoneList = mMemoryProvider.syncPhoneList;
+
+                        if (syncPhoneList.size() == 0) {
+                            mTextViewEmpty.setText(R.string.crud_phone_list_tv_empty_no_results);
+                            return;
+                        }
+
+                        final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                        adapter.clear();
+                        adapter.setNotifyOnChange(false);
+                        for (Phone phone : syncPhoneList) {
+                            adapter.add(phone);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                    if (mMemoryProvider.syncPhoneDeleteData == null) {
+                        showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
+                    } else {
+                        mRequestType = -1;
+
+                        final long[] syncDeletedPhoneIdArray = mMemoryProvider.syncPhoneDeleteData;
+
+                        final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                        adapter.setNotifyOnChange(false);
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            Phone phone = adapter.getItem(i);
+                            if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
+                                adapter.remove(phone);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                mRequestId = -1;
             }
         } else if (!mArePhonesLoaded) {
             callSyncPhoneListWS();
@@ -189,12 +227,25 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 b.setNeutralButton(getString(android.R.string.ok), null);
                 b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int which) {
-                        callSyncPhoneListWS();
+                        if (mRequestType == REQUEST_TYPE_LIST) {
+                            callSyncPhoneListWS();
+                        } else if (mRequestType == REQUEST_TYPE_DELETE_ALL) {
+                            callSyncPhoneDeleteAllWS();
+                        } else if (mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                            callSyncPhoneDeleteMonoWS();
+                        }
                     }
                 });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
+            case DialogConfig.DIALOG_PROGRESS:
+                ProgressDialog dialog = new ProgressDialog(this);
+                dialog.setTitle(R.string.progress_dialog_title);
+                dialog.setMessage(getString(R.string.progress_dialog_message));
+                dialog.setIndeterminate(true);
+                dialog.setCancelable(false);
+                return dialog;
             case DialogConfig.DIALOG_DELETE_ALL_CONFIRM:
                 b = new Builder(this);
                 b.setIcon(android.R.drawable.ic_dialog_alert);
@@ -271,21 +322,33 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     private void callSyncPhoneListWS() {
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getSyncPhoneList(UserManager.getUserId(this));
+        mRequestType = REQUEST_TYPE_LIST;
+        mRequestId = mRequestManager.getSyncPhoneList(mUserId);
     }
 
     private void callSyncPhoneDeleteMonoWS() {
-        // TODO get id to delete
-        callSyncPhoneDeleteWS("");
+        mRequestType = REQUEST_TYPE_DELETE_MONO;
+        callSyncPhoneDeleteWS(String.valueOf(((PhoneListAdapter) getListAdapter()).getItem(mPositionToDelete).serverId));
     }
 
     private void callSyncPhoneDeleteAllWS() {
-        // TODO get all ids
-        callSyncPhoneDeleteWS("");
+        final StringBuilder sb = new StringBuilder();
+        final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+        final int adapterCount = adapter.getCount();
+        for (int i = 0; i < adapterCount; i++) {
+            sb.append(adapter.getItem(i).serverId);
+            if (i != adapterCount - 1) {
+                sb.append(",");
+            }
+        }
+        mRequestType = REQUEST_TYPE_DELETE_ALL;
+        callSyncPhoneDeleteWS(sb.toString());
     }
 
-    private void callSyncPhoneDeleteWS(final String idList) {
-        // TODO call requestManager
+    private void callSyncPhoneDeleteWS(final String phoneIdList) {
+        showDialog(DialogConfig.DIALOG_PROGRESS);
+        mRequestManager.addOnRequestFinishedListener(this);
+        mRequestId = mRequestManager.deleteSyncPhones(mUserId, phoneIdList);
     }
 
     @Override
@@ -348,18 +411,35 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
             } else {
-                mArePhonesLoaded = true;
+                if (mRequestType == REQUEST_TYPE_LIST) {
+                    mArePhonesLoaded = true;
 
-                final ArrayList<Phone> syncPhoneList = payload
-                        .getParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_SYNC_PHONE_LIST);
+                    final ArrayList<Phone> syncPhoneList = payload
+                            .getParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_PHONE_LIST);
 
-                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
-                adapter.clear();
-                adapter.setNotifyOnChange(false);
-                for (Phone phone : syncPhoneList) {
-                    adapter.add(phone);
+                    final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                    adapter.clear();
+                    adapter.setNotifyOnChange(false);
+                    for (Phone phone : syncPhoneList) {
+                        adapter.add(phone);
+                    }
+                    adapter.notifyDataSetChanged();
+                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                    final long[] syncDeletedPhoneIdArray = payload
+                            .getLongArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_DELETE_DATA);
+
+                    final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                    adapter.setNotifyOnChange(false);
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        Phone phone = adapter.getItem(i);
+                        if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
+                            adapter.remove(phone);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+
+                mRequestType = -1;
             }
         }
     }
