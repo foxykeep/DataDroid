@@ -262,6 +262,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     }
                 });
                 b.setNegativeButton(android.R.string.cancel, null);
+                b.setCancelable(true);
                 return b.create();
             case DialogConfig.DIALOG_DELETE_CONFIRM:
                 Phone phone = ((PhoneListAdapter) getListAdapter()).getItem(mPositionToDelete);
@@ -277,6 +278,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     }
                 });
                 b.setNegativeButton(android.R.string.cancel, null);
+                b.setCancelable(true);
                 return b.create();
             default:
                 return super.onCreateDialog(id);
