@@ -48,6 +48,7 @@ public class PoCService extends WorkerService {
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_LIST = 2;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_DELETE = 3;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_ADD = 4;
+    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_EDIT = 5;
 
     // Worker params
     // - PersonList WS params
@@ -64,6 +65,14 @@ public class PoCService extends WorkerService {
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION = "com.foxykeep.datadroidpoc.extras.crudPhoneAddAndroidVersion";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.crudPhoneAddScreenSize";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE = "com.foxykeep.datadroidpoc.extras.crudPhoneAddPrice";
+    // - CrudSyncPhoneEdit WS params
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneEditUserId";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneEditId";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME = "com.foxykeep.datadroidpoc.extras.crudPhoneEditName";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER = "com.foxykeep.datadroidpoc.extras.crudPhoneEditManufacturer";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION = "com.foxykeep.datadroidpoc.extras.crudPhoneEditAndroidVersion";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.crudPhoneEditScreenSize";
+    public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_PRICE = "com.foxykeep.datadroidpoc.extras.crudPhoneEditPrice";
 
     public PoCService() {
         super(MAX_THREADS);
@@ -106,6 +115,18 @@ public class PoCService extends WorkerService {
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION),
                                     intent.getDoubleExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, -1),
                                     intent.getIntExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE, -1)));
+                    break;
+                case WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
+                    sendSuccess(
+                            intent,
+                            CrudSyncPhoneAddEditWorker.start(this,
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID),
+                                    intent.getLongExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ID, -1),
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME),
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER),
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION),
+                                    intent.getDoubleExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE, -1),
+                                    intent.getIntExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_PRICE, -1)));
                     break;
             }
         } catch (final IllegalStateException e) {

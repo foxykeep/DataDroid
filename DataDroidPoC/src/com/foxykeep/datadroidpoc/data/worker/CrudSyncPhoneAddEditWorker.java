@@ -27,13 +27,17 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 
 public class CrudSyncPhoneAddEditWorker {
 
-    public static Bundle start(final Context context, final long serverId, final String userId, final String name,
+    public static Bundle start(final Context context, final String userId, final long serverId, final String name,
             final String manufacturer, final String androidVersion, final double screenSize, final int price)
             throws IllegalStateException, IOException, URISyntaxException, RestClientException, JSONException {
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_USER_UDID, userId);
-        params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ID, String.valueOf(serverId));
+        if (serverId > 0) {
+            params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ID, String.valueOf(serverId));
+        } else if (serverId != -1) {
+            throw new IllegalArgumentException("serverId must be equal either to a serverId (edit) or to -1 (add)");
+        }
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_NAME, name);
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_MANUFACTURER, manufacturer);
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ANDROID_VERSION, androidVersion);

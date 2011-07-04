@@ -43,4 +43,7 @@ public class MemoryProvider {
 
     // SyncPhoneAdd WS
     public Phone syncPhoneAddData;
+
+    // SyncPhoneEdit WS
+    public Phone syncPhoneEditData;
 }
