@@ -59,6 +59,10 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     private static final int REQUEST_TYPE_DELETE_MONO = 1;
     private static final int REQUEST_TYPE_DELETE_ALL = 2;
 
+    private static final int ACTIVITY_FOR_RESULT_ADD = 1;
+    private static final int ACTIVITY_FOR_RESULT_EDIT = 2;
+    private static final int ACTIVITY_FOR_RESULT_VIEW = 3;
+
     private TextView mTextViewEmpty;
 
     private PoCRequestManager mRequestManager;
@@ -309,7 +313,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.menu_add:
-                startActivity(new Intent(this, CrudSyncPhoneAddEditActivity.class));
+                startActivityForResult(new Intent(this, CrudSyncPhoneAddEditActivity.class), ACTIVITY_FOR_RESULT_ADD);
                 return true;
             case R.id.menu_delete_all:
                 showDialog(DialogConfig.DIALOG_DELETE_ALL_CONFIRM);
@@ -357,6 +361,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
             Intent intent = new Intent(this, CrudSyncPhoneViewActivity.class);
             intent.putExtra(CrudSyncPhoneViewActivity.INTENT_EXTRA_PHONE,
                     ((PhoneListAdapter) getListAdapter()).getItem(position));
+            startActivityForResult(intent, ACTIVITY_FOR_RESULT_VIEW);
         }
     }
 
@@ -380,7 +385,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 Phone phone = ((PhoneListAdapter) getListAdapter()).getItem(position);
                 Intent intent = new Intent(this, CrudSyncPhoneAddEditActivity.class);
                 intent.putExtra(CrudSyncPhoneAddEditActivity.INTENT_EXTRA_PHONE, phone);
-                startActivity(intent);
+                startActivityForResult(intent, ACTIVITY_FOR_RESULT_EDIT);
                 return true;
             case R.id.menu_delete:
                 mPositionToDelete = position;
