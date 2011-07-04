@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 2011 Foxykeep (http://www.foxykeep.com) Licensed under the Beerware 
+	License : As long as you retain this notice you can do whatever you want 
+	with this stuff. If we meet some day, and you think this stuff is worth it, 
+	you can buy me a beer in return -->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView
+			android:id="@+id/tv_manufacturer"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:textAppearance="?android:attr/textAppearanceLarge" />
+		<TextView
+			android:id="@+id/tv_name"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:textAppearance="?android:attr/textAppearanceLarge" />
+	</LinearLayout>
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1dp"
+		android:background="@android:drawable/divider_horizontal_dark" />
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:layout_weight="0.3"
+			android:textColor="@android:color/white"
+			android:text="@string/crud_phone_view_tv_android_version" />
+		<TextView
+			android:id="@+id/tv_android_version"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent" />
+	</LinearLayout>
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:layout_weight="0.3"
+			android:textColor="@android:color/white"
+			android:text="@string/crud_phone_view_tv_screen_size" />
+		<TextView
+			android:id="@+id/tv_screen_size"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent" />
+	</LinearLayout>
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:layout_weight="0.3"
+			android:textColor="@android:color/white"
+			android:text="@string/crud_phone_view_tv_price" />
+		<TextView
+			android:id="@+id/tv_price"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent" />
+	</LinearLayout>
+</LinearLayout>

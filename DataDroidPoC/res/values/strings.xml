@@ -53,6 +53,19 @@
     <!-- CrudSyncPhoneListActivity texts -->
     <string name="crud_sync_phone_list_title">DataDroid > Phones (CRUD) (Sync)</string>
     
+    <!-- CrudSyncPhoneViewActivity and CrudAsyncPhoneViewActivity texts -->
+    <string name="crud_phone_view_tv_android_version">Android version</string>
+    <string name="crud_phone_view_tv_screen_size">Screen size</string>
+    <string name="crud_phone_view_tv_screen_size_format">%1$.1f</string>
+    <string name="crud_phone_view_tv_price">Price</string>
+    <string name="crud_phone_view_tv_price_format">%1$d $</string>
+    
+    <string name="crud_phone_view_menu_edit">Edit</string>
+    <string name="crud_phone_view_menu_delete">Delete</string>
+    
+    <string name="crud_phone_view_dialog_delete_confirm_title">Delete</string>
+    <string name="crud_phone_view_dialog_delete_confirm_message">%1$s will be deleted.</string>
+    
     <!-- CrudSyncPhoneViewActivity texts -->
     <string name="crud_sync_phone_view_title">DataDroid > Phone (CRUD) (Sync)</string>
 </resources>
