@@ -64,8 +64,18 @@ public class SkeletonService extends WorkerService {
                     sendFailure(intent, null);
                     break;
             }
+            // This block (which should be the last one in your implementation)
+            // will catch all the RuntimeException and send you back an error
+            // that you can manage. If you remove this catch, the
+            // RuntimeException will still crash the Service but you will not be
+            // informed (as it is in 'background') so you should never remove
+            // this catch
+        } catch (final RuntimeException e) {
+            Log.e(LOG_TAG, "RuntimeException", e);
+            sendDataFailure(intent, null);
             // TODO normally you should replace this catch block with Exception
-            // by specialized block using the method sendConnexionFailure or
+            // by specialized blocks which use the methods sendConnexionFailure
+            // or
             // sendDataFailure
         } catch (final Exception e) {
             Log.e(LOG_TAG, "Erreur", e);
