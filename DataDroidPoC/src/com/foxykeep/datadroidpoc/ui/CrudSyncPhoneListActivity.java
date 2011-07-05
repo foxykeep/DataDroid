@@ -306,6 +306,51 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     }
 
     @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        switch (requestCode) {
+            case ACTIVITY_FOR_RESULT_VIEW:
+                if (resultCode == RESULT_OK) {
+                    final long deletedPhoneId = data.getLongExtra(RESULT_EXTRA_DELETED_PHONE_ID, -1);
+                    final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
+
+                    if (deletedPhoneId != -1) {
+                        final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                        adapter.setNotifyOnChange(false);
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            final Phone phone = adapter.getItem(i);
+                            if (phone.serverId == deletedPhoneId) {
+                                adapter.remove(phone);
+                                break;
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    } else if (editedPhone != null) {
+                        final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                        final int adapterCount = adapter.getCount();
+                        adapter.setNotifyOnChange(false);
+                        for (int i = 0; i < adapterCount; i++) {
+                            final Phone phone = adapter.getItem(i);
+                            if (phone.serverId == editedPhone.serverId) {
+                                phone.serverId = editedPhone.serverId;
+                                phone.name = editedPhone.name;
+                                phone.manufacturer = editedPhone.manufacturer;
+                                phone.androidVersion = editedPhone.androidVersion;
+                                phone.screenSize = editedPhone.screenSize;
+                                phone.price = editedPhone.price;
+                                break;
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         super.onCreateOptionsMenu(menu);
         final MenuInflater inflater = getMenuInflater();
