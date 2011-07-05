@@ -63,12 +63,15 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     private static final int ACTIVITY_FOR_RESULT_EDIT = 2;
     private static final int ACTIVITY_FOR_RESULT_VIEW = 3;
 
+    public static final String RESULT_EXTRA_ADDED_PHONE = "resultExtraAddedPhone";
+    public static final String RESULT_EXTRA_EDITED_PHONE = "resultExtraEditedPhone";
+    public static final String RESULT_EXTRA_DELETED_PHONE_ID = "resultExtraDeletedPhoneId";
+
     private TextView mTextViewEmpty;
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
     private int mRequestType = -1;
-
     private String mUserId;
 
     private boolean mArePhonesLoaded = false;
@@ -160,7 +163,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                         final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
                         adapter.setNotifyOnChange(false);
                         for (int i = 0; i < adapter.getCount(); i++) {
-                            Phone phone = adapter.getItem(i);
+                            final Phone phone = adapter.getItem(i);
                             if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
                                 adapter.remove(phone);
                             }
@@ -401,7 +404,11 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     @Override
     public void onRequestFinished(final int requestId, final int resultCode, final Bundle payload) {
         if (requestId == mRequestId) {
-            setProgressBarIndeterminateVisibility(false);
+            if (mRequestType == REQUEST_TYPE_LIST) {
+                setProgressBarIndeterminateVisibility(false);
+            } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                dismissDialog(DialogConfig.DIALOG_PROGRESS);
+            }
             mRequestId = -1;
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
@@ -438,7 +445,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
                     adapter.setNotifyOnChange(false);
                     for (int i = 0; i < adapter.getCount(); i++) {
-                        Phone phone = adapter.getItem(i);
+                        final Phone phone = adapter.getItem(i);
                         if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
                             adapter.remove(phone);
                         }
