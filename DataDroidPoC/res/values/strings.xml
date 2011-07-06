@@ -67,5 +67,17 @@
     <string name="crud_phone_view_dialog_delete_confirm_message">%1$s will be deleted.</string>
     
     <!-- CrudSyncPhoneViewActivity texts -->
-    <string name="crud_sync_phone_view_title">DataDroid > Phone (CRUD) (Sync)</string>
+    <string name="crud_sync_phone_view_title">DataDroid > View phone (CRUD) (Sync)</string>
+    
+    <!-- CrudSyncPhoneAddEditActivity and CrudAsyncPhoneAddEditActivity -->
+    <string name="crud_phone_add_edit_tv_name">Name :</string>
+    <string name="crud_phone_add_edit_tv_manufacturer">Manufacturer :</string>
+    <string name="crud_phone_add_edit_tv_android_version">Android version :</string>
+    <string name="crud_phone_add_edit_tv_screen_size">Screen size :</string>
+    <string name="crud_phone_add_edit_tv_price">Price :</string>
+    <string name="crud_phone_add_edit_b_submit">Submit</string>
+    
+    <!-- CrudSyncPhoneAddEditActivity texts -->
+    <string name="crud_sync_phone_add_title">DataDroid > New phone (CRUD) (Sync)</string>
+    <string name="crud_sync_phone_edit_title">DataDroid > Edit phone (CRUD) (Sync)</string>
 </resources>

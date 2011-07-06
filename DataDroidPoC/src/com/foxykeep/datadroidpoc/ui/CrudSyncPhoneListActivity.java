@@ -55,9 +55,9 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     private static final String SAVED_STATE_ARE_PHONES_LOADED = "savedStateIsResultLoaded";
     private static final String SAVED_STATE_PHONE_ARRAY_LIST = "savedStatePhoneArrayList";
 
-    private static final int REQUEST_TYPE_LIST = 0;
-    private static final int REQUEST_TYPE_DELETE_MONO = 1;
-    private static final int REQUEST_TYPE_DELETE_ALL = 2;
+    private static final int REQUEST_TYPE_LIST = 1;
+    private static final int REQUEST_TYPE_DELETE_MONO = 2;
+    private static final int REQUEST_TYPE_DELETE_ALL = 3;
 
     private static final int ACTIVITY_FOR_RESULT_ADD = 1;
     private static final int ACTIVITY_FOR_RESULT_EDIT = 2;
@@ -192,6 +192,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         super.onSaveInstanceState(outState);
 
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
+        outState.putInt(SAVED_STATE_REQUEST_TYPE, mRequestType);
         outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
         outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
         outState.putInt(SAVED_STATE_POSITION_TO_DELETE, mPositionToDelete);
@@ -308,7 +309,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
-            case ACTIVITY_FOR_RESULT_VIEW:
+            case ACTIVITY_FOR_RESULT_VIEW: {
                 if (resultCode == RESULT_OK) {
                     final long deletedPhoneId = data.getLongExtra(RESULT_EXTRA_DELETED_PHONE_ID, -1);
                     final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
@@ -344,6 +345,38 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     }
                 }
                 break;
+            }
+            case ACTIVITY_FOR_RESULT_ADD: {
+                final Phone addedPhone = data.getParcelableExtra(RESULT_EXTRA_ADDED_PHONE);
+
+                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                adapter.setNotifyOnChange(false);
+                adapter.add(addedPhone);
+                adapter.notifyDataSetChanged();
+
+                break;
+            }
+            case ACTIVITY_FOR_RESULT_EDIT: {
+                final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
+
+                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                final int adapterCount = adapter.getCount();
+                adapter.setNotifyOnChange(false);
+                for (int i = 0; i < adapterCount; i++) {
+                    final Phone phone = adapter.getItem(i);
+                    if (phone.serverId == editedPhone.serverId) {
+                        phone.serverId = editedPhone.serverId;
+                        phone.name = editedPhone.name;
+                        phone.manufacturer = editedPhone.manufacturer;
+                        phone.androidVersion = editedPhone.androidVersion;
+                        phone.screenSize = editedPhone.screenSize;
+                        phone.price = editedPhone.price;
+                        break;
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                break;
+            }
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;

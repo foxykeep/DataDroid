@@ -31,7 +31,7 @@ public class WSConfig {
     public static final String WS_CRUD_PHONE_DELETE_PROPERTY_IDS = "ids";
 
     // CrudPhoneAddEdit WS
-    public static final String WS_CRUD_PHONE_ADD_EDIT_URL = ROOT_URL + "crud/addEdit.php";
+    public static final String WS_CRUD_PHONE_ADD_EDIT_URL = ROOT_URL + "crud/addedit.php";
 
     public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_USER_UDID = "userUdid";
     public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ID = "id";

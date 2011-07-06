@@ -99,6 +99,7 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                     Intent data = new Intent();
                     data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID, syncDeletedPhoneIdArray[0]);
                     setResult(RESULT_OK, data);
+                    finish();
                 }
             }
         }

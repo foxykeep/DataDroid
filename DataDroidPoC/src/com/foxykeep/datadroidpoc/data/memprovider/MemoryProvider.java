@@ -42,8 +42,8 @@ public class MemoryProvider {
     public long[] syncPhoneDeleteData;
 
     // SyncPhoneAdd WS
-    public Phone syncPhoneAddData;
+    public Phone syncPhoneAddedPhone;
 
     // SyncPhoneEdit WS
-    public Phone syncPhoneEditData;
+    public Phone syncPhoneEditedPhone;
 }

@@ -172,10 +172,10 @@ public class PoCRequestManager extends RequestManager {
                     mMemoryProvider.syncPhoneDeleteData = resultData.getLongArray(RECEIVER_EXTRA_PHONE_DELETE_DATA);
                     break;
                 case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
-                    mMemoryProvider.syncPhoneAddData = resultData.getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
+                    mMemoryProvider.syncPhoneAddedPhone = resultData.getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
                     break;
                 case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
-                    mMemoryProvider.syncPhoneEditData = resultData.getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
+                    mMemoryProvider.syncPhoneEditedPhone = resultData.getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
                     break;
             }
         }
@@ -407,7 +407,7 @@ public class PoCRequestManager extends RequestManager {
 
         mRequestSparseArray.append(requestId, intent);
 
-        mMemoryProvider.syncPhoneAddData = null;
+        mMemoryProvider.syncPhoneAddedPhone = null;
 
         return requestId;
     }
@@ -474,7 +474,7 @@ public class PoCRequestManager extends RequestManager {
 
         mRequestSparseArray.append(requestId, intent);
 
-        mMemoryProvider.syncPhoneEditData = null;
+        mMemoryProvider.syncPhoneEditedPhone = null;
 
         return requestId;
     }
