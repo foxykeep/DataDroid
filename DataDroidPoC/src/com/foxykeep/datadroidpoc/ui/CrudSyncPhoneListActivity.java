@@ -141,7 +141,6 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
 
                         if (syncPhoneList.size() == 0) {
                             mTextViewEmpty.setText(R.string.crud_phone_list_tv_empty_no_results);
-                            return;
                         }
 
                         final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
@@ -166,6 +165,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                             final Phone phone = adapter.getItem(i);
                             if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
                                 adapter.remove(phone);
+                                i--;
                             }
                         }
                         adapter.notifyDataSetChanged();
@@ -509,6 +509,10 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                     final ArrayList<Phone> syncPhoneList = payload
                             .getParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_PHONE_LIST);
 
+                    if (syncPhoneList.size() == 0) {
+                        mTextViewEmpty.setText(R.string.crud_phone_list_tv_empty_no_results);
+                    }
+
                     final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
                     adapter.clear();
                     adapter.setNotifyOnChange(false);
@@ -526,6 +530,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                         final Phone phone = adapter.getItem(i);
                         if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
                             adapter.remove(phone);
+                            i--;
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -570,7 +575,7 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
             }
 
             viewHolder.populateView(getItem(position));
-            return super.getView(position, convertView, parent);
+            return convertView;
         }
     }
 }

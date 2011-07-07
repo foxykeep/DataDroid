@@ -432,27 +432,27 @@ public class PoCRequestManager extends RequestManager {
         for (int i = 0; i < requestSparseArrayLength; i++) {
             final Intent savedIntent = mRequestSparseArray.valueAt(i);
 
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID).equals(userId)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID).equals(userId)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME).equals(name)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME).equals(name)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER).equals(
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER).equals(
                     manufacturer)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION).equals(
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION).equals(
                     androidVersion)) {
                 continue;
             }
-            if (savedIntent.getDoubleExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, -1) != screenSize) {
+            if (savedIntent.getDoubleExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE, -1) != screenSize) {
                 continue;
             }
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE, -1) != price) {
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_PRICE, -1) != price) {
                 continue;
             }
             return mRequestSparseArray.keyAt(i);
@@ -461,15 +461,16 @@ public class PoCRequestManager extends RequestManager {
         final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
 
         final Intent intent = new Intent(mContext, PoCService.class);
-        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT);
         intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
         intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID, userId);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME, name);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER, manufacturer);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION, androidVersion);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, screenSize);
-        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE, price);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID, userId);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ID, serverId);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME, name);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER, manufacturer);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION, androidVersion);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE, screenSize);
+        intent.putExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_PRICE, price);
         mContext.startService(intent);
 
         mRequestSparseArray.append(requestId, intent);

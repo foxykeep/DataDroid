@@ -301,8 +301,14 @@ public class NetworkConnection {
                 }
 
                 if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                    Log.i(LOG_TAG, "retrieveResponseFromService - GET Request - complete URL with parameters if any : "
-                            + sb.toString());
+                    Log.i(LOG_TAG, "retrieveResponseFromService - GET Request - complete URL with parameters if any : ");
+                    final String completeUrl = sb.toString();
+                    int pos = 0;
+                    int dumpLength = completeUrl.length();
+                    while (pos < dumpLength) {
+                        Log.i(LOG_TAG, completeUrl.substring(pos, Math.min(dumpLength - 1, pos + 120)));
+                        pos = pos + 120;
+                    }
                 }
 
                 final URI uri = new URI(sb.toString());

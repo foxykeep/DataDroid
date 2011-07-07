@@ -209,6 +209,7 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                 if (resultCode == RESULT_OK) {
                     mPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
                     mIsPhoneEdited = true;
+                    populateViews();
                 }
                 break;
             default:
@@ -283,6 +284,7 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                 Intent data = new Intent();
                 data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID, syncDeletedPhoneIdArray[0]);
                 setResult(RESULT_OK, data);
+                finish();
             }
         }
     }

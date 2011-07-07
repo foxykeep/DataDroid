@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -247,9 +248,12 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
     @Override
     public void onClick(final View view) {
         if (view == mButtonSubmit) {
+            Log.d("fox", "mPhone : " + (mPhone == null ? 1 : 0));
             if (mPhone == null) {
+                Log.d("fox", "test add");
                 callSyncPhoneAddWS();
             } else {
+                Log.d("fox", "test edit");
                 callSyncPhoneEditWS();
             }
         }
@@ -295,13 +299,13 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
                 if (mRequestType == REQUEST_TYPE_ADD) {
                     Intent resultData = new Intent();
                     resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE,
-                            payload.getParcelableArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
+                            payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
                     setResult(RESULT_OK, resultData);
                     finish();
                 } else if (mRequestType == REQUEST_TYPE_EDIT) {
                     Intent resultData = new Intent();
                     resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE,
-                            payload.getParcelableArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
+                            payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
                     setResult(RESULT_OK, resultData);
                     finish();
                 }
