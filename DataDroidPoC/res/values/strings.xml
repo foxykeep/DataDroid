@@ -21,6 +21,7 @@
     <string name="home_b_city_list">City List (Memory)</string>
     <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
     <string name="home_b_crud_phone_list_async">Phones (CRUD) (Async)</string>
+    <string name="home_toast_example_not_implemented_message">This example is not yet implemented.</string>
     
     <!-- PersonListActivity texts -->
     <string name="person_list_title">DataDroid > Person List (DB)</string>
