@@ -347,34 +347,37 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 break;
             }
             case ACTIVITY_FOR_RESULT_ADD: {
-                final Phone addedPhone = data.getParcelableExtra(RESULT_EXTRA_ADDED_PHONE);
+                if (resultCode == RESULT_OK) {
+                    final Phone addedPhone = data.getParcelableExtra(RESULT_EXTRA_ADDED_PHONE);
 
-                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
-                adapter.setNotifyOnChange(false);
-                adapter.add(addedPhone);
-                adapter.notifyDataSetChanged();
-
+                    final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                    adapter.setNotifyOnChange(false);
+                    adapter.add(addedPhone);
+                    adapter.notifyDataSetChanged();
+                }
                 break;
             }
             case ACTIVITY_FOR_RESULT_EDIT: {
-                final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
+                if (resultCode == RESULT_OK) {
+                    final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
 
-                final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
-                final int adapterCount = adapter.getCount();
-                adapter.setNotifyOnChange(false);
-                for (int i = 0; i < adapterCount; i++) {
-                    final Phone phone = adapter.getItem(i);
-                    if (phone.serverId == editedPhone.serverId) {
-                        phone.serverId = editedPhone.serverId;
-                        phone.name = editedPhone.name;
-                        phone.manufacturer = editedPhone.manufacturer;
-                        phone.androidVersion = editedPhone.androidVersion;
-                        phone.screenSize = editedPhone.screenSize;
-                        phone.price = editedPhone.price;
-                        break;
+                    final PhoneListAdapter adapter = (PhoneListAdapter) getListAdapter();
+                    final int adapterCount = adapter.getCount();
+                    adapter.setNotifyOnChange(false);
+                    for (int i = 0; i < adapterCount; i++) {
+                        final Phone phone = adapter.getItem(i);
+                        if (phone.serverId == editedPhone.serverId) {
+                            phone.serverId = editedPhone.serverId;
+                            phone.name = editedPhone.name;
+                            phone.manufacturer = editedPhone.manufacturer;
+                            phone.androidVersion = editedPhone.androidVersion;
+                            phone.screenSize = editedPhone.screenSize;
+                            phone.price = editedPhone.price;
+                            break;
+                        }
                     }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
                 break;
             }
             default:
