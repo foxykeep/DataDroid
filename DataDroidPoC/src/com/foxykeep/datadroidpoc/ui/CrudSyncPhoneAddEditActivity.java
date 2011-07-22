@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -248,12 +247,9 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
     @Override
     public void onClick(final View view) {
         if (view == mButtonSubmit) {
-            Log.d("fox", "mPhone : " + (mPhone == null ? 1 : 0));
             if (mPhone == null) {
-                Log.d("fox", "test add");
                 callSyncPhoneAddWS();
             } else {
-                Log.d("fox", "test edit");
                 callSyncPhoneEditWS();
             }
         }
