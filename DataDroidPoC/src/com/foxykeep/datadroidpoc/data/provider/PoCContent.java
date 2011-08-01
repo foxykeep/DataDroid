@@ -18,15 +18,12 @@ import android.provider.BaseColumns;
 import com.foxykeep.datadroid.provider.util.DatabaseUtil;
 import com.foxykeep.datadroidpoc.data.model.Person;
 import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.skeleton.data.provider.SkeletonProvider;
 
 /**
  * {@link PoCContent} is the superclass of the various classes of content stored
- * by {@link SkeletonProvider}. It adds to {@link DatabaseContent} the
+ * by {@link PoCProvider}. It adds to {@link DatabaseContent} the
  * {@link #AUTHORITY} and {@link #CONTENT_URI}
  * <p>
- * <b>This class is a skeleton of the normal class. Replace the TODOs by your
- * code</b>
  * </p>
  */
 public abstract class PoCContent {

@@ -89,13 +89,13 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 mRequestId = -1;
 
                 // Get the number of persons in the database
-                int number = 1;
-                // TODO gestion des infos en base pour voir si requete OK
+                int number = ((PersonListAdapter) getListAdapter()).getCursor().getCount();
 
                 if (number < 1) {
-                    // We don't have a way to know if the request was correctly
-                    // executed with 0 result or if an error occurred.
-                    // Here I choose to display an error but it's up to you
+                    // In this case, we don't have a way to know if the request
+                    // was correctly executed with 0 result or if an error
+                    // occurred. Here I choose to display an error but it's up
+                    // to you
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
                 // Nothing to do if it works as the cursor is automatically
