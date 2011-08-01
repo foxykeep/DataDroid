@@ -32,6 +32,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -278,122 +279,96 @@ public class NetworkConnection {
 
         try {
             HttpUriRequest request = null;
-            if (method == METHOD_GET) {
+            switch (method) {
+                case METHOD_GET:
+                case METHOD_PUT:
+                case METHOD_DELETE: {
+                    final StringBuffer sb = new StringBuffer();
+                    sb.append(url);
 
-                final StringBuffer sb = new StringBuffer();
-                sb.append(url);
+                    // Add the parameters to the GET url if any
+                    if (parameters != null && !parameters.isEmpty()) {
+                        sb.append("?");
 
-                // Add the parameters to the GET url if any
-                if (parameters != null && !parameters.isEmpty()) {
-                    sb.append("?");
+                        final ArrayList<String> keyList = new ArrayList<String>(parameters.keySet());
+                        final int keyListLength = keyList.size();
 
-                    final ArrayList<String> keyList = new ArrayList<String>(parameters.keySet());
-                    final int keyListLength = keyList.size();
+                        for (int i = 0; i < keyListLength; i++) {
+                            final String key = keyList.get(i);
 
-                    for (int i = 0; i < keyListLength; i++) {
-                        final String key = keyList.get(i);
-
-                        sb.append(URLEncoder.encode(key, "UTF-8"));
-                        sb.append("=");
-                        sb.append(URLEncoder.encode(parameters.get(key), "UTF-8"));
-                        sb.append("&");
-                    }
-                }
-
-                if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                    Log.i(LOG_TAG, "retrieveResponseFromService - GET Request - complete URL with parameters if any : ");
-                    final String completeUrl = sb.toString();
-                    int pos = 0;
-                    int dumpLength = completeUrl.length();
-                    while (pos < dumpLength) {
-                        Log.i(LOG_TAG, completeUrl.substring(pos, Math.min(dumpLength - 1, pos + 120)));
-                        pos = pos + 120;
-                    }
-                }
-
-                final URI uri = new URI(sb.toString());
-
-                request = new HttpGet(uri);
-            } else if (method == METHOD_POST) {
-
-                final URI uri = new URI(url);
-                request = new HttpPost(uri);
-
-                // Add the parameters to the POST request if any
-                if (parameters != null && !parameters.isEmpty()) {
-
-                    final List<NameValuePair> postRequestParameters = new ArrayList<NameValuePair>();
-                    final ArrayList<String> keyList = new ArrayList<String>(parameters.keySet());
-                    final int keyListLength = keyList.size();
-
-                    for (int i = 0; i < keyListLength; i++) {
-                        final String key = keyList.get(i);
-                        postRequestParameters.add(new BasicNameValuePair(key, parameters.get(key)));
-                    }
-
-                    if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                        Log.i(LOG_TAG, "retrieveResponseFromService - POST Request - parameters list (key => value) : ");
-
-                        final int postRequestParametersLength = postRequestParameters.size();
-                        for (int i = 0; i < postRequestParametersLength; i++) {
-                            final NameValuePair nameValuePair = postRequestParameters.get(i);
-                            Log.i(LOG_TAG, "- " + nameValuePair.getName() + " => " + nameValuePair.getValue());
+                            sb.append(URLEncoder.encode(key, "UTF-8"));
+                            sb.append("=");
+                            sb.append(URLEncoder.encode(parameters.get(key), "UTF-8"));
+                            sb.append("&");
                         }
                     }
 
-                    request.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
-                    ((HttpPost) request).setEntity(new UrlEncodedFormEntity(postRequestParameters, "UTF-8"));
-                } else if (null != postText) { // Add post text (send xml for
-                    // example)
-                    ((HttpPost) request).setEntity(new StringEntity(postText));
-                }
-            } else if (method == METHOD_PUT) {
-
-                final URI uri = new URI(url);
-                request = new HttpPut(uri);
-
-                // Add the parameters to the PUT request if any
-                if (parameters != null && !parameters.isEmpty()) {
-
-                    final List<NameValuePair> putRequestParameters = new ArrayList<NameValuePair>();
-                    final ArrayList<String> keyList = new ArrayList<String>(parameters.keySet());
-                    final int keyListLength = keyList.size();
-
-                    for (int i = 0; i < keyListLength; i++) {
-                        final String key = keyList.get(i);
-                        putRequestParameters.add(new BasicNameValuePair(key, parameters.get(key)));
-                    }
-
                     if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                        Log.i(LOG_TAG, "retrieveResponseFromService - PUT Request - parameters list (key => value) : ");
-
-                        final int putRequestParametersLength = putRequestParameters.size();
-                        for (int i = 0; i < putRequestParametersLength; i++) {
-                            final NameValuePair nameValuePair = putRequestParameters.get(i);
-                            Log.i(LOG_TAG, "- " + nameValuePair.getName() + " => " + nameValuePair.getValue());
+                        Log.i(LOG_TAG,
+                                "retrieveResponseFromService - GET Request - complete URL with parameters if any : ");
+                        final String completeUrl = sb.toString();
+                        int pos = 0;
+                        int dumpLength = completeUrl.length();
+                        while (pos < dumpLength) {
+                            Log.i(LOG_TAG, completeUrl.substring(pos, Math.min(dumpLength - 1, pos + 120)));
+                            pos = pos + 120;
                         }
                     }
 
-                    ((HttpPut) request).setEntity(new UrlEncodedFormEntity(putRequestParameters, "UTF-8"));
+                    final URI uri = new URI(sb.toString());
+
+                    if (method == METHOD_GET) {
+                        request = new HttpGet(uri);
+                    } else if (method == METHOD_PUT) {
+                        request = new HttpPut(uri);
+                    } else if (method == METHOD_DELETE) {
+                        request = new HttpDelete(uri);
+                    }
+                    break;
                 }
-            } else if (method == METHOD_DELETE) {
-                // TODO Delete
-            } else {
-                if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                    Log.e(LOG_TAG,
+                case METHOD_POST: {
+                    final URI uri = new URI(url);
+                    request = new HttpPost(uri);
+
+                    // Add the parameters to the POST request if any
+                    if (parameters != null && !parameters.isEmpty()) {
+
+                        final List<NameValuePair> postRequestParameters = new ArrayList<NameValuePair>();
+                        final ArrayList<String> keyList = new ArrayList<String>(parameters.keySet());
+                        final int keyListLength = keyList.size();
+
+                        for (int i = 0; i < keyListLength; i++) {
+                            final String key = keyList.get(i);
+                            postRequestParameters.add(new BasicNameValuePair(key, parameters.get(key)));
+                        }
+
+                        if (LogConfig.DP_INFO_LOGS_ENABLED) {
+                            Log.i(LOG_TAG,
+                                    "retrieveResponseFromService - POST Request - parameters list (key => value) : ");
+
+                            final int postRequestParametersLength = postRequestParameters.size();
+                            for (int i = 0; i < postRequestParametersLength; i++) {
+                                final NameValuePair nameValuePair = postRequestParameters.get(i);
+                                Log.i(LOG_TAG, "- " + nameValuePair.getName() + " => " + nameValuePair.getValue());
+                            }
+                        }
+
+                        request.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+                        ((HttpPost) request).setEntity(new UrlEncodedFormEntity(postRequestParameters, "UTF-8"));
+                    } else if (null != postText) { // Add post text (send xml
+                                                   // for
+                        // example)
+                        ((HttpPost) request).setEntity(new StringEntity(postText));
+                    }
+                    break;
+                }
+                default: {
+                    if (LogConfig.DP_ERROR_LOGS_ENABLED) {
+                        Log.e(LOG_TAG,
+                                "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                    }
+                    throw new IllegalArgumentException(
                             "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
-                }
-                throw new IllegalArgumentException(
-                        "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
-            }
-
-            // Add the request headers if any
-            if (headers != null && !headers.isEmpty()) {
-
-                final int headersLength = headers.size();
-
-                for (int i = 0; i < headersLength; i++) {
-                    request.addHeader(headers.get(i));
                 }
             }
 
@@ -445,23 +420,8 @@ public class NetworkConnection {
             final Header contentEncoding = response.getFirstHeader("Content-Encoding");
 
             if (entity != null) {
-                if (method == METHOD_GET) {
-                    result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_GET,
-                            (int) entity.getContentLength());
-                } else if (method == METHOD_POST) {
-                    result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_POST,
-                            (int) entity.getContentLength());
-                } else if (method == METHOD_PUT) {
-                    result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_PUT,
-                            (int) entity.getContentLength());
-                } else if (method == METHOD_DELETE) {
-                    result = convertStreamToString(entity.getContent(), contentEncoding != null
-                            && contentEncoding.getValue().equalsIgnoreCase("gzip"), METHOD_DELETE,
-                            (int) entity.getContentLength());
-                }
+                result = convertStreamToString(entity.getContent(), contentEncoding != null
+                        && contentEncoding.getValue().equalsIgnoreCase("gzip"), method, (int) entity.getContentLength());
             }
 
             if (LogConfig.DP_INFO_LOGS_ENABLED) {
@@ -490,40 +450,39 @@ public class NetworkConnection {
         }
 
         try {
-            if (method == METHOD_GET) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(cleanedIs));
-                StringBuilder sb = new StringBuilder();
+            switch (method) {
+                case METHOD_GET:
+                case METHOD_PUT:
+                case METHOD_DELETE: {
+                    final BufferedReader reader = new BufferedReader(new InputStreamReader(cleanedIs));
+                    final StringBuilder sb = new StringBuilder();
 
-                String line = null;
+                    String line = null;
 
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+
+                    return sb.toString();
                 }
+                case METHOD_POST: {
+                    int i = contentLength;
+                    if (i < 0) {
+                        i = 4096;
+                    }
 
-                return sb.toString();
-            } else if (method == METHOD_POST) {
-                int i = contentLength;
-                if (i < 0) {
-                    i = 4096;
+                    final Reader reader = new InputStreamReader(cleanedIs);
+                    final CharArrayBuffer buffer = new CharArrayBuffer(i);
+                    final char[] tmp = new char[1024];
+                    int l;
+                    while ((l = reader.read(tmp)) != -1) {
+                        buffer.append(tmp, 0, l);
+                    }
+
+                    return buffer.toString();
                 }
-
-                Reader reader = new InputStreamReader(cleanedIs);
-                CharArrayBuffer buffer = new CharArrayBuffer(i);
-                char[] tmp = new char[1024];
-                int l;
-                while ((l = reader.read(tmp)) != -1) {
-                    buffer.append(tmp, 0, l);
-                }
-
-                return buffer.toString();
-            } else if (method == METHOD_PUT) {
-                // TODO a coder
-                return null;
-            } else if (method == METHOD_DELETE) {
-                // TODO a coder
-                return null;
-            } else {
-                return null;
+                default:
+                    return null;
             }
         } finally {
             cleanedIs.close();
