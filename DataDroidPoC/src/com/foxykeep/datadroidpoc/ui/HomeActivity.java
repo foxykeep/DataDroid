@@ -57,7 +57,7 @@ public class HomeActivity extends Activity implements OnClickListener {
         } else if (view == mButtonPhonesCrudSync) {
             intent = new Intent(this, CrudSyncPhoneListActivity.class);
         } else if (view == mButtonPhonesCrudAsync) {
-            Toast.makeText(this, R.string.home_toast_example_not_implemented_message, Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.home_toast_example_not_implemented_message, Toast.LENGTH_LONG).show();
         }
 
         if (intent != null) {

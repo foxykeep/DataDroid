@@ -24,7 +24,7 @@
     <string name="home_toast_example_not_implemented_message">This example is not yet implemented.</string>
     
     <!-- PersonListActivity texts -->
-    <string name="person_list_title">DataDroid > Person List (DB)</string>
+    <string name="person_list_title">DataDroid PoC > Person List (DB)</string>
     <string name="person_list_sp_return_format_prompt">Webservice return format</string>
     <string name="person_list_b_load">Load</string>
     <string name="person_list_b_clear_db">Clear DB</string>
@@ -32,7 +32,7 @@
     <string name="person_list_item_tv_age_format">%1$d yrs old</string>
     
     <!-- CityListActivity texts -->
-    <string name="city_list_title">DataDroid > City List (Memory)</string>
+    <string name="city_list_title">DataDroid PoC > City List (Memory)</string>
     <string name="city_list_b_load">Load</string>
     <string name="city_list_b_clear_memory">Clear memory</string>
     <string name="city_list_tv_empty">0 city found</string>
@@ -52,7 +52,7 @@
     <string name="crud_phone_list_dialog_delete_confirm_message">%1$s will be deleted.</string>
     
     <!-- CrudSyncPhoneListActivity texts -->
-    <string name="crud_sync_phone_list_title">DataDroid > Phones (CRUD) (Sync)</string>
+    <string name="crud_sync_phone_list_title">DataDroid PoC > Phones (CRUD) (Sync)</string>
     
     <!-- CrudSyncPhoneViewActivity and CrudAsyncPhoneViewActivity texts -->
     <string name="crud_phone_view_tv_android_version">Android version</string>
@@ -68,7 +68,7 @@
     <string name="crud_phone_view_dialog_delete_confirm_message">%1$s will be deleted.</string>
     
     <!-- CrudSyncPhoneViewActivity texts -->
-    <string name="crud_sync_phone_view_title">DataDroid > View phone (CRUD) (Sync)</string>
+    <string name="crud_sync_phone_view_title">DataDroid PoC > View phone (CRUD) (Sync)</string>
     
     <!-- CrudSyncPhoneAddEditActivity and CrudAsyncPhoneAddEditActivity -->
     <string name="crud_phone_add_edit_tv_name">Name :</string>
@@ -79,6 +79,6 @@
     <string name="crud_phone_add_edit_b_submit">Submit</string>
     
     <!-- CrudSyncPhoneAddEditActivity texts -->
-    <string name="crud_sync_phone_add_title">DataDroid > New phone (CRUD) (Sync)</string>
-    <string name="crud_sync_phone_edit_title">DataDroid > Edit phone (CRUD) (Sync)</string>
+    <string name="crud_sync_phone_add_title">DataDroid PoC > New phone (CRUD) (Sync)</string>
+    <string name="crud_sync_phone_edit_title">DataDroid PoC > Edit phone (CRUD) (Sync)</string>
 </resources>

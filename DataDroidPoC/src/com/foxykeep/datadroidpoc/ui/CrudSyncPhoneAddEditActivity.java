@@ -87,6 +87,8 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
             mPhone = intent.getParcelableExtra(INTENT_EXTRA_PHONE);
         }
 
+        setTitle(mPhone == null ? R.string.crud_sync_phone_add_title : R.string.crud_sync_phone_edit_title);
+
         populateViews();
     }
 
