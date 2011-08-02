@@ -387,6 +387,16 @@ public class NetworkConnection {
                 }
             }
 
+            // Add the request headers if any
+            if (headers != null && !headers.isEmpty()) {
+
+                final int headersLength = headers.size();
+
+                for (int i = 0; i < headersLength; i++) {
+                    request.addHeader(headers.get(i));
+                }
+            }
+
             // Launch the request
             String result = null;
             if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
