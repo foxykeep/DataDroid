@@ -1,5 +1,5 @@
 /*
- * 2011 Foxykeep (http://www.foxykeep.com)
+ * 2011 Foxykeep (http://datadroid.foxykeep.com)
  *
  * Licensed under the Beerware License :
  * 
@@ -34,7 +34,7 @@ public class RestClientException extends Exception {
      * @param detailMessage the detail message for this exception.
      * @param throwable the cause of this exception.
      */
-    public RestClientException(String detailMessage, Throwable throwable) {
+    public RestClientException(final String detailMessage, final Throwable throwable) {
         super(detailMessage, throwable);
     }
 
@@ -44,7 +44,7 @@ public class RestClientException extends Exception {
      * 
      * @param detailMessage the detail message for this exception.
      */
-    public RestClientException(String detailMessage) {
+    public RestClientException(final String detailMessage) {
         super(detailMessage);
     }
 
@@ -55,7 +55,7 @@ public class RestClientException extends Exception {
      * @param detailMessage the detail message for this exception.
      * @param redirection url.
      */
-    public RestClientException(String detailMessage, String redirectionUrl) {
+    public RestClientException(final String detailMessage, final String redirectionUrl) {
         super(detailMessage);
         mNewUrl = redirectionUrl;
     }
@@ -66,7 +66,7 @@ public class RestClientException extends Exception {
      * 
      * @param throwable the cause of this exception.
      */
-    public RestClientException(Throwable throwable) {
+    public RestClientException(final Throwable throwable) {
         super(throwable);
     }
 

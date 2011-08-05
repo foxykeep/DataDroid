@@ -1,5 +1,5 @@
 /*
- * 2011 Foxykeep (http://www.foxykeep.com)
+ * 2011 Foxykeep (http://datadroid.foxykeep.com)
  *
  * Licensed under the Beerware License :
  * 
@@ -33,7 +33,7 @@ public class CompulsoryParameterException extends RuntimeException {
      * @param detailMessage the detail message for this exception.
      * @param throwable the cause of this exception.
      */
-    public CompulsoryParameterException(String detailMessage, Throwable throwable) {
+    public CompulsoryParameterException(final String detailMessage, final Throwable throwable) {
         super(detailMessage, throwable);
     }
 
@@ -43,7 +43,7 @@ public class CompulsoryParameterException extends RuntimeException {
      * 
      * @param detailMessage the detail message for this exception.
      */
-    public CompulsoryParameterException(String detailMessage) {
+    public CompulsoryParameterException(final String detailMessage) {
         super(detailMessage);
     }
 
@@ -53,7 +53,7 @@ public class CompulsoryParameterException extends RuntimeException {
      * 
      * @param throwable the cause of this exception.
      */
-    public CompulsoryParameterException(Throwable throwable) {
+    public CompulsoryParameterException(final Throwable throwable) {
         super(throwable);
     }
 

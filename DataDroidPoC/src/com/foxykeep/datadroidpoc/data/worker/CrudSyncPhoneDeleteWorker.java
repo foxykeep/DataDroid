@@ -1,5 +1,5 @@
 /*
- * 2011 Foxykeep (http://www.foxykeep.com)
+ * 2011 Foxykeep (http://datadroid.foxykeep.com)
  *
  * Licensed under the Beerware License :
  * 

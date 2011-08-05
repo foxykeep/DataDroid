@@ -1,5 +1,5 @@
 /*
- * 2011 Foxykeep (http://www.foxykeep.com)
+ * 2011 Foxykeep (http://datadroid.foxykeep.com)
  *
  * Licensed under the Beerware License :
  * 
@@ -32,7 +32,7 @@ public class ParsingException extends Exception {
      * @param detailMessage the detail message for this exception.
      * @param throwable the cause of this exception.
      */
-    public ParsingException(String detailMessage, Throwable throwable) {
+    public ParsingException(final String detailMessage, final Throwable throwable) {
         super(detailMessage, throwable);
     }
 
@@ -42,7 +42,7 @@ public class ParsingException extends Exception {
      * 
      * @param detailMessage the detail message for this exception.
      */
-    public ParsingException(String detailMessage) {
+    public ParsingException(final String detailMessage) {
         super(detailMessage);
     }
 
@@ -52,7 +52,7 @@ public class ParsingException extends Exception {
      * 
      * @param throwable the cause of this exception.
      */
-    public ParsingException(Throwable throwable) {
+    public ParsingException(final Throwable throwable) {
         super(throwable);
     }
 
