@@ -157,7 +157,7 @@ public class NetworkConnection {
     public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method,
             final Map<String, String> parameters, final ArrayList<Header> headers) throws IllegalStateException,
             IOException, URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, method, parameters, null, false);
+        return retrieveResponseFromService(url, method, parameters, headers, false);
     }
 
     /**
