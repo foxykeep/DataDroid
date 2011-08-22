@@ -70,6 +70,20 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
 
         mRequestManager = PoCRequestManager.from(this);
         mInflater = getLayoutInflater();
+
+        final Object data = getLastNonConfigurationInstance();
+        if (data != null) {
+            RetainData retainData = (RetainData) data;
+
+            if (retainData.cityArray != null & retainData.cityArray.length > 0) {
+                final CityListAdapter adapter = (CityListAdapter) getListAdapter();
+                adapter.setNotifyOnChange(false);
+                for (City city : retainData.cityArray) {
+                    adapter.add(city);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
@@ -113,6 +127,25 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
         outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
         outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
         outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
+    }
+
+    class RetainData {
+        public City[] cityArray;
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        final CityListAdapter adapter = (CityListAdapter) getListAdapter();
+        final int count = adapter.getCount();
+
+        final RetainData retainData = new RetainData();
+        retainData.cityArray = new City[count];
+
+        for (int i = 0; i < count; i++) {
+            retainData.cityArray[i] = adapter.getItem(i);
+        }
+
+        return retainData;
     }
 
     private void bindViews() {
