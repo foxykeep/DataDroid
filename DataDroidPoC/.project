@@ -30,11 +30,4 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>DataDroid_src</name>
-			<type>2</type>
-			<locationURI>_android_DataDroid_604c28d2/src</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
