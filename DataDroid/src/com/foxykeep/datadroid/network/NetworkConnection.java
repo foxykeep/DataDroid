@@ -420,7 +420,7 @@ public class NetworkConnection {
                     }
                     throw new RestClientException("New location : " + newLocation, newLocation.getValue());
                 } else {
-                    throw new RestClientException("Invalid response from server : " + status.toString());
+                    throw new RestClientException("Invalid response from server : ", status.getStatusCode());
                 }
             }
 

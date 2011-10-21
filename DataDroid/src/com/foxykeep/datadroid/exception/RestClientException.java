@@ -18,6 +18,7 @@ public class RestClientException extends Exception {
     private static final long serialVersionUID = 4658308128254827562L;
 
     private String mNewUrl;
+    private int mErrorStatus = -1;
 
     /**
      * Constructs a new {@link RestClientException} that includes the current
@@ -62,6 +63,18 @@ public class RestClientException extends Exception {
 
     /**
      * Constructs a new {@link RestClientException} that includes the current
+     * stack trace and the specified detail message and the error status code
+     * 
+     * @param detailMessage the detail message for this exception.
+     * @param errorStatus
+     */
+    public RestClientException(final String detailMessage, final int errorStatus) {
+        super(detailMessage);
+        mErrorStatus = errorStatus;
+    }
+
+    /**
+     * Constructs a new {@link RestClientException} that includes the current
      * stack trace and the specified cause.
      * 
      * @param throwable the cause of this exception.
@@ -72,6 +85,10 @@ public class RestClientException extends Exception {
 
     public String getRedirectionUrl() {
         return mNewUrl;
+    }
+
+    public int getErrorStatus() {
+        return mErrorStatus;
     }
 
 }
