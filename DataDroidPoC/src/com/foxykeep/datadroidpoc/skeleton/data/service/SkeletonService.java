@@ -11,12 +11,12 @@ package com.foxykeep.datadroidpoc.skeleton.data.service;
 import android.content.Intent;
 import android.util.Log;
 
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.service.WorkerService;
 import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestManager;
 
 /**
- * This class is called by the {@link SkeletonRequestManager} through the
- * {@link Intent} system. Get the parameters stored in the {@link Intent} and
+ * This class is called by the {@link SkeletonRequestManager} through the {@link Intent} system. Get the parameters stored in the {@link Intent} and
  * call the right Worker.
  * 
  * @author Foxykeep
@@ -42,23 +42,26 @@ public class SkeletonService extends WorkerService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
+        // This line will generate the Android User Agent which will be used in your webservice calls if you don't specify a special one
+        NetworkConnection.generateDefaultUserAgent(this);
+
         final int workerType = intent.getIntExtra(INTENT_EXTRA_WORKER_TYPE, -1);
 
         try {
             switch (workerType) {
-                // TODO : Add a case per worker where you do the following
-                // things :
-                // - get the parameters for this worker (if any)
-                // - either call a private method if it is a short work and
-                // create
-                // the Bundle to return (if any)
-                // - or create the worker and start the worker and get the
-                // returned
-                // Bundle (if any)
-                // - call sendSuccess() with the received Intent and the Bundle
-                // (if
-                // any)
-                // See the PoC if you need more information.
+            // TODO : Add a case per worker where you do the following
+            // things :
+            // - get the parameters for this worker (if any)
+            // - either call a private method if it is a short work and
+            // create
+            // the Bundle to return (if any)
+            // - or create the worker and start the worker and get the
+            // returned
+            // Bundle (if any)
+            // - call sendSuccess() with the received Intent and the Bundle
+            // (if
+            // any)
+            // See the PoC if you need more information.
                 default:
                     Log.e(LOG_TAG, "This worker type is not implemented");
                     sendFailure(intent, null);

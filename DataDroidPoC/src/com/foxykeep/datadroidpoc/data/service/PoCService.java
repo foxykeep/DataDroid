@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.xml.sax.SAXException;
 
 import com.foxykeep.datadroid.exception.RestClientException;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.service.WorkerService;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.worker.CityListWorker;
@@ -29,9 +30,8 @@ import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneListWorker;
 import com.foxykeep.datadroidpoc.data.worker.PersonListWorker;
 
 /**
- * This class is called by the {@link PoCRequestManager} through the
- * {@link Intent} system. Get the parameters stored in the {@link Intent} and
- * call the right Worker.
+ * This class is called by the {@link PoCRequestManager} through the {@link Intent} system. Get the parameters stored in the {@link Intent} and call
+ * the right Worker.
  * 
  * @author Foxykeep
  */
@@ -80,36 +80,33 @@ public class PoCService extends WorkerService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
+        // This line will generate the Android User Agent which will be used in your webservice calls if you don't specify a special one
+        NetworkConnection.generateDefaultUserAgent(this);
+
         final int workerType = intent.getIntExtra(INTENT_EXTRA_WORKER_TYPE, -1);
 
         try {
             switch (workerType) {
                 case WORKER_TYPE_PERSON_LIST:
-                    PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT,
-                            PersonListWorker.RETURN_FORMAT_XML));
+                    PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, PersonListWorker.RETURN_FORMAT_XML));
                     sendSuccess(intent, null);
                     break;
                 case WORKER_TYPE_CITY_LIST:
                     sendSuccess(intent, CityListWorker.start());
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
-                    sendSuccess(
-                            intent,
-                            CrudSyncPhoneListWorker.start(this,
-                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID)));
+                    sendSuccess(intent, CrudSyncPhoneListWorker.start(this, intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID)));
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
                     sendSuccess(
                             intent,
-                            CrudSyncPhoneDeleteWorker.start(this,
-                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
+                            CrudSyncPhoneDeleteWorker.start(this, intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST)));
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
                     sendSuccess(
                             intent,
-                            CrudSyncPhoneAddEditWorker.start(this,
-                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID), -1,
+                            CrudSyncPhoneAddEditWorker.start(this, intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID), -1,
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION),
@@ -119,8 +116,7 @@ public class PoCService extends WorkerService {
                 case WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
                     sendSuccess(
                             intent,
-                            CrudSyncPhoneAddEditWorker.start(this,
-                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID),
+                            CrudSyncPhoneAddEditWorker.start(this, intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID),
                                     intent.getLongExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ID, -1),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER),
