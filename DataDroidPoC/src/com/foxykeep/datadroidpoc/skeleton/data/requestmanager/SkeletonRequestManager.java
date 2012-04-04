@@ -23,10 +23,8 @@ import android.util.SparseArray;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 
 /**
- * This class is used as a proxy to call the Service. It provides easy-to-use
- * methods to call the service and manages the Intent creation. It also assures
- * that a request will not be sent again if an exactly identical one is already
- * in progress
+ * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the service and manages the Intent creation. It also
+ * assures that a request will not be sent again if an exactly identical one is already in progress
  * 
  * @author Foxykeep
  */
@@ -78,8 +76,7 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Clients may implements this interface to be notified when a request is
-     * finished
+     * Clients may implements this interface to be notified when a request is finished
      * 
      * @author Foxykeep
      */
@@ -96,17 +93,14 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this
-     * {@link SkeletonRequestManager}. Clients may use it in order to listen to
-     * events fired when a request is finished.
+     * Add a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}. Clients may use it in order to listen to events fired when a
+     * request is finished.
      * <p>
-     * <b>Warning !! </b> If it's an {@link Activity} that is used as a
-     * Listener, it must be detached when {@link Activity#onPause} is called in
-     * an {@link Activity}.
+     * <b>Warning !! </b> If it's an {@link Activity} that is used as a Listener, it must be detached when {@link Activity#onPause} is called in an
+     * {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this
-     *            {@link SkeletonRequestManager} .
+     * @param listener The listener to add to this {@link SkeletonRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         WeakReference<OnRequestFinishedListener> weakRef = new WeakReference<OnRequestFinishedListener>(listener);
@@ -118,11 +112,9 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Remove a {@link OnRequestFinishedListener} to this
-     * {@link SkeletonRequestManager}.
+     * Remove a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}.
      * 
-     * @param listenerThe listener to remove to this
-     *            {@link SkeletonRequestManager}.
+     * @param listenerThe listener to remove to this {@link SkeletonRequestManager}.
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
@@ -131,8 +123,7 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Return whether a request (specified by its id) is still in progress or
-     * not
+     * Return whether a request (specified by its id) is still in progress or not
      * 
      * @param requestId The request id
      * @return whether the request is still in progress or not.
@@ -142,8 +133,7 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * This method is call whenever a request is finished. Call all the
-     * available listeners to let them know about the finished request
+     * This method is call whenever a request is finished. Call all the available listeners to let them know about the finished request
      * 
      * @param resultCode The result code of the request
      * @param resultData The bundle sent back by the service
@@ -158,10 +148,14 @@ public class SkeletonRequestManager extends RequestManager {
 
         // Call the available listeners
         synchronized (mListenerList) {
-            for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
-                OnRequestFinishedListener listener = weakRef.get();
-                if (weakRef != null) {
+            for (int i = 0; i < mListenerList.size(); i++) {
+                final WeakReference<OnRequestFinishedListener> weakRef = mListenerList.get(i);
+                final OnRequestFinishedListener listener = weakRef.get();
+                if (listener != null) {
                     listener.onRequestFinished(requestId, resultCode, resultData);
+                } else {
+                    mListenerList.remove(i);
+                    i--;
                 }
             }
         }

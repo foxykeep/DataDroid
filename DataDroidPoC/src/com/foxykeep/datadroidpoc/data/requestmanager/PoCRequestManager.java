@@ -27,10 +27,8 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestManager;
 
 /**
- * This class is used as a proxy to call the Service. It provides easy-to-use
- * methods to call the service and manages the Intent creation. It also assures
- * that a request will not be sent again if an exactly identical one is already
- * in progress
+ * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the service and manages the Intent creation. It also
+ * assures that a request will not be sent again if an exactly identical one is already in progress
  * 
  * @author Foxykeep
  */
@@ -84,8 +82,7 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Clients may implements this interface to be notified when a request is
-     * finished
+     * Clients may implements this interface to be notified when a request is finished
      * 
      * @author Foxykeep
      */
@@ -102,17 +99,14 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this
-     * {@link SkeletonRequestManager}. Clients may use it in order to listen to
-     * events fired when a request is finished.
+     * Add a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}. Clients may use it in order to listen to events fired when a
+     * request is finished.
      * <p>
-     * <b>Warning !! </b> If it's an {@link Activity} that is used as a
-     * Listener, it must be detached when {@link Activity#onPause} is called in
-     * an {@link Activity}.
+     * <b>Warning !! </b> If it's an {@link Activity} that is used as a Listener, it must be detached when {@link Activity#onPause} is called in an
+     * {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this
-     *            {@link SkeletonRequestManager} .
+     * @param listener The listener to add to this {@link SkeletonRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         WeakReference<OnRequestFinishedListener> weakRef = new WeakReference<OnRequestFinishedListener>(listener);
@@ -124,11 +118,9 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Remove a {@link OnRequestFinishedListener} to this
-     * {@link SkeletonRequestManager}.
+     * Remove a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}.
      * 
-     * @param listenerThe listener to remove to this
-     *            {@link SkeletonRequestManager}.
+     * @param listenerThe listener to remove to this {@link SkeletonRequestManager}.
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
@@ -137,8 +129,7 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Return whether a request (specified by its id) is still in progress or
-     * not
+     * Return whether a request (specified by its id) is still in progress or not
      * 
      * @param requestId The request id
      * @return whether the request is still in progress or not.
@@ -148,8 +139,7 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * This method is call whenever a request is finished. Call all the
-     * available listeners to let them know about the finished request
+     * This method is call whenever a request is finished. Call all the available listeners to let them know about the finished request
      * 
      * @param resultCode The result code of the request
      * @param resultData The bundle sent back by the service
@@ -185,10 +175,14 @@ public class PoCRequestManager extends RequestManager {
 
         // Call the available listeners
         synchronized (mListenerList) {
-            for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
-                OnRequestFinishedListener listener = weakRef.get();
+            for (int i = 0; i < mListenerList.size(); i++) {
+                final WeakReference<OnRequestFinishedListener> weakRef = mListenerList.get(i);
+                final OnRequestFinishedListener listener = weakRef.get();
                 if (listener != null) {
                     listener.onRequestFinished(requestId, resultCode, resultData);
+                } else {
+                    mListenerList.remove(i);
+                    i--;
                 }
             }
         }
@@ -322,8 +316,7 @@ public class PoCRequestManager extends RequestManager {
             if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID).equals(userId)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST).equals(
-                    phoneIdList)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST).equals(phoneIdList)) {
                 continue;
             }
             return mRequestSparseArray.keyAt(i);
@@ -357,8 +350,8 @@ public class PoCRequestManager extends RequestManager {
      * @param price the phone price
      * @return the request Id
      */
-    public int addSyncPhone(final String userId, final String name, final String manufacturer,
-            final String androidVersion, final double screenSize, final int price) {
+    public int addSyncPhone(final String userId, final String name, final String manufacturer, final String androidVersion, final double screenSize,
+            final int price) {
 
         // Check if a match to this request is already launched
         final int requestSparseArrayLength = mRequestSparseArray.size();
@@ -374,12 +367,10 @@ public class PoCRequestManager extends RequestManager {
             if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME).equals(name)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER).equals(
-                    manufacturer)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER).equals(manufacturer)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION).equals(
-                    androidVersion)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION).equals(androidVersion)) {
                 continue;
             }
             if (savedIntent.getDoubleExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, -1) != screenSize) {
@@ -424,8 +415,8 @@ public class PoCRequestManager extends RequestManager {
      * @param price the phone new price
      * @return the request Id
      */
-    public int editSyncPhone(final String userId, final long serverId, final String name, final String manufacturer,
-            final String androidVersion, final double screenSize, final int price) {
+    public int editSyncPhone(final String userId, final long serverId, final String name, final String manufacturer, final String androidVersion,
+            final double screenSize, final int price) {
 
         // Check if a match to this request is already launched
         final int requestSparseArrayLength = mRequestSparseArray.size();
@@ -441,12 +432,10 @@ public class PoCRequestManager extends RequestManager {
             if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME).equals(name)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER).equals(
-                    manufacturer)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER).equals(manufacturer)) {
                 continue;
             }
-            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION).equals(
-                    androidVersion)) {
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION).equals(androidVersion)) {
                 continue;
             }
             if (savedIntent.getDoubleExtra(PoCService.INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE, -1) != screenSize) {
