@@ -51,6 +51,7 @@ public class PoCRequestManager extends RequestManager {
     public static final String RECEIVER_EXTRA_PHONE_LIST = "com.foxykeep.datadroidpoc.extras.phoneList";
     public static final String RECEIVER_EXTRA_PHONE_DELETE_DATA = "com.foxykeep.datadroidpoc.extras.phoneDeleteData";
     public static final String RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA = "com.foxykeep.datadroidpoc.extras.phoneAddEditData";
+    public static final String RECEIVER_EXTRA_RSS_FEED_DATA = "com.foxykeep.datadroidpoc.extras.rssFeed";
 
     private static Random sRandom = new Random();
 
@@ -167,6 +168,8 @@ public class PoCRequestManager extends RequestManager {
                 case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
                     mMemoryProvider.syncPhoneEditedPhone = resultData.getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
                     break;
+                case PoCService.WORKER_TYPE_RSS_FEED:
+                    mMemoryProvider.rssFeed = resultData.getParcelable(RECEIVER_EXTRA_RSS_FEED_DATA);
             }
         }
 
@@ -465,6 +468,44 @@ public class PoCRequestManager extends RequestManager {
         mRequestSparseArray.append(requestId, intent);
 
         mMemoryProvider.syncPhoneEditedPhone = null;
+
+        return requestId;
+    }
+
+    /**
+     * Gets the RSS feed of the given url and save it in the memory
+     * 
+     * @param feedUrl the url of the RSS feed
+     * @return the request Id
+     */
+    public int getRssFeed(final String feedUrl) {
+
+        // Check if a match to this request is already launched
+        final int requestSparseArrayLength = mRequestSparseArray.size();
+        for (int i = 0; i < requestSparseArrayLength; i++) {
+            final Intent savedIntent = mRequestSparseArray.valueAt(i);
+
+            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_RSS_FEED) {
+                continue;
+            }
+            if (!savedIntent.getStringExtra(PoCService.INTENT_EXTRA_RSS_FEED_URL).equals(feedUrl)) {
+                continue;
+            }
+            return mRequestSparseArray.keyAt(i);
+        }
+
+        final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
+
+        final Intent intent = new Intent(mContext, PoCService.class);
+        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_RSS_FEED);
+        intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
+        intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
+        intent.putExtra(PoCService.INTENT_EXTRA_RSS_FEED_URL, feedUrl);
+        mContext.startService(intent);
+
+        mRequestSparseArray.append(requestId, intent);
+
+        mMemoryProvider.rssFeed = null;
 
         return requestId;
     }

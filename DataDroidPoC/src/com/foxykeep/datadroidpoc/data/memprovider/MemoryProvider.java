@@ -10,6 +10,7 @@ package com.foxykeep.datadroidpoc.data.memprovider;
 
 import java.util.ArrayList;
 
+import com.foxykeep.datadroid.model.RssFeed;
 import com.foxykeep.datadroidpoc.data.model.City;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 
@@ -46,4 +47,7 @@ public class MemoryProvider {
 
     // SyncPhoneEdit WS
     public Phone syncPhoneEditedPhone;
+
+    // RssFeed WS
+    public RssFeed rssFeed;
 }

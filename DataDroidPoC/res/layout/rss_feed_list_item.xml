@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+	License : As long as you retain this notice you can do whatever you want 
+	with this stuff. If we meet some day, and you think this stuff is worth it, 
+	you can buy me a beer in return
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:paddingRight="?android:attr/scrollbarSize" >
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:ellipsize="end"
+        android:gravity="bottom|left"
+        android:singleLine="true"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:ellipsize="end"
+        android:gravity="top|left"
+        android:maxLines="3"
+        android:textAppearance="@android:style/TextAppearance.Small" />
+
+</LinearLayout>
