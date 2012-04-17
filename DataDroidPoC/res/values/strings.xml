@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+<!--
+     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
 	License : As long as you retain this notice you can do whatever you want 
 	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
+	you can buy me a beer in return
+-->
 <resources>
+
     <string name="app_name">DataDroid PoC</string>
-    
-    <!--  Dialog texts -->
+
+    <!-- Dialog texts -->
     <string name="dialog_error_connexion_error_title">Connexion error</string>
-    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>  
+    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>
     <string name="dialog_error_data_error_title">Incorrect data</string>
     <string name="dialog_error_data_error_message">Received data are invalid.</string>
     <string name="dialog_button_retry">Retry</string>
-    
     <string name="progress_dialog_title">Loading</string>
     <string name="progress_dialog_message">Loading in progress...</string>
-    
+
     <!-- HomeActivity texts -->
     <string name="home_b_person_list">Person List (DB)</string>
     <string name="home_b_city_list">City List (Memory)</string>
     <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
-    <string name="home_b_crud_phone_list_async">Phones (CRUD) (Async)</string>
-    <string name="home_toast_example_not_implemented_message">This example is not yet implemented.</string>
-    
+    <string name="home_b_rss_feed">Rss Feed</string>
+
     <!-- PersonListActivity texts -->
     <string name="person_list_title">DataDroid PoC > Person List (DB)</string>
     <string name="person_list_sp_return_format_prompt">Webservice return format</string>
@@ -30,46 +31,42 @@
     <string name="person_list_b_clear_db">Clear DB</string>
     <string name="person_list_tv_empty">0 person found</string>
     <string name="person_list_item_tv_age_format">%1$d yrs old</string>
-    
+
     <!-- CityListActivity texts -->
     <string name="city_list_title">DataDroid PoC > City List (Memory)</string>
     <string name="city_list_b_load">Load</string>
     <string name="city_list_b_clear_memory">Clear memory</string>
     <string name="city_list_tv_empty">0 city found</string>
-    
+
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
     <string name="crud_phone_list_tv_empty_loading">Loading ...</string>
     <string name="crud_phone_list_tv_empty_no_results">0 phone found</string>
-    
     <string name="crud_phone_list_menu_add">Add</string>
     <string name="crud_phone_list_menu_delete_all">Delete all</string>
     <string name="crud_phone_list_context_menu_edit">Edit</string>
     <string name="crud_phone_list_context_menu_delete">Delete</string>
-    
     <string name="crud_phone_list_dialog_delete_all_confirm_title">Delete all</string>
     <string name="crud_phone_list_dialog_delete_all_confirm_message">All the phones will be deleted.</string>
     <string name="crud_phone_list_dialog_delete_confirm_title">Delete</string>
     <string name="crud_phone_list_dialog_delete_confirm_message">%1$s will be deleted.</string>
-    
+
     <!-- CrudSyncPhoneListActivity texts -->
     <string name="crud_sync_phone_list_title">DataDroid PoC > Phones (CRUD) (Sync)</string>
-    
+
     <!-- CrudSyncPhoneViewActivity and CrudAsyncPhoneViewActivity texts -->
     <string name="crud_phone_view_tv_android_version">Android version</string>
     <string name="crud_phone_view_tv_screen_size">Screen size</string>
     <string name="crud_phone_view_tv_screen_size_format">%1$.1f</string>
     <string name="crud_phone_view_tv_price">Price</string>
     <string name="crud_phone_view_tv_price_format">%1$d $</string>
-    
     <string name="crud_phone_view_menu_edit">Edit</string>
     <string name="crud_phone_view_menu_delete">Delete</string>
-    
     <string name="crud_phone_view_dialog_delete_confirm_title">Delete</string>
     <string name="crud_phone_view_dialog_delete_confirm_message">%1$s will be deleted.</string>
-    
+
     <!-- CrudSyncPhoneViewActivity texts -->
     <string name="crud_sync_phone_view_title">DataDroid PoC > View phone (CRUD) (Sync)</string>
-    
+
     <!-- CrudSyncPhoneAddEditActivity and CrudAsyncPhoneAddEditActivity -->
     <string name="crud_phone_add_edit_tv_name">Name :</string>
     <string name="crud_phone_add_edit_tv_manufacturer">Manufacturer :</string>
@@ -77,8 +74,12 @@
     <string name="crud_phone_add_edit_tv_screen_size">Screen size :</string>
     <string name="crud_phone_add_edit_tv_price">Price :</string>
     <string name="crud_phone_add_edit_b_submit">Submit</string>
-    
+
     <!-- CrudSyncPhoneAddEditActivity texts -->
     <string name="crud_sync_phone_add_title">DataDroid PoC > New phone (CRUD) (Sync)</string>
     <string name="crud_sync_phone_edit_title">DataDroid PoC > Edit phone (CRUD) (Sync)</string>
+
+    <!-- RssFeedListActivity texts -->
+    <string name="rss_feed_list_title">DataDroid PoC > RSS Feed</string>
+
 </resources>

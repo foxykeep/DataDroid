@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+<!--
+     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
 	License : As long as you retain this notice you can do whatever you want 
 	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:paddingTop="5dp">
-	<Button
-		android:id="@+id/b_person_list"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/home_b_person_list" />
-	<Button
-		android:id="@+id/b_city_list"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/home_b_city_list" />
-	<Button
-		android:id="@+id/b_phones_crud_sync"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/home_b_crud_phone_list_sync" />
-	<Button
-		android:id="@+id/b_phones_crud_async"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/home_b_crud_phone_list_async" />
+	you can buy me a beer in return
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingTop="5dp" >
+
+    <Button
+        android:id="@+id/b_person_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_b_person_list" />
+
+    <Button
+        android:id="@+id/b_city_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_b_city_list" />
+
+    <Button
+        android:id="@+id/b_phones_crud_sync"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_b_crud_phone_list_sync" />
+
+    <Button
+        android:id="@+id/b_rss_feed"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/home_b_rss_feed" />
+
 </LinearLayout>

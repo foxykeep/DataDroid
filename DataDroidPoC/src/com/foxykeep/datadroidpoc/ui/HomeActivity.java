@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.foxykeep.datadroidpoc.R;
 
@@ -23,7 +22,8 @@ public class HomeActivity extends Activity implements OnClickListener {
     private Button mButtonPersonList;
     private Button mButtonCityList;
     private Button mButtonPhonesCrudSync;
-    private Button mButtonPhonesCrudAsync;
+
+    private Button mButtonRssFeed;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -43,8 +43,8 @@ public class HomeActivity extends Activity implements OnClickListener {
         mButtonPhonesCrudSync = (Button) findViewById(R.id.b_phones_crud_sync);
         mButtonPhonesCrudSync.setOnClickListener(this);
 
-        mButtonPhonesCrudAsync = (Button) findViewById(R.id.b_phones_crud_async);
-        mButtonPhonesCrudAsync.setOnClickListener(this);
+        mButtonRssFeed = (Button) findViewById(R.id.b_rss_feed);
+        mButtonRssFeed.setOnClickListener(this);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class HomeActivity extends Activity implements OnClickListener {
             intent = new Intent(this, CityListActivity.class);
         } else if (view == mButtonPhonesCrudSync) {
             intent = new Intent(this, CrudSyncPhoneListActivity.class);
-        } else if (view == mButtonPhonesCrudAsync) {
-            Toast.makeText(this, R.string.home_toast_example_not_implemented_message, Toast.LENGTH_LONG).show();
+        } else if (view == mButtonRssFeed) {
+            intent = new Intent(this, RssFeedListActivity.class);
         }
 
         if (intent != null) {
