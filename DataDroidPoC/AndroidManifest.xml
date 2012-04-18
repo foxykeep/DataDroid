@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+<!--
+     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
 	License : As long as you retain this notice you can do whatever you want 
 	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.foxykeep.datadroidpoc"
-	android:versionCode="2"
-	android:versionName="0.1">
+	you can buy me a beer in return
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.foxykeep.datadroidpoc"
+    android:versionCode="2"
+    android:versionName="0.1" >
 
-	<uses-sdk
-		android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="4" />
 
-	<uses-permission
-		android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-	<application
-		android:icon="@drawable/icon"
-		android:label="@string/app_name">
-		<activity
-			android:name=".ui.HomeActivity"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action
-					android:name="android.intent.action.MAIN" />
-				<category
-					android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".ui.PersonListActivity"
-			android:label="@string/person_list_title" />
-		<activity
-			android:name=".ui.CityListActivity"
-			android:label="@string/city_list_title" />
-		<activity
-			android:name=".ui.CrudSyncPhoneListActivity"
-			android:label="@string/crud_sync_phone_list_title" />
-		<activity
-			android:name=".ui.CrudSyncPhoneViewActivity"
-			android:label="@string/crud_sync_phone_view_title" />
-		<activity
-			android:name=".ui.CrudSyncPhoneAddEditActivity" />
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".ui.HomeActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-		<service
-			android:name=".data.service.PoCService"
-			android:exported="false" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.PersonListActivity"
+            android:label="@string/person_list_title" />
+        <activity
+            android:name=".ui.CityListActivity"
+            android:label="@string/city_list_title" />
+        <activity
+            android:name=".ui.CrudSyncPhoneListActivity"
+            android:label="@string/crud_sync_phone_list_title" />
+        <activity
+            android:name=".ui.CrudSyncPhoneViewActivity"
+            android:label="@string/crud_sync_phone_view_title" />
+        <activity android:name=".ui.CrudSyncPhoneAddEditActivity" />
 
-		<provider
-			android:name=".data.provider.PoCProvider"
-			android:authorities="com.foxykeep.datadroidpoc.data.provider.PoCProvider"
-			android:exported="false" />
-	</application>
+        <service
+            android:name=".data.service.PoCService"
+            android:exported="false" />
+
+        <provider
+            android:name=".data.provider.PoCProvider"
+            android:authorities="com.foxykeep.datadroidpoc.data.provider.PoCProvider"
+            android:exported="false" />
+    </application>
+
 </manifest>
