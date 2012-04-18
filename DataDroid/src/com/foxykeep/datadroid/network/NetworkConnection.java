@@ -261,6 +261,12 @@ public class NetworkConnection {
     public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText)
             throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, postText, new ArrayList<String>());
+    }
+
+    private static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
+            final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText,
+            final ArrayList<String> previousUrlList) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
         // Get the request URL
         if (url == null) {
             if (LogConfig.DP_ERROR_LOGS_ENABLED) {
@@ -439,6 +445,20 @@ public class NetworkConnection {
                         Log.i(LOG_TAG, "retrieveResponseFromService - New location : " + newLocation.getValue());
                     }
                     throw new RestClientException("New location : " + newLocation, newLocation.getValue());
+                } else if (status.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+                    if (method == METHOD_GET) {
+                        final String newUrl = response.getHeaders("Location")[0].getValue();
+                        if (!previousUrlList.contains(newUrl)) {
+                            Log.d(LOG_TAG, "retrieveResponseFromService - Url moved permanently - Trying the new url : " + newUrl);
+                            previousUrlList.add(newUrl);
+                            return retrieveResponseFromService(newUrl, method, parameters, headers, isGzipEnabled, userAgent, postText);
+                        } else {
+                            // It's an url already checked. We are in a loop. So let's throw an Exception
+                            throw new RestClientException("Moved permanently - Loop detected");
+                        }
+                    } else {
+                        throw new RestClientException("Invalid response from server : ", status.getStatusCode());
+                    }
                 } else {
                     throw new RestClientException("Invalid response from server : ", status.getStatusCode());
                 }

@@ -24,7 +24,6 @@ import android.util.SparseArray;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
-import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestManager;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the service and manages the Intent creation. It also
@@ -100,32 +99,44 @@ public class PoCRequestManager extends RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}. Clients may use it in order to listen to events fired when a
-     * request is finished.
+     * Add a {@link OnRequestFinishedListener} to this {@link PoCRequestManager}. Clients may use it in order to listen to events fired when a request
+     * is finished.
      * <p>
      * <b>Warning !! </b> If it's an {@link Activity} that is used as a Listener, it must be detached when {@link Activity#onPause} is called in an
      * {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this {@link SkeletonRequestManager} .
+     * @param listener The listener to add to this {@link PoCRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
-        WeakReference<OnRequestFinishedListener> weakRef = new WeakReference<OnRequestFinishedListener>(listener);
         synchronized (mListenerList) {
-            if (!mListenerList.contains(weakRef)) {
-                mListenerList.add(weakRef);
+            // Check if the listener is not already in the list
+            if (!mListenerList.isEmpty()) {
+                for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
+                    if (weakRef.get().equals(listener)) {
+                        return;
+                    }
+                }
             }
+
+            mListenerList.add(new WeakReference<OnRequestFinishedListener>(listener));
         }
     }
 
     /**
-     * Remove a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}.
+     * Remove a {@link OnRequestFinishedListener} to this {@link PoCRequestManager}.
      * 
-     * @param listenerThe listener to remove to this {@link SkeletonRequestManager}.
+     * @param listenerThe listener to remove to this {@link PoCRequestManager}.
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
-            mListenerList.remove(new WeakReference<OnRequestFinishedListener>(listener));
+            final int listenerListSize = mListenerList.size();
+            for (int i = 0; i < listenerListSize; i++) {
+                if (mListenerList.get(i).get().equals(listener)) {
+                    mListenerList.remove(i);
+                    return;
+                }
+            }
         }
     }
 

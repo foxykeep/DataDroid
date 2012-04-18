@@ -103,11 +103,17 @@ public class SkeletonRequestManager extends RequestManager {
      * @param listener The listener to add to this {@link SkeletonRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
-        WeakReference<OnRequestFinishedListener> weakRef = new WeakReference<OnRequestFinishedListener>(listener);
         synchronized (mListenerList) {
-            if (!mListenerList.contains(weakRef)) {
-                mListenerList.add(weakRef);
+            // Check if the listener is not already in the list
+            if (!mListenerList.isEmpty()) {
+                for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
+                    if (weakRef.get().equals(listener)) {
+                        return;
+                    }
+                }
             }
+
+            mListenerList.add(new WeakReference<OnRequestFinishedListener>(listener));
         }
     }
 
@@ -118,7 +124,13 @@ public class SkeletonRequestManager extends RequestManager {
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         synchronized (mListenerList) {
-            mListenerList.remove(new WeakReference<OnRequestFinishedListener>(listener));
+            final int listenerListSize = mListenerList.size();
+            for (int i = 0; i < listenerListSize; i++) {
+                if (mListenerList.get(i).get().equals(listener)) {
+                    mListenerList.remove(i);
+                    return;
+                }
+            }
         }
     }
 
