@@ -11,6 +11,13 @@
     android:orientation="vertical"
     android:padding="5dp" >
 
+    <Spinner
+        android:id="@+id/sp_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/rss_feed_name"
+        android:prompt="@string/rss_feed_list_sp_url_prompt" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

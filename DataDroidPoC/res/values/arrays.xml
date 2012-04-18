@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+<!--
+     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
 	License : As long as you retain this notice you can do whatever you want 
 	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
+	you can buy me a beer in return
+-->
 <resources>
-	<string-array
-		name="return_format">
-		<item>XML</item>
-		<item>JSON</item>
-	</string-array>
+
+    <string-array name="return_format">
+        <item>XML</item>
+        <item>JSON</item>
+    </string-array>
+    <string-array name="rss_feed_url">
+        <item>http://datadroid.foxykeep.com/feed</item>
+        <item>http://android.foxykeep.com/feed</item>
+        <item>http://feedproxy.google.com/TechCrunch</item>
+    </string-array>
+    <string-array name="rss_feed_name">
+        <item>DataDroid</item>
+        <item>Foxykeep on Android</item>
+        <item>TechCrunch</item>
+    </string-array>
+
 </resources>

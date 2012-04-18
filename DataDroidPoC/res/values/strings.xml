@@ -83,5 +83,6 @@
     <string name="rss_feed_list_title">DataDroid PoC > RSS Feed</string>
     <string name="rss_feed_list_b_load">Load</string>
     <string name="rss_feed_list_b_clear_memory">Clear memory</string>
+    <string name="rss_feed_list_sp_url_prompt">Feed URL</string>
 
 </resources>

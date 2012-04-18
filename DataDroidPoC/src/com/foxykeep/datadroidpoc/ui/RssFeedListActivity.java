@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.foxykeep.datadroid.model.RssFeed;
@@ -42,10 +43,11 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
     private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
 
-    private static final String RSS_URL = "http://android.foxykeep.com/feed";
-
+    private Spinner mSpinnerFeedUrl;
     private Button mButtonLoad;
     private Button mButtonClearMemory;
+
+    private String[] mFeedUrlArray;
 
     private PoCRequestManager mRequestManager;
     private int mRequestId = -1;
@@ -65,6 +67,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
         setContentView(R.layout.rss_feed_list);
         bindViews();
         setListAdapter(new RssItemListAdapter(this));
+
+        mFeedUrlArray = getResources().getStringArray(R.array.rss_feed_url);
 
         if (savedInstanceState != null) {
             mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
@@ -153,6 +157,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
     }
 
     private void bindViews() {
+        mSpinnerFeedUrl = (Spinner) findViewById(R.id.sp_url);
+
         mButtonLoad = (Button) findViewById(R.id.b_load);
         mButtonLoad.setOnClickListener(this);
 
@@ -206,7 +212,7 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
 
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getRssFeed(RSS_URL);
+        mRequestId = mRequestManager.getRssFeed(mFeedUrlArray[mSpinnerFeedUrl.getSelectedItemPosition()]);
     }
 
     @Override
