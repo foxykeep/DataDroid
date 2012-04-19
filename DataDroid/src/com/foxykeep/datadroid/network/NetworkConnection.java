@@ -435,17 +435,18 @@ public class NetworkConnection {
             if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "retrieveResponseFromService - Response status : " + status.getStatusCode());
             }
-            if (status.getStatusCode() != HttpStatus.SC_OK) {
+            final int statusCode = status.getStatusCode();
+            if (statusCode != HttpStatus.SC_OK) {
                 if (LogConfig.DP_ERROR_LOGS_ENABLED) {
                     Log.e(LOG_TAG, "retrieveResponseFromService - Invalid response from server : " + status.toString());
                 }
-                if (status.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
+                if (statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
                     final Header newLocation = response.getFirstHeader("Location");
                     if (LogConfig.DP_INFO_LOGS_ENABLED) {
                         Log.i(LOG_TAG, "retrieveResponseFromService - New location : " + newLocation.getValue());
                     }
                     throw new RestClientException("New location : " + newLocation, newLocation.getValue());
-                } else if (status.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+                } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY) {
                     if (method == METHOD_GET) {
                         final String newUrl = response.getHeaders("Location")[0].getValue();
                         if (!previousUrlList.contains(newUrl)) {
@@ -454,13 +455,13 @@ public class NetworkConnection {
                             return retrieveResponseFromService(newUrl, method, parameters, headers, isGzipEnabled, userAgent, postText);
                         } else {
                             // It's an url already checked. We are in a loop. So let's throw an Exception
-                            throw new RestClientException("Moved permanently - Loop detected");
+                            throw new RestClientException("Moved permanently - Loop detected", statusCode);
                         }
                     } else {
-                        throw new RestClientException("Invalid response from server : ", status.getStatusCode());
+                        throw new RestClientException("Invalid response from server : ", statusCode);
                     }
                 } else {
-                    throw new RestClientException("Invalid response from server : ", status.getStatusCode());
+                    throw new RestClientException("Invalid response from server : ", statusCode);
                 }
             }
 
