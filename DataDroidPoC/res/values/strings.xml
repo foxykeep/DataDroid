@@ -23,6 +23,7 @@
     <string name="home_b_city_list">City List (Memory)</string>
     <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
     <string name="home_b_rss_feed">Rss Feed</string>
+    <string name="home_tv_source_code">The source code of the DataDroid library as well as this example app is available on Github :\nhttps://github.com/foxykeep/datadroid</string>
 
     <!-- PersonListActivity texts -->
     <string name="person_list_title">DataDroid PoC > Person List (DB)</string>
