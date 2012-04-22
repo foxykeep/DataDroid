@@ -16,6 +16,8 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -23,6 +25,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -37,7 +41,7 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 
-public class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener, OnClickListener {
+public class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener, OnClickListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -164,6 +168,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
 
         mButtonClearMemory = (Button) findViewById(R.id.b_clear_memory);
         mButtonClearMemory.setOnClickListener(this);
+
+        getListView().setOnItemClickListener(this);
     }
 
     @Override
@@ -222,6 +228,15 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
         } else if (view == mButtonClearMemory) {
             mMemoryProvider.rssFeed = null;
             ((RssItemListAdapter) getListAdapter()).clear();
+        }
+    }
+
+    @Override
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+
+        final RssItem rssItem = ((RssItemListAdapter) parent.getAdapter()).getItem(position);
+        if (rssItem != null) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rssItem.link)));
         }
     }
 
