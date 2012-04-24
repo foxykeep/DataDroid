@@ -127,6 +127,43 @@ public class NetworkConnection {
             wsResponse = result;
         }
     }
+    
+    // ------------------------------------------------------------------------------
+    // [MTG] Moss: Adding raw network result. Used for binary results.
+    
+    /**
+     * The raw result of a WS call. Adds an {@link InputStream} to the base {@link NetworkConnectionResult}.
+     * The {@link InputStream} can be null or empty if the call was text base or no binary encoding was set
+     * in the header. The {@link InputStream} will not be closed so that the receiver is able to read from it.
+     * <p>
+     * Header requirements:
+     * <ul>
+     * <li>Required: <i>Content-Type: application/octet-stream</i></li>
+     * <li>Required: <i>Content-Transfer-Encoding: binary</i></li>
+     * <li>Optional: <i>Content-MD5: hash.here</i></li>
+     * </ul>
+     * @author Moritz 'Moss' Wundke (b.thax.dcg@gmail.com)
+     *
+     */
+    public static class NetworkConnectionResultRaw extends NetworkConnectionResult {
+    	public InputStream wsRawResponse;
+    	
+    	/**
+    	 * Http response result container.
+    	 * 
+    	 * @param resultHeader
+    	 * @param result
+    	 * @param rawResult
+    	 */
+    	public NetworkConnectionResultRaw(final Header[] resultHeader, final String result, final InputStream rawResult) {
+			super(resultHeader, result);			
+			wsRawResponse = rawResult;			
+		}
+    }
+    
+    
+    // [MTG] Moss: Adding raw network result. Used for binary results.
+    // ------------------------------------------------------------------------------
 
     /**
      * Call a webservice and return the response
@@ -467,7 +504,22 @@ public class NetworkConnection {
 
             // Get the response entity
             final HttpEntity entity = response.getEntity();
-
+            
+            // ------------------------------------------------------------------------------
+            // [MTG] Moss: Adding raw network result. Used for binary results.
+            
+            final Header contentType = response.getFirstHeader("Content-Type");
+            final Header contentTransferEncoding = response.getFirstHeader("Content-Transfer-Encoding");
+            
+            if ( contentType.getValue().equalsIgnoreCase("application/octet-stream") && 
+        		 contentTransferEncoding.getValue().equalsIgnoreCase("binary") ) {            	
+            	// Get stream
+            	return new NetworkConnectionResultRaw(response.getAllHeaders(), "", entity.getContent());
+            }
+            
+            // [MTG] Moss: Adding raw network result. Used for binary results.
+            // ------------------------------------------------------------------------------
+            
             final Header contentEncoding = response.getFirstHeader("Content-Encoding");
 
             if (entity != null) {
