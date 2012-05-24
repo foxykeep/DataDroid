@@ -109,16 +109,18 @@ public class PoCRequestManager extends RequestManager {
      * @param listener The listener to add to this {@link PoCRequestManager} .
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
+        if (listener == null) {
+            return;
+        }
         synchronized (mListenerList) {
             // Check if the listener is not already in the list
             if (!mListenerList.isEmpty()) {
                 for (WeakReference<OnRequestFinishedListener> weakRef : mListenerList) {
-                    if (weakRef.get().equals(listener)) {
+                    if (listener.equals(weakRef.get())) {
                         return;
                     }
                 }
             }
-
             mListenerList.add(new WeakReference<OnRequestFinishedListener>(listener));
         }
     }
@@ -129,10 +131,13 @@ public class PoCRequestManager extends RequestManager {
      * @param listenerThe listener to remove to this {@link PoCRequestManager}.
      */
     public void removeOnRequestFinishedListener(final OnRequestFinishedListener listener) {
+        if (listener == null) {
+            return;
+        }
         synchronized (mListenerList) {
             final int listenerListSize = mListenerList.size();
             for (int i = 0; i < listenerListSize; i++) {
-                if (mListenerList.get(i).get().equals(listener)) {
+                if (listener.equals(mListenerList.get(i).get())) {
                     mListenerList.remove(i);
                     return;
                 }
