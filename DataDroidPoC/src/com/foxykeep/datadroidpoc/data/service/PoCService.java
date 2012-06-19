@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import android.content.Intent;
+import android.content.OperationApplicationException;
+import android.os.RemoteException;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -151,6 +153,12 @@ public class PoCService extends WorkerService {
             sendDataFailure(intent, null);
         } catch (final JSONException e) {
             Log.e(LOG_TAG, "JSONException", e);
+            sendDataFailure(intent, null);
+        } catch (RemoteException e) {
+            Log.e(LOG_TAG, "RemoteException", e);
+            sendDataFailure(intent, null);
+        } catch (OperationApplicationException e) {
+            Log.e(LOG_TAG, "OperationApplicationException", e);
             sendDataFailure(intent, null);
         }
         // This block (which should be the last one in your implementation)

@@ -8,15 +8,19 @@
  */
 package com.foxykeep.datadroidpoc.data.provider;
 
+import java.util.ArrayList;
+
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
@@ -200,7 +204,7 @@ public class PoCProvider extends ContentProvider {
             case PERSON:
             case PHONE:
                 id = db.insert(TABLE_NAMES[table], "foo", values);
-                resultUri = ContentUris.withAppendedId(uri, id);
+                resultUri = id == -1 ? null : ContentUris.withAppendedId(uri, id);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -213,62 +217,24 @@ public class PoCProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(final Uri uri, final ContentValues[] values) {
-
-        final int match = sURIMatcher.match(uri);
-        final Context context = getContext();
-
-        // Pick the correct database for this operation
-        final SQLiteDatabase db = getDatabase(context);
-
-        if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
-            Log.d(LOG_TAG, "bulkInsert: uri=" + uri + ", match is " + match);
-        }
-
-        int numberInserted = 0;
-        SQLiteStatement insertStmt;
-
+    public ContentProviderResult[] applyBatch(final ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        final SQLiteDatabase db = getDatabase(getContext());
         db.beginTransaction();
         try {
-            switch (match) {
-                case PERSON:
-                    insertStmt = db.compileStatement(PersonDao.getBulkInsertString());
-                    for (final ContentValues value : values) {
-                        PersonDao.bindValuesInBulkInsert(insertStmt, value);
-                        insertStmt.execute();
-                        insertStmt.clearBindings();
-                    }
-                    insertStmt.close();
-                    db.setTransactionSuccessful();
-                    numberInserted = values.length;
-                    break;
-                case PHONE:
-                    insertStmt = db.compileStatement(PhoneDao.getBulkInsertString());
-                    for (final ContentValues value : values) {
-                        PhoneDao.bindValuesInBulkInsert(insertStmt, value);
-                        insertStmt.execute();
-                        insertStmt.clearBindings();
-                    }
-                    insertStmt.close();
-                    db.setTransactionSuccessful();
-                    numberInserted = values.length;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
+            final int numOperations = operations.size();
+            final ContentProviderResult[] results = new ContentProviderResult[numOperations];
+            for (int i = 0; i < numOperations; i++) {
+                results[i] = operations.get(i).apply(this, results, i);
             }
+            db.setTransactionSuccessful();
+            return results;
         } finally {
             db.endTransaction();
         }
-
-        // Notify with the base uri, not the new uri (nobody is watching a new
-        // record)
-        context.getContentResolver().notifyChange(uri, null);
-        return numberInserted;
     }
 
     @Override
-    public Cursor query(final Uri uri, final String[] projection, final String selection, final String[] selectionArgs,
-            final String sortOrder) {
+    public Cursor query(final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
 
         Cursor c = null;
         final Uri notificationUri = PoCContent.CONTENT_URI;
@@ -287,8 +253,7 @@ public class PoCProvider extends ContentProvider {
             case PERSON_ID:
             case PHONE_ID:
                 id = uri.getPathSegments().get(1);
-                c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null,
-                        sortOrder);
+                c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null, sortOrder);
                 break;
             case PERSON:
             case PHONE:

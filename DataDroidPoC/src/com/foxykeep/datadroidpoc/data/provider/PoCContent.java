@@ -11,7 +11,6 @@ package com.foxykeep.datadroidpoc.data.provider;
 import android.content.ContentValues;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -20,8 +19,7 @@ import com.foxykeep.datadroidpoc.data.model.Person;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 
 /**
- * {@link PoCContent} is the superclass of the various classes of content stored
- * by {@link PoCProvider}. It adds to {@link DatabaseContent} the
+ * {@link PoCContent} is the superclass of the various classes of content stored by {@link PoCProvider}. It adds to {@link DatabaseContent} the
  * {@link #AUTHORITY} and {@link #CONTENT_URI}
  * <p>
  * </p>
@@ -69,9 +67,8 @@ public abstract class PoCContent {
         };
 
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME + " text, " + LAST_NAME
-                    + " text, " + EMAIL + " text, " + CITY + " text, " + POSTAL_CODE + " integer, " + AGE
-                    + " integer, " + IS_WORKING + " integer " + ");";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME + " text, " + LAST_NAME + " text, " + EMAIL + " text, "
+                    + CITY + " text, " + POSTAL_CODE + " integer, " + AGE + " integer, " + IS_WORKING + " integer " + ");";
 
             db.execSQL("create table " + TABLE_NAME + s);
 
@@ -84,43 +81,6 @@ public abstract class PoCContent {
             } catch (final SQLException e) {
             }
             createTable(db);
-        }
-
-        public static String getBulkInsertString() {
-            final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
-            sqlRequest.append(TABLE_NAME);
-            sqlRequest.append(" ( ");
-            sqlRequest.append(FIRST_NAME);
-            sqlRequest.append(", ");
-            sqlRequest.append(LAST_NAME);
-            sqlRequest.append(", ");
-            sqlRequest.append(EMAIL);
-            sqlRequest.append(", ");
-            sqlRequest.append(CITY);
-            sqlRequest.append(", ");
-            sqlRequest.append(POSTAL_CODE);
-            sqlRequest.append(", ");
-            sqlRequest.append(AGE);
-            sqlRequest.append(", ");
-            sqlRequest.append(IS_WORKING);
-            sqlRequest.append(" ) ");
-            sqlRequest.append(" VALUES (?, ?, ?, ?, ?, ?, ?)");
-            return sqlRequest.toString();
-        }
-
-        public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
-            int i = 1;
-            String value = values.getAsString(FIRST_NAME);
-            stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(LAST_NAME);
-            stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(EMAIL);
-            stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(CITY);
-            stmt.bindString(i++, value != null ? value : "");
-            stmt.bindLong(i++, values.getAsInteger(POSTAL_CODE));
-            stmt.bindLong(i++, values.getAsInteger(AGE));
-            stmt.bindLong(i++, values.getAsInteger(IS_WORKING));
         }
 
         public static ContentValues getContentValues(final Person person) {
@@ -172,9 +132,8 @@ public abstract class PoCContent {
         };
 
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + _ID + " integer primary key autoincrement, " + SERVER_ID + " integer, " + NAME
-                    + " text, " + MANUFACTURER + " text, " + ANDROID_VERSION + " text, " + SCREEN_SIZE + " text, "
-                    + PRICE + " integer );";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + SERVER_ID + " integer, " + NAME + " text, " + MANUFACTURER
+                    + " text, " + ANDROID_VERSION + " text, " + SCREEN_SIZE + " text, " + PRICE + " integer );";
 
             db.execSQL("create table " + TABLE_NAME + s);
 
@@ -188,40 +147,6 @@ public abstract class PoCContent {
             } catch (final SQLException e) {
             }
             createTable(db);
-        }
-
-        public static String getBulkInsertString() {
-            final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
-            sqlRequest.append(TABLE_NAME);
-            sqlRequest.append(" ( ");
-            sqlRequest.append(SERVER_ID);
-            sqlRequest.append(", ");
-            sqlRequest.append(NAME);
-            sqlRequest.append(", ");
-            sqlRequest.append(MANUFACTURER);
-            sqlRequest.append(", ");
-            sqlRequest.append(ANDROID_VERSION);
-            sqlRequest.append(", ");
-            sqlRequest.append(SCREEN_SIZE);
-            sqlRequest.append(", ");
-            sqlRequest.append(PRICE);
-            sqlRequest.append(" ) ");
-            sqlRequest.append(" VALUES (?, ?, ?, ?, ?, ?)");
-            return sqlRequest.toString();
-        }
-
-        public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
-            int i = 1;
-            stmt.bindLong(i++, values.getAsInteger(SERVER_ID));
-            String value = values.getAsString(NAME);
-            stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(MANUFACTURER);
-            stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(ANDROID_VERSION);
-            stmt.bindString(i++, value != null ? value : "");
-            value = values.getAsString(SCREEN_SIZE);
-            stmt.bindString(i++, value != null ? value : "");
-            stmt.bindLong(i++, values.getAsInteger(PRICE));
         }
 
         public static ContentValues getContentValues(final Phone phone) {

@@ -8,21 +8,17 @@
  */
 package com.foxykeep.datadroidpoc.skeleton.data.provider;
 
-import android.content.ContentValues;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.foxykeep.datadroid.provider.util.DatabaseUtil;
 
 /**
- * {@link SkeletonContent} is the superclass of the various classes of content
- * stored by {@link SkeletonProvider}.
+ * {@link SkeletonContent} is the superclass of the various classes of content stored by {@link SkeletonProvider}.
  * <p>
- * <b>This class is a skeleton of the normal class. Replace the TODOs by your
- * code</b>
+ * <b>This class is a skeleton of the normal class. Replace the TODOs by your code</b>
  * </p>
  */
 public abstract class SkeletonContent {
@@ -67,8 +63,8 @@ public abstract class SkeletonContent {
         // TODO : The following 2 methods are used for creation and upgrade of a
         // table.
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + _ID + " integer primary key autoincrement, " + COLUMN_NAME_ONE + " text, "
-                    + COLUMN_NAME_TWO + " integer, " + COLUMN_NAME_THREE + " integer " + ");";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + COLUMN_NAME_ONE + " text, " + COLUMN_NAME_TWO + " integer, "
+                    + COLUMN_NAME_THREE + " integer " + ");";
 
             db.execSQL("create table " + TABLE_NAME + s);
 
@@ -85,29 +81,6 @@ public abstract class SkeletonContent {
             } catch (final SQLException e) {
             }
             createTable(db);
-        }
-
-        // TODO : The 2 following methods allow to save in bulk (it should be
-        // used if you have more than one insert to do)
-        public static String getBulkInsertString() {
-            final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
-            sqlRequest.append(TABLE_NAME);
-            sqlRequest.append(" ( ");
-            sqlRequest.append(COLUMN_NAME_ONE);
-            sqlRequest.append(", ");
-            sqlRequest.append(COLUMN_NAME_TWO);
-            sqlRequest.append(", ");
-            sqlRequest.append(COLUMN_NAME_THREE);
-            sqlRequest.append(" ) ");
-            sqlRequest.append(" VALUES (?, ?, ?)");
-            return sqlRequest.toString();
-        }
-
-        public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
-            final String columnOne = values.getAsString(COLUMN_NAME_ONE);
-            stmt.bindString(1, columnOne != null ? columnOne : "");
-            stmt.bindLong(2, values.getAsInteger(COLUMN_NAME_TWO));
-            stmt.bindLong(3, values.getAsInteger(COLUMN_NAME_THREE));
         }
     }
 }

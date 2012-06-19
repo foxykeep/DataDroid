@@ -14,8 +14,10 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import android.content.ContentValues;
+import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.content.OperationApplicationException;
+import android.os.RemoteException;
 
 import org.json.JSONException;
 import org.xml.sax.SAXException;
@@ -28,18 +30,18 @@ import com.foxykeep.datadroidpoc.data.factory.PersonListJsonFactory;
 import com.foxykeep.datadroidpoc.data.factory.PersonListXmlFactory;
 import com.foxykeep.datadroidpoc.data.model.Person;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
+import com.foxykeep.datadroidpoc.data.provider.PoCProvider;
 
 public class PersonListWorker {
 
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
 
-    public static void start(final Context context, final int returnFormat) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException, ParserConfigurationException, SAXException, JSONException {
+    public static void start(final Context context, final int returnFormat) throws IllegalStateException, IOException, URISyntaxException,
+            RestClientException, ParserConfigurationException, SAXException, JSONException, RemoteException, OperationApplicationException {
 
         NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
-                returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML : WSConfig.WS_PERSON_LIST_URL_JSON,
-                NetworkConnection.METHOD_GET);
+                returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML : WSConfig.WS_PERSON_LIST_URL_JSON, NetworkConnection.METHOD_GET);
 
         ArrayList<Person> personList = null;
         if (returnFormat == RETURN_FORMAT_XML) {
@@ -54,11 +56,12 @@ public class PersonListWorker {
         // Adds the persons in the database
         final int personListSize = personList.size();
         if (personList != null && personListSize > 0) {
-            ContentValues[] valuesArray = new ContentValues[personListSize];
+            final ArrayList<ContentProviderOperation> operationList = new ArrayList<ContentProviderOperation>();
             for (int i = 0; i < personListSize; i++) {
-                valuesArray[i] = PersonDao.getContentValues(personList.get(i));
+                operationList.add(ContentProviderOperation.newInsert(PersonDao.CONTENT_URI).withValues(PersonDao.getContentValues(personList.get(i)))
+                        .build());
             }
-            context.getContentResolver().bulkInsert(PersonDao.CONTENT_URI, valuesArray);
+            context.getContentResolver().applyBatch(PoCProvider.AUTHORITY, operationList);
         }
     }
 }
