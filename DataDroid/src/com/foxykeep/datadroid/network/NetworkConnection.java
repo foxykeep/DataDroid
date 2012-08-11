@@ -147,6 +147,8 @@ public class NetworkConnection {
      */
     public static class NetworkConnectionResultRaw extends NetworkConnectionResult {
     	public InputStream wsRawResponse;
+    	public AndroidHttpClient wsClient;
+    	public HttpEntity wsEntity;
     	
     	/**
     	 * Http response result container.
@@ -155,9 +157,11 @@ public class NetworkConnection {
     	 * @param result
     	 * @param rawResult
     	 */
-    	public NetworkConnectionResultRaw(final Header[] resultHeader, final String result, final InputStream rawResult) {
+    	public NetworkConnectionResultRaw(final Header[] resultHeader, final String result, final InputStream rawResult, final HttpEntity entity, final AndroidHttpClient client) {
 			super(resultHeader, result);			
-			wsRawResponse = rawResult;			
+			wsRawResponse = rawResult;
+			wsEntity = entity;
+			wsClient = client;
 		}
     }
     
@@ -338,7 +342,7 @@ public class NetworkConnection {
         }
 
         // Create the Request
-        final AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
+        AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
         if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request user agent : " + userAgent);
         }
@@ -514,7 +518,9 @@ public class NetworkConnection {
             if ( contentType.getValue().equalsIgnoreCase("application/octet-stream") && 
         		 contentTransferEncoding.getValue().equalsIgnoreCase("binary") ) {            	
             	// Get stream
-            	return new NetworkConnectionResultRaw(response.getAllHeaders(), "", entity.getContent());
+            	NetworkConnectionResultRaw rawResult = new NetworkConnectionResultRaw(response.getAllHeaders(), "", entity.getContent(), entity, client);
+            	client = null;
+            	return rawResult;
             }
             
             // [MTG] Moss: Adding raw network result. Used for binary results.
@@ -534,7 +540,8 @@ public class NetworkConnection {
             return new NetworkConnectionResult(response.getAllHeaders(), result);
 
         } finally {
-            client.close();
+        	if ( client != null )
+        		client.close();
         }
     }
 
