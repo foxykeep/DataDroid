@@ -146,20 +146,14 @@ public class NetworkConnection {
      *
      */
     public static class NetworkConnectionResultRaw extends NetworkConnectionResult {
-    	public InputStream wsRawResponse;
     	public AndroidHttpClient wsClient;
     	public HttpEntity wsEntity;
     	
     	/**
     	 * Http response result container.
-    	 * 
-    	 * @param resultHeader
-    	 * @param result
-    	 * @param rawResult
     	 */
-    	public NetworkConnectionResultRaw(final Header[] resultHeader, final String result, final InputStream rawResult, final HttpEntity entity, final AndroidHttpClient client) {
+    	public NetworkConnectionResultRaw(final Header[] resultHeader, final String result, final HttpEntity entity, final AndroidHttpClient client) {
 			super(resultHeader, result);			
-			wsRawResponse = rawResult;
 			wsEntity = entity;
 			wsClient = client;
 		}
@@ -518,7 +512,7 @@ public class NetworkConnection {
             if ( contentType.getValue().equalsIgnoreCase("application/octet-stream") && 
         		 contentTransferEncoding.getValue().equalsIgnoreCase("binary") ) {            	
             	// Get stream
-            	NetworkConnectionResultRaw rawResult = new NetworkConnectionResultRaw(response.getAllHeaders(), "", entity.getContent(), entity, client);
+            	NetworkConnectionResultRaw rawResult = new NetworkConnectionResultRaw(response.getAllHeaders(), "", entity, client);
             	client = null;
             	return rawResult;
             }
