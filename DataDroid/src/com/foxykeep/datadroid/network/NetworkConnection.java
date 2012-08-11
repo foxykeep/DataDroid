@@ -127,6 +127,41 @@ public class NetworkConnection {
             wsResponse = result;
         }
     }
+    
+    // ------------------------------------------------------------------------------
+    // [MTG] Moss: Adding raw network result. Used for binary results.
+    
+    /**
+     * The raw result of a WS call. Adds an {@link InputStream} to the base {@link NetworkConnectionResult}.
+     * The {@link InputStream} can be null or empty if the call was text base or no binary encoding was set
+     * in the header. The {@link InputStream} will not be closed so that the receiver is able to read from it.
+     * <p>
+     * Header requirements:
+     * <ul>
+     * <li>Required: <i>Content-Type: application/octet-stream</i></li>
+     * <li>Required: <i>Content-Transfer-Encoding: binary</i></li>
+     * <li>Optional: <i>Content-MD5: hash.here</i></li>
+     * </ul>
+     * @author Moritz 'Moss' Wundke (b.thax.dcg@gmail.com)
+     *
+     */
+    public static class NetworkConnectionResultRaw extends NetworkConnectionResult {
+    	public AndroidHttpClient wsClient;
+    	public HttpEntity wsEntity;
+    	
+    	/**
+    	 * Http response result container.
+    	 */
+    	public NetworkConnectionResultRaw(final Header[] resultHeader, final String result, final HttpEntity entity, final AndroidHttpClient client) {
+			super(resultHeader, result);			
+			wsEntity = entity;
+			wsClient = client;
+		}
+    }
+    
+    
+    // [MTG] Moss: Adding raw network result. Used for binary results.
+    // ------------------------------------------------------------------------------
 
     /**
      * Call a webservice and return the response
@@ -301,7 +336,7 @@ public class NetworkConnection {
         }
 
         // Create the Request
-        final AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
+        AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
         if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request user agent : " + userAgent);
         }
@@ -467,7 +502,24 @@ public class NetworkConnection {
 
             // Get the response entity
             final HttpEntity entity = response.getEntity();
-
+            
+            // ------------------------------------------------------------------------------
+            // [MTG] Moss: Adding raw network result. Used for binary results.
+            
+            final Header contentType = response.getFirstHeader("Content-Type");
+            final Header contentTransferEncoding = response.getFirstHeader("Content-Transfer-Encoding");
+            
+            if ( contentType.getValue().equalsIgnoreCase("application/octet-stream") && 
+        		 contentTransferEncoding.getValue().equalsIgnoreCase("binary") ) {            	
+            	// Get stream
+            	NetworkConnectionResultRaw rawResult = new NetworkConnectionResultRaw(response.getAllHeaders(), "", entity, client);
+            	client = null;
+            	return rawResult;
+            }
+            
+            // [MTG] Moss: Adding raw network result. Used for binary results.
+            // ------------------------------------------------------------------------------
+            
             final Header contentEncoding = response.getFirstHeader("Content-Encoding");
 
             if (entity != null) {
@@ -482,7 +534,8 @@ public class NetworkConnection {
             return new NetworkConnectionResult(response.getAllHeaders(), result);
 
         } finally {
-            client.close();
+        	if ( client != null )
+        		client.close();
         }
     }
 
