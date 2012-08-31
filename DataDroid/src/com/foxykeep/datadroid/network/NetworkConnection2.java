@@ -48,26 +48,25 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.CharArrayBuffer;
 
+import com.foxykeep.datadroid.BuildConfig;
 import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.CompulsoryParameterException;
 import com.foxykeep.datadroid.exception.RestClientException;
 
 /**
- * This class gives the user methods to easily call a webservice and return the received string
+ * This class gives the user an API to easily call a webservice and return the received string.
+ * <p>
+ * Use the {@link NetworkConnection2Builder} to prepare your webservice call
  * 
  * @author Foxykeep
- * @deprecated This class is deprecated. Please use {@link NetworkConnection2} which provides an easier to use API.
  */
-@SuppressLint("NewApi")
-@Deprecated
-public class NetworkConnection {
+public class NetworkConnection2 {
 
-    private static final String LOG_TAG = NetworkConnection.class.getSimpleName();
+    private static final String LOG_TAG = NetworkConnection2.class.getSimpleName();
 
-    public static final int METHOD_GET = 0;
-    public static final int METHOD_POST = 1;
-    public static final int METHOD_PUT = 2;
-    public static final int METHOD_DELETE = 3;
+    public static enum Method {
+        GET, POST, PUT, DELETE
+    }
 
     private static String sDefaultUserAgent = null;
 
@@ -111,7 +110,7 @@ public class NetworkConnection {
     }
 
     /**
-     * The result of a webservice call. Contain the Header of the response and the body of the response as an unparsed String
+     * The result of a webservice call. Contain the Header and the body of the response as an unparsed String
      * 
      * @author Foxykeep
      */
@@ -133,142 +132,102 @@ public class NetworkConnection {
     }
 
     /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
+     * @author foxykeep
      */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, METHOD_GET);
+    public static class NetworkConnection2Builder {
+        private String mUrl;
+        private Method mMethod = Method.GET;
+        private Map<String, String> mParameters = null;
+        private List<Header> mHeaderList = null;
+        private boolean mIsGzipEnabled = true;
+        private String mUserAgent = null;
+        private String mPostText = null;
+
+        public NetworkConnection2Builder(final String url) {
+            if (url == null) {
+                if (LogConfig.DP_ERROR_LOGS_ENABLED && BuildConfig.DEBUG) {
+                    Log.e(LOG_TAG, "NetworkConnection2Builder - Compulsory Parameter : request URL has not been set");
+                }
+                throw new CompulsoryParameterException("Request URL has not been set");
+            }
+            mUrl = url;
+        }
+
+        /**
+         * Set the method to use. Default is {@link Method#GET}
+         * 
+         * @param method The method to use
+         * @return The builder
+         */
+        public NetworkConnection2Builder setMethod(final Method method) {
+            mMethod = method;
+            return this;
+        }
+
+        /**
+         * Set the parameters to add to the request. This is a "key" => "value" Map.
+         * 
+         * @param parameters The parameters to add to the request
+         * @return The builder
+         */
+        public NetworkConnection2Builder setParameters(final Map<String, String> parameters) {
+            mParameters = parameters;
+            return this;
+        }
+
+        /**
+         * Set the headers to add to the request
+         * 
+         * @param headerList The headers to add to the request
+         * @return The builder
+         */
+        public NetworkConnection2Builder setHeaderList(final List<Header> headerList) {
+            mHeaderList = headerList;
+            return this;
+        }
+
+        /**
+         * Set whether the request will use gzip compression if available on the server. Default is true.
+         * 
+         * @param isGzipEnabled Whether the request will user gzip compression if available on the server.
+         * @return The builder
+         */
+        public NetworkConnection2Builder setGzipEnabled(final boolean isGzipEnabled) {
+            mIsGzipEnabled = isGzipEnabled;
+            return this;
+        }
+
+        /**
+         * Set the user agent to set in the request. Otherwise a default Android one will be used.
+         * 
+         * @param userAgent The user agent
+         * @return The builder
+         */
+        public NetworkConnection2Builder setUserAgent(final String userAgent) {
+            mUserAgent = userAgent;
+            return this;
+        }
+
+        /**
+         * Set the POSTDATA text that will be added in the request. Also automatically set the {@link Method} to {@link Method#POST} to be able to use
+         * it
+         * 
+         * @param postText The POSTDATA text that will be added in the request
+         * @return The builder
+         */
+        public NetworkConnection2Builder setPostText(final String postText) {
+            mPostText = postText;
+            mMethod = Method.POST;
+            return this;
+        }
+
+        public NetworkConnectionResult execute() {
+            return null;
+        }
     }
 
-    /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
-     *            {@link #METHOD_DELETE}
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
-     */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, method, null);
-    }
-
-    /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
-     *            {@link #METHOD_DELETE}
-     * @param parameters The parameters to add to the request. This is a "key => value" Map.
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
-     */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, method, parameters, null);
-    }
-
-    /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
-     *            {@link #METHOD_DELETE}
-     * @param parameters The parameters to add to the request. This is a "key => value" Map.
-     * @param headers The headers to add to the request
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
-     */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
-            final ArrayList<Header> headers) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, method, parameters, headers, false);
-    }
-
-    /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
-     *            {@link #METHOD_DELETE}
-     * @param parameters The parameters to add to the request. This is a "key => value" Map.
-     * @param headers The headers to add to the request
-     * @param isGzipEnabled Whether we should use gzip compression if available
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
-     */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
-            final ArrayList<Header> headers, final boolean isGzipEnabled) throws IllegalStateException, IOException, URISyntaxException,
-            RestClientException {
-        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, null);
-    }
-
-    /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
-     *            {@link #METHOD_DELETE}
-     * @param parameters The parameters to add to the request. This is a "key => value" Map.
-     * @param headers The headers to add to the request
-     * @param isGzipEnabled Whether we should use gzip compression if available
-     * @param userAgent The user agent to set in the request. If not given, the default one will be used
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
-     */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
-            final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
-
-        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, null);
-    }
-
-    /**
-     * Call a webservice and return the response
-     * 
-     * @param url The url of the webservice
-     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
-     *            {@link #METHOD_DELETE}
-     * @param parameters The parameters to add to the request. This is a "key => value" Map.
-     * @param headers The headers to add to the request
-     * @param isGzipEnabled Whether we should use gzip compression if available
-     * @param userAgent The user agent to set in the request. If not given, the default one will be used
-     * @param postText A POSTDATA text that will be added in the request (only if the method is set to {@link #METHOD_POST})
-     * @return A NetworkConnectionResult containing the response
-     * @throws IllegalStateException
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws RestClientException
-     */
-    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
-            final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, postText, new ArrayList<String>());
-    }
-
-    private static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
+    @SuppressLint("NewApi")
+    private static NetworkConnectionResult retrieveResponseFromService(final String url, final Method method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText,
             final ArrayList<String> previousUrlList) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
         // Get the request URL
@@ -283,12 +242,12 @@ public class NetworkConnection {
         }
 
         // Get the request method
-        if (method != METHOD_GET && method != METHOD_POST && method != METHOD_PUT && method != METHOD_DELETE) {
+        if (method != Method.GET && method != Method.POST && method != Method.PUT && method != Method.DELETE) {
             if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                Log.e(LOG_TAG, "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
             }
             throw new IllegalArgumentException(
-                    "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                    "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
         }
         if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request method : " + method);
@@ -313,9 +272,9 @@ public class NetworkConnection {
         try {
             HttpUriRequest request = null;
             switch (method) {
-                case METHOD_GET:
-                case METHOD_PUT:
-                case METHOD_DELETE: {
+                case GET:
+                case PUT:
+                case DELETE: {
                     final StringBuffer sb = new StringBuffer();
                     sb.append(url);
 
@@ -349,16 +308,16 @@ public class NetworkConnection {
 
                     final URI uri = new URI(sb.toString());
 
-                    if (method == METHOD_GET) {
+                    if (method == Method.GET) {
                         request = new HttpGet(uri);
-                    } else if (method == METHOD_PUT) {
+                    } else if (method == Method.PUT) {
                         request = new HttpPut(uri);
-                    } else if (method == METHOD_DELETE) {
+                    } else if (method == Method.DELETE) {
                         request = new HttpDelete(uri);
                     }
                     break;
                 }
-                case METHOD_POST: {
+                case POST: {
                     final URI uri = new URI(url);
                     request = new HttpPost(uri);
 
@@ -395,10 +354,10 @@ public class NetworkConnection {
                 }
                 default: {
                     if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                        Log.e(LOG_TAG, "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                        Log.e(LOG_TAG, "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
                     }
                     throw new IllegalArgumentException(
-                            "retrieveResponseFromService - Request method must be METHOD_GET, METHOD_POST, METHOD_PUT or METHOD_DELETE");
+                            "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
                 }
             }
 
@@ -451,12 +410,13 @@ public class NetworkConnection {
                     }
                     throw new RestClientException("New location : " + newLocation, newLocation.getValue());
                 } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY) {
-                    if (method == METHOD_GET) {
+                    if (method == Method.GET) {
                         final String newUrl = response.getHeaders("Location")[0].getValue();
                         if (!previousUrlList.contains(newUrl)) {
                             Log.d(LOG_TAG, "retrieveResponseFromService - Url moved permanently - Trying the new url : " + newUrl);
                             previousUrlList.add(newUrl);
-                            return retrieveResponseFromService(newUrl, method, parameters, headers, isGzipEnabled, userAgent, postText);
+                            // TODO
+                            // return retrieveResponseFromService(newUrl, method, parameters, headers, isGzipEnabled, userAgent, postText);
                         } else {
                             // It's an url already checked. We are in a loop. So let's throw an Exception
                             throw new RestClientException("Moved permanently - Loop detected", statusCode);
@@ -497,7 +457,7 @@ public class NetworkConnection {
      * @return String from the InputStream
      * @throws IOException If a problem occurs while reading the InputStream
      */
-    private static String convertStreamToString(final InputStream is, final boolean isGzipEnabled, final int method, final int contentLength)
+    private static String convertStreamToString(final InputStream is, final boolean isGzipEnabled, final Method method, final int contentLength)
             throws IOException {
         InputStream cleanedIs = is;
         if (isGzipEnabled) {
@@ -506,9 +466,9 @@ public class NetworkConnection {
 
         try {
             switch (method) {
-                case METHOD_GET:
-                case METHOD_PUT:
-                case METHOD_DELETE: {
+                case GET:
+                case PUT:
+                case DELETE: {
                     final BufferedReader reader = new BufferedReader(new InputStreamReader(cleanedIs));
                     final StringBuilder sb = new StringBuilder();
 
@@ -520,7 +480,7 @@ public class NetworkConnection {
 
                     return sb.toString();
                 }
-                case METHOD_POST: {
+                case POST: {
                     int i = contentLength;
                     if (i < 0) {
                         i = 4096;

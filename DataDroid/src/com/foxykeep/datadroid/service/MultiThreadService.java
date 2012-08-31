@@ -20,8 +20,8 @@ import android.os.Handler;
 import android.os.IBinder;
 
 /**
- * This class is nearly identical to {@link IntentService}. The only difference
- * is that the subclasses can specify the number of parallel working thread.
+ * This class is nearly identical to {@link IntentService}. The only difference is that the subclasses can specify the number of parallel working
+ * threads.
  * 
  * @author Foxykeep
  */
@@ -100,8 +100,7 @@ abstract public class MultiThreadService extends Service {
     }
 
     /**
-     * This method is invoked on the worker thread with a request to process.
-     * The processing happens on a worker thread that runs independently from
+     * This method is invoked on the worker thread with a request to process. The processing happens on a worker thread that runs independently from
      * other application logic.
      * 
      * @param intent The value passed to {@link Content#startService(Intent)}.

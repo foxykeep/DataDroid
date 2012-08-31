@@ -13,11 +13,12 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 
+import com.foxykeep.datadroid.BuildConfig;
 import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 
 /**
- * This class is the superclass of all the worker service you'll create.
+ * This class is the superclass of all the worker services you'll create.
  * 
  * @author Foxykeep
  */
@@ -37,8 +38,7 @@ abstract public class WorkerService extends MultiThreadService {
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work
-     * is a success
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a success
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} with the data to send back
@@ -48,8 +48,7 @@ abstract public class WorkerService extends MultiThreadService {
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work
-     * is a failure
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} the data to send back
@@ -59,8 +58,7 @@ abstract public class WorkerService extends MultiThreadService {
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work
-     * is a failure due to the network
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to the network
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} the data to send back
@@ -74,8 +72,7 @@ abstract public class WorkerService extends MultiThreadService {
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work
-     * is a failure due to the data (parsing for example)
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to the data (parsing for example)
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} the data to send back
@@ -91,14 +88,13 @@ abstract public class WorkerService extends MultiThreadService {
     /**
      * Method used to send back the result to the {@link RequestManager}
      * 
-     * @param intent The value passed to {@link onHandleIntent(Intent)}. It must
-     *            contain the {@link ResultReceiver} and the requestId
+     * @param intent The value passed to {@link onHandleIntent(Intent)}. It must contain the {@link ResultReceiver} and the requestId
      * @param data A {@link Bundle} the data to send back
      * @param code The sucess/error code to send back
      */
     protected void sendResult(final Intent intent, Bundle data, final int code) {
 
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
+        if (LogConfig.DP_DEBUG_LOGS_ENABLED && BuildConfig.DEBUG) {
             Log.d(LOG_TAG, "sendResult : " + ((code == SUCCESS_CODE) ? "Success" : "Failure"));
         }
 
