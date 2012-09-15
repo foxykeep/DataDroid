@@ -16,6 +16,7 @@ import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +37,22 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.CharArrayBuffer;
 
 import com.foxykeep.datadroid.config.LogConfig;
@@ -261,12 +269,43 @@ public class NetworkConnection {
     public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText)
             throws IllegalStateException, IOException, URISyntaxException, RestClientException {
-        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, postText, new ArrayList<String>());
+        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, postText, null);
     }
 
+    /**
+     * Call a webservice and return the response
+     * 
+     * @param url The url of the webservice
+     * @param method The method to use (must be one of the following : {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT} ,
+     *            {@link #METHOD_DELETE}
+     * @param parameters The parameters to add to the request. This is a "key => value" Map.
+     * @param headers The headers to add to the request
+     * @param isGzipEnabled Whether we should use gzip compression if available
+     * @param userAgent The user agent to set in the request. If not given, the default one will be used
+     * @param postText A POSTDATA text that will be added in the request (only if the method is set to {@link #METHOD_POST})
+     * @param credentials The credentials to use for authentication
+     * @return A NetworkConnectionResult containing the response
+     * @throws IllegalStateException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws RestClientException
+     */
+    public static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
+            final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText,
+            final UsernamePasswordCredentials credentials)
+            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+        return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, userAgent, postText,
+        		credentials,  new ArrayList<String>());
+    }
+    
     private static NetworkConnectionResult retrieveResponseFromService(final String url, final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText,
-            final ArrayList<String> previousUrlList) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+            final UsernamePasswordCredentials credentials, final ArrayList<String> previousUrlList)
+            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+
+    	final URI uri;
+    	HttpContext httpContext = new BasicHttpContext();
+
         // Get the request URL
         if (url == null) {
             if (LogConfig.DP_ERROR_LOGS_ENABLED) {
@@ -301,11 +340,11 @@ public class NetworkConnection {
         }
 
         // Create the Request
-        final AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
+        AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
         if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request user agent : " + userAgent);
         }
-
+        
         try {
             HttpUriRequest request = null;
             switch (method) {
@@ -343,7 +382,7 @@ public class NetworkConnection {
                         }
                     }
 
-                    final URI uri = new URI(sb.toString());
+                    uri = new URI(sb.toString());
 
                     if (method == METHOD_GET) {
                         request = new HttpGet(uri);
@@ -355,7 +394,7 @@ public class NetworkConnection {
                     break;
                 }
                 case METHOD_POST: {
-                    final URI uri = new URI(url);
+                    uri = new URI(url);
                     request = new HttpPost(uri);
 
                     // Add the parameters to the POST request if any
@@ -423,12 +462,21 @@ public class NetworkConnection {
                 }
             }
 
+            // Set creds if provided
+            if (credentials != null) {
+            	final URL urlObj = uri.toURL();
+            	AuthScope scope = new AuthScope(urlObj.getHost(), urlObj.getPort());
+            	CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+            	credentialsProvider.setCredentials(scope, credentials);
+            	httpContext.setAttribute(ClientContext.CREDS_PROVIDER, credentialsProvider);
+            }
+            
             // Launch the request
             String result = null;
             if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "retrieveResponseFromService - Executing the request");
             }
-            final HttpResponse response = client.execute(request);
+            final HttpResponse response = client.execute(request, httpContext);
 
             // Get the response status
             final StatusLine status = response.getStatusLine();
