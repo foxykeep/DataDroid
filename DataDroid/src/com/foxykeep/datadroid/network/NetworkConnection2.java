@@ -8,10 +8,13 @@
 
 package com.foxykeep.datadroid.network;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.CompulsoryParameterException;
+import com.foxykeep.datadroid.internal.network.NetworkConnectionImplFY;
+import com.foxykeep.datadroid.internal.network.NetworkConnectionImplGB;
 
 import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -65,7 +68,7 @@ public final class NetworkConnection2 {
     public static class NetworkConnection2Builder {
         private String mUrl;
         private Method mMethod = Method.GET;
-        private HashMap<String, String> mParameters = null;
+        private HashMap<String, String> mParameterMap = null;
         private ArrayList<Header> mHeaderList = null;
         private boolean mIsGzipEnabled = true;
         private String mUserAgent = null;
@@ -98,11 +101,11 @@ public final class NetworkConnection2 {
         /**
          * Set the parameters to add to the request. This has to be a "key" => "value" Map.
          * 
-         * @param parameters The parameters to add to the request.
+         * @param parameterMap The parameters to add to the request.
          * @return The builder.
          */
-        public NetworkConnection2Builder setParameters(final HashMap<String, String> parameters) {
-            mParameters = parameters;
+        public NetworkConnection2Builder setParameters(final HashMap<String, String> parameterMap) {
+            mParameterMap = parameterMap;
             return this;
         }
 
@@ -181,14 +184,22 @@ public final class NetworkConnection2 {
             return this;
         }
 
-        // TODO add the exceptions and the code
+        // TODO add the exceptions
         /**
          * Execute the webservice call and return the {@link WebserviceResult}.
          * 
          * @return The result of the webservice call.
          */
         public WebserviceResult execute() {
-            return null;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+                return NetworkConnectionImplFY.execute(mUrl, mMethod, mParameterMap, mHeaderList,
+                        mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
+                        mIsSslValidationEnabled);
+            } else {
+                return NetworkConnectionImplGB.execute(mUrl, mMethod, mParameterMap, mHeaderList,
+                        mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
+                        mIsSslValidationEnabled);
+            }
         }
     }
 }
