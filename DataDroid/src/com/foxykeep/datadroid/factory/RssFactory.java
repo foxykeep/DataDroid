@@ -34,7 +34,11 @@ import javax.xml.parsers.SAXParserFactory;
  * 
  * @author Foxykeep
  */
-public class RssFactory {
+public final class RssFactory {
+
+    private RssFactory() {
+        // No public constructor
+    }
 
     public static RssFeed parseResult(final String wsResponse) throws ParserConfigurationException,
             SAXException, IOException {

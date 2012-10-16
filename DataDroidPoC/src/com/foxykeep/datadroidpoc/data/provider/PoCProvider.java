@@ -29,7 +29,7 @@ import com.foxykeep.datadroidpoc.data.provider.PoCContent.PhoneDao;
 
 import java.util.ArrayList;
 
-public class PoCProvider extends ContentProvider {
+public final class PoCProvider extends ContentProvider {
 
     private static final String LOG_TAG = PoCProvider.class.getSimpleName();
 

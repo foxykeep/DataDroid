@@ -21,7 +21,11 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class CityListWorker {
+public final class CityListWorker {
+
+    private CityListWorker() {
+        // No public constructor
+    }
 
     public static Bundle start() throws IllegalStateException, IOException, URISyntaxException,
             RestClientException,

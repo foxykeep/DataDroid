@@ -15,7 +15,11 @@ import com.foxykeep.datadroidpoc.config.SharedPrefsConfig;
 
 import java.util.UUID;
 
-public class UserManager {
+public final class UserManager {
+
+    private UserManager() {
+        // No public constructor
+    }
 
     public static String getUserId(final Context context) {
         final SharedPreferences sharedPrefs = context.getSharedPreferences(

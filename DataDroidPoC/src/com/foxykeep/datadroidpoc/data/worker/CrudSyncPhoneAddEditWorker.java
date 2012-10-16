@@ -24,7 +24,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-public class CrudSyncPhoneAddEditWorker {
+public final class CrudSyncPhoneAddEditWorker {
+
+    private CrudSyncPhoneAddEditWorker() {
+        // No public constructor
+    }
 
     public static Bundle start(final String userId, final long serverId, final String name,
             final String manufacturer, final String androidVersion,

@@ -32,7 +32,11 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public class PersonListWorker {
+public final class PersonListWorker {
+
+    private PersonListWorker() {
+        // No public constructor
+    }
 
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;

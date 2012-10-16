@@ -14,7 +14,11 @@ import com.foxykeep.datadroidpoc.data.model.Phone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PhoneAddEditFactory {
+public final class PhoneAddEditFactory {
+
+    private PhoneAddEditFactory() {
+        // No public constructor
+    }
 
     public static Phone parseResult(final String wsResponse) throws JSONException {
         final JSONObject parser = new JSONObject(wsResponse);

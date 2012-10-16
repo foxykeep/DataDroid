@@ -17,7 +17,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PersonListJsonFactory {
+public final class PersonListJsonFactory {
+
+    private PersonListJsonFactory() {
+        // No public constructor
+    }
 
     public static ArrayList<Person> parseResult(final String wsResponse) throws JSONException {
         final ArrayList<Person> personList = new ArrayList<Person>();

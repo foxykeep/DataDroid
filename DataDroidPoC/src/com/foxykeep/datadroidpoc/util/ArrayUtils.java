@@ -8,7 +8,11 @@
 
 package com.foxykeep.datadroidpoc.util;
 
-public class ArrayUtils {
+public final class ArrayUtils {
+
+    private ArrayUtils() {
+        // No public constructor
+    }
 
     /**
      * Checks whether the value is in the array or not. Functions only with type long.

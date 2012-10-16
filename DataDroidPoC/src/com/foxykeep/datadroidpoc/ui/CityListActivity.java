@@ -34,7 +34,7 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 
 import java.util.ArrayList;
 
-public class CityListActivity extends ListActivity implements OnRequestFinishedListener,
+public final class CityListActivity extends ListActivity implements OnRequestFinishedListener,
         OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";

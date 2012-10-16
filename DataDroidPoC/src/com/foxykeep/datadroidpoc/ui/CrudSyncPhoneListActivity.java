@@ -45,8 +45,8 @@ import com.foxykeep.datadroidpoc.util.UserManager;
 
 import java.util.ArrayList;
 
-public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener,
-        OnItemClickListener {
+public final class CrudSyncPhoneListActivity extends ListActivity implements
+        OnRequestFinishedListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_REQUEST_TYPE = "savedStateRequestType";

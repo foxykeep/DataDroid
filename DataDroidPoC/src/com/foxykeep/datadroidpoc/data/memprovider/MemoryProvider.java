@@ -14,7 +14,7 @@ import com.foxykeep.datadroidpoc.data.model.Phone;
 
 import java.util.ArrayList;
 
-public class MemoryProvider {
+public final class MemoryProvider {
 
     private static MemoryProvider sInstance;
 

@@ -23,7 +23,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-public class CrudSyncPhoneDeleteWorker {
+public final class CrudSyncPhoneDeleteWorker {
+
+    private CrudSyncPhoneDeleteWorker() {
+        // No public constructor
+    }
 
     public static Bundle start(final String userId, final String phoneIdList)
             throws IllegalStateException, IOException, URISyntaxException,

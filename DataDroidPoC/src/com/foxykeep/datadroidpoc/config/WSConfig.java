@@ -8,7 +8,11 @@
 
 package com.foxykeep.datadroidpoc.config;
 
-public class WSConfig {
+public final class WSConfig {
+
+    private WSConfig() {
+        // No public constructor
+    }
 
     public static final String ROOT_URL = "http://foxykeep.com/projects/datadroid/";
 

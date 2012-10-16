@@ -14,7 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PhoneDeleteFactory {
+public final class PhoneDeleteFactory {
+
+    private PhoneDeleteFactory() {
+        // No public constructor
+    }
 
     public static long[] parseResult(final String wsResponse) throws JSONException {
 

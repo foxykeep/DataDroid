@@ -31,7 +31,7 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequest
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFinishedListener {
+public final class CrudSyncPhoneViewActivity extends Activity implements OnRequestFinishedListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";

@@ -25,7 +25,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CrudSyncPhoneListWorker {
+public final class CrudSyncPhoneListWorker {
+
+    private CrudSyncPhoneListWorker() {
+        // No public constructor
+    }
 
     public static Bundle start(final String userId) throws IllegalStateException, IOException,
             URISyntaxException, RestClientException, JSONException {

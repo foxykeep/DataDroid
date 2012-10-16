@@ -8,7 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.model;
 
-public class Person {
+public final class Person {
 
     public String firstName;
     public String lastName;

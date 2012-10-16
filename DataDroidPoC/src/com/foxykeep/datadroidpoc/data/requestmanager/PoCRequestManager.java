@@ -32,7 +32,7 @@ import java.util.Random;
  * 
  * @author Foxykeep
  */
-public class PoCRequestManager extends RequestManager {
+public final class PoCRequestManager extends RequestManager {
 
     private static final int MAX_RANDOM_REQUEST_ID = 1000000;
 

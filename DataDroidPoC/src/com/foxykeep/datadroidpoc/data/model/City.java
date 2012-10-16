@@ -11,7 +11,7 @@ package com.foxykeep.datadroidpoc.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class City implements Parcelable {
+public final class City implements Parcelable {
 
     public String name;
     public int postalCode;

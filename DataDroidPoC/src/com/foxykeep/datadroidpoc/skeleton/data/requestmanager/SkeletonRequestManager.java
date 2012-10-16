@@ -29,7 +29,7 @@ import java.util.EventListener;
  * 
  * @author Foxykeep
  */
-public class SkeletonRequestManager extends RequestManager {
+public final class SkeletonRequestManager extends RequestManager {
 
     // TODO : This constant will be used in your special methods
     @SuppressWarnings("unused")

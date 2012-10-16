@@ -29,7 +29,7 @@ import com.foxykeep.datadroidpoc.skeleton.data.provider.SkeletonContent.Skeleton
 import java.util.ArrayList;
 
 // TODO : Change the className
-public class SkeletonProvider extends ContentProvider {
+public final class SkeletonProvider extends ContentProvider {
 
     private static final String LOG_TAG = SkeletonProvider.class.getSimpleName();
 

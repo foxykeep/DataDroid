@@ -36,9 +36,8 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class PersonListActivity extends ListActivity implements OnRequestFinishedListener,
-        AsyncQueryListener,
-        OnClickListener {
+public final class PersonListActivity extends ListActivity implements OnRequestFinishedListener,
+        AsyncQueryListener, OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";

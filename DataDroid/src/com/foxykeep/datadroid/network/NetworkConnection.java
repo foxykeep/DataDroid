@@ -61,7 +61,7 @@ import java.util.zip.GZIPInputStream;
  */
 @SuppressLint("NewApi")
 @Deprecated
-public class NetworkConnection {
+public final class NetworkConnection {
 
     private static final String LOG_TAG = NetworkConnection.class.getSimpleName();
 

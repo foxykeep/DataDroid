@@ -17,7 +17,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PhoneListFactory {
+public final class PhoneListFactory {
+
+    private PhoneListFactory() {
+        // No public constructor
+    }
 
     public static ArrayList<Phone> parseResult(final String wsResponse) throws JSONException {
         final ArrayList<Phone> phoneList = new ArrayList<Phone>();

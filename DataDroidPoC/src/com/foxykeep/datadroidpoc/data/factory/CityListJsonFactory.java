@@ -20,7 +20,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CityListJsonFactory {
+public final class CityListJsonFactory {
+
+    private CityListJsonFactory() {
+        // No public constructor
+    }
 
     public static Bundle parseResult(final String wsResponse) throws JSONException {
         final ArrayList<City> cityList = new ArrayList<City>();

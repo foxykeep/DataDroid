@@ -8,7 +8,11 @@
 
 package com.foxykeep.datadroidpoc.config;
 
-public class XMLTag {
+public final class XMLTag {
+
+    private XMLTag() {
+        // No public constructor
+    }
 
     // PersonList WS tags
     public static final String TAG_PERSON = "person";

@@ -21,7 +21,7 @@ import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestMan
  * 
  * @author Foxykeep
  */
-public class SkeletonService extends WorkerService {
+public final class SkeletonService extends WorkerService {
 
     private static final String LOG_TAG = SkeletonService.class.getSimpleName();
 

@@ -8,7 +8,11 @@
 
 package com.foxykeep.datadroidpoc.config;
 
-public class SharedPrefsConfig {
+public final class SharedPrefsConfig {
+
+    private SharedPrefsConfig() {
+        // No public constructor
+    }
 
     public static final String SHARED_PREFS_FILENAME = "com.foxykeep.datadroidpoc.config.sp";
 

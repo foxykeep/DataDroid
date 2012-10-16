@@ -25,7 +25,11 @@ import java.net.URISyntaxException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public class RssFeedWorker {
+public final class RssFeedWorker {
+
+    private RssFeedWorker() {
+        // No public constructor
+    }
 
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;

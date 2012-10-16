@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * 
  * @author Foxykeep
  */
-public class RssFeed implements Parcelable {
+public final class RssFeed implements Parcelable {
 
     // Required
     public String title;

@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * 
  * @author Foxykeep
  */
-public class RssItem implements Parcelable {
+public final class RssItem implements Parcelable {
 
     // Required
     public String title;

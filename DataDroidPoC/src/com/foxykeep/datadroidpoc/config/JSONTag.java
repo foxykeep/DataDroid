@@ -8,7 +8,11 @@
 
 package com.foxykeep.datadroidpoc.config;
 
-public class JSONTag {
+public final class JSONTag {
+
+    private JSONTag() {
+        // No public constructor
+    }
 
     // PersonList WS tags
     public static final String PERSON_LIST_ELEM_PERSONS = "persons";

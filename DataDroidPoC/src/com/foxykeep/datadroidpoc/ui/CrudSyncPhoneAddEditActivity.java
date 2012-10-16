@@ -33,9 +33,8 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequest
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestFinishedListener,
-        OnClickListener,
-        TextWatcher {
+public final class CrudSyncPhoneAddEditActivity extends Activity implements
+        OnRequestFinishedListener, OnClickListener, TextWatcher {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_REQUEST_TYPE = "savedStateRequestType";

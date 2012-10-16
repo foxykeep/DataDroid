@@ -17,7 +17,7 @@ import android.widget.Button;
 
 import com.foxykeep.datadroidpoc.R;
 
-public class HomeActivity extends Activity implements OnClickListener {
+public final class HomeActivity extends Activity implements OnClickListener {
 
     private Button mButtonPersonList;
     private Button mButtonCityList;

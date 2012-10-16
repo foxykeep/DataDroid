@@ -22,7 +22,7 @@ import com.foxykeep.datadroid.requestmanager.RequestManager;
  * 
  * @author Foxykeep
  */
-abstract public class WorkerService extends MultiThreadedIntentService {
+public abstract class WorkerService extends MultiThreadedIntentService {
 
     public static final String LOG_TAG = WorkerService.class.getSimpleName();
 

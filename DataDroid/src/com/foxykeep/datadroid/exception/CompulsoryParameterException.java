@@ -13,7 +13,7 @@ package com.foxykeep.datadroid.exception;
  * 
  * @author Foxykeep
  */
-public class CompulsoryParameterException extends RuntimeException {
+public final class CompulsoryParameterException extends RuntimeException {
 
     private static final long serialVersionUID = -6031863210486494461L;
 

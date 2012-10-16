@@ -10,7 +10,11 @@ package com.foxykeep.datadroid.provider.util;
 
 import android.database.sqlite.SQLiteDatabase;
 
-public class DatabaseUtil {
+public final class DatabaseUtil {
+
+    private DatabaseUtil() {
+        // No public constructor
+    }
 
     /**
      * Creates the string used by the database to create an index in a table. This string can be

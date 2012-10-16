@@ -11,9 +11,10 @@ package com.foxykeep.datadroidpoc.config;
 import com.foxykeep.datadroidpoc.BuildConfig;
 
 @SuppressWarnings("all")
-public class LogConfig {
+public final class LogConfig {
 
     private LogConfig() {
+        // No public constructor
     }
 
     /**

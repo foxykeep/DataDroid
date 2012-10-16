@@ -38,7 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * 
  * @author Foxykeep
  */
-public class PoCService extends WorkerService {
+public final class PoCService extends WorkerService {
 
     private static final String LOG_TAG = PoCService.class.getSimpleName();
 

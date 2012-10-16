@@ -13,7 +13,7 @@ package com.foxykeep.datadroid.exception;
  * 
  * @author Foxykeep
  */
-public class RestClientException extends Exception {
+public final class RestClientException extends Exception {
 
     private static final long serialVersionUID = 4658308128254827562L;
 

@@ -41,7 +41,7 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 
 import java.util.ArrayList;
 
-public class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener,
+public final class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener,
         OnClickListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
