@@ -1,11 +1,11 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroid.service;
 
 import android.content.Intent;
@@ -22,7 +22,7 @@ import com.foxykeep.datadroid.requestmanager.RequestManager;
  * 
  * @author Foxykeep
  */
-abstract public class WorkerService extends MultiThreadService {
+abstract public class WorkerService extends MultiThreadedIntentService {
 
     public static final String LOG_TAG = WorkerService.class.getSimpleName();
 
@@ -38,63 +38,68 @@ abstract public class WorkerService extends MultiThreadService {
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a success
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a success.
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
-     * @param data A {@link Bundle} with the data to send back
+     * @param data A {@link Bundle} with the data to send back.
      */
     protected void sendSuccess(final Intent intent, final Bundle data) {
         sendResult(intent, data, SUCCESS_CODE);
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure.
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
-     * @param data A {@link Bundle} the data to send back
+     * @param data A {@link Bundle} the data to send back.
      */
     protected void sendFailure(final Intent intent, final Bundle data) {
         sendResult(intent, data, ERROR_CODE);
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to the network
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to
+     * the network.
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
-     * @param data A {@link Bundle} the data to send back
+     * @param data A {@link Bundle} the data to send back.
      */
     protected void sendConnexionFailure(final Intent intent, Bundle data) {
         if (data == null) {
             data = new Bundle();
         }
-        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_CONNEXION);
+        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE,
+                RequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_CONNEXION);
         sendResult(intent, data, ERROR_CODE);
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to the data (parsing for example)
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to
+     * the data (parsing for example).
      * 
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
-     * @param data A {@link Bundle} the data to send back
+     * @param data A {@link Bundle} the data to send back.
      */
     protected void sendDataFailure(final Intent intent, Bundle data) {
         if (data == null) {
             data = new Bundle();
         }
-        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA);
+        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE,
+                RequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA);
         sendResult(intent, data, ERROR_CODE);
     }
 
     /**
-     * Method used to send back the result to the {@link RequestManager}
+     * Method used to send back the result to the {@link RequestManager}.
      * 
-     * @param intent The value passed to {@link onHandleIntent(Intent)}. It must contain the {@link ResultReceiver} and the requestId
-     * @param data A {@link Bundle} the data to send back
-     * @param code The sucess/error code to send back
+     * @param intent The value passed to {@link onHandleIntent(Intent)}. It must contain the
+     *            {@link ResultReceiver} and the requestId.
+     * @param data A {@link Bundle} the data to send back.
+     * @param code The success/error code to send back.
      */
     protected void sendResult(final Intent intent, Bundle data, final int code) {
 
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED && BuildConfig.DEBUG) {
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED && BuildConfig.DEBUG) {
             Log.d(LOG_TAG, "sendResult : " + ((code == SUCCESS_CODE) ? "Success" : "Failure"));
         }
 
@@ -105,7 +110,8 @@ abstract public class WorkerService extends MultiThreadService {
                 data = new Bundle();
             }
 
-            data.putInt(RequestManager.RECEIVER_EXTRA_REQUEST_ID, intent.getIntExtra(INTENT_EXTRA_REQUEST_ID, -1));
+            data.putInt(RequestManager.RECEIVER_EXTRA_REQUEST_ID,
+                    intent.getIntExtra(INTENT_EXTRA_REQUEST_ID, -1));
 
             receiver.send(code, data);
         }

@@ -1,26 +1,12 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroid.network;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Constructor;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
+package com.foxykeep.datadroid.network;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,6 +15,11 @@ import android.os.Looper;
 import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
+import com.foxykeep.datadroid.BuildConfig;
+import com.foxykeep.datadroid.config.LogConfig;
+import com.foxykeep.datadroid.exception.CompulsoryParameterException;
+import com.foxykeep.datadroid.exception.RestClientException;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
@@ -48,10 +39,19 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.CharArrayBuffer;
 
-import com.foxykeep.datadroid.BuildConfig;
-import com.foxykeep.datadroid.config.LogConfig;
-import com.foxykeep.datadroid.exception.CompulsoryParameterException;
-import com.foxykeep.datadroid.exception.RestClientException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Constructor;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
  * This class gives the user an API to easily call a webservice and return the received string.
@@ -71,8 +71,8 @@ public class NetworkConnection2 {
     private static String sDefaultUserAgent = null;
 
     /**
-     * By default the user agent is empty. If you want to use the standard Android user agent, call this method before using the
-     * <code>retrieveResponseFromService</code> methods
+     * By default the user agent is empty. If you want to use the standard Android user agent, call
+     * this method before using the <code>retrieveResponseFromService</code> methods
      * 
      * @param context The context
      */
@@ -82,7 +82,8 @@ public class NetworkConnection2 {
         }
 
         try {
-            Constructor<WebSettings> constructor = WebSettings.class.getDeclaredConstructor(Context.class, WebView.class);
+            Constructor<WebSettings> constructor = WebSettings.class.getDeclaredConstructor(
+                    Context.class, WebView.class);
             constructor.setAccessible(true);
             try {
                 WebSettings settings = constructor.newInstance(context, null);
@@ -110,7 +111,8 @@ public class NetworkConnection2 {
     }
 
     /**
-     * The result of a webservice call. Contain the Header and the body of the response as an unparsed String
+     * The result of a webservice call. Contain the Header and the body of the response as an
+     * unparsed String
      * 
      * @author Foxykeep
      */
@@ -145,8 +147,9 @@ public class NetworkConnection2 {
 
         public NetworkConnection2Builder(final String url) {
             if (url == null) {
-                if (LogConfig.DP_ERROR_LOGS_ENABLED && BuildConfig.DEBUG) {
-                    Log.e(LOG_TAG, "NetworkConnection2Builder - Compulsory Parameter : request URL has not been set");
+                if (LogConfig.DD_ERROR_LOGS_ENABLED && BuildConfig.DEBUG) {
+                    Log.e(LOG_TAG,
+                            "NetworkConnection2Builder - Compulsory Parameter : request URL has not been set");
                 }
                 throw new CompulsoryParameterException("Request URL has not been set");
             }
@@ -187,9 +190,11 @@ public class NetworkConnection2 {
         }
 
         /**
-         * Set whether the request will use gzip compression if available on the server. Default is true.
+         * Set whether the request will use gzip compression if available on the server. Default is
+         * true.
          * 
-         * @param isGzipEnabled Whether the request will user gzip compression if available on the server.
+         * @param isGzipEnabled Whether the request will user gzip compression if available on the
+         *            server.
          * @return The builder
          */
         public NetworkConnection2Builder setGzipEnabled(final boolean isGzipEnabled) {
@@ -209,8 +214,8 @@ public class NetworkConnection2 {
         }
 
         /**
-         * Set the POSTDATA text that will be added in the request. Also automatically set the {@link Method} to {@link Method#POST} to be able to use
-         * it
+         * Set the POSTDATA text that will be added in the request. Also automatically set the
+         * {@link Method} to {@link Method#POST} to be able to use it
          * 
          * @param postText The POSTDATA text that will be added in the request
          * @return The builder
@@ -227,45 +232,54 @@ public class NetworkConnection2 {
     }
 
     @SuppressLint("NewApi")
-    private static NetworkConnectionResult retrieveResponseFromService(final String url, final Method method, final Map<String, String> parameters,
-            final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent, final String postText,
-            final ArrayList<String> previousUrlList) throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+    private static NetworkConnectionResult retrieveResponseFromService(final String url,
+            final Method method, final Map<String, String> parameters,
+            final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent,
+            final String postText,
+            final ArrayList<String> previousUrlList) throws IllegalStateException, IOException,
+            URISyntaxException, RestClientException {
         // Get the request URL
         if (url == null) {
-            if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "retrieveResponseFromService - Compulsory Parameter : request URL has not been set");
+            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
+                Log.e(LOG_TAG,
+                        "retrieveResponseFromService - Compulsory Parameter : request URL has not been set");
             }
             throw new CompulsoryParameterException("Request URL has not been set");
         }
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request url : " + url);
         }
 
         // Get the request method
-        if (method != Method.GET && method != Method.POST && method != Method.PUT && method != Method.DELETE) {
-            if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
+        if (method != Method.GET && method != Method.POST && method != Method.PUT
+                && method != Method.DELETE) {
+            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
+                Log.e(LOG_TAG,
+                        "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
             }
             throw new IllegalArgumentException(
                     "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
         }
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request method : " + method);
         }
 
         // Get the request parameters
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
-            Log.d(LOG_TAG, "retrieveResponseFromService - Request parameters (number) : " + ((parameters != null) ? parameters.size() : ""));
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+            Log.d(LOG_TAG, "retrieveResponseFromService - Request parameters (number) : "
+                    + ((parameters != null) ? parameters.size() : ""));
         }
 
         // Get the request headers
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
-            Log.d(LOG_TAG, "retrieveResponseFromService - Request headers (number) : " + ((headers != null) ? headers.size() : ""));
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+            Log.d(LOG_TAG, "retrieveResponseFromService - Request headers (number) : "
+                    + ((headers != null) ? headers.size() : ""));
         }
 
         // Create the Request
-        final AndroidHttpClient client = AndroidHttpClient.newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
-        if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
+        final AndroidHttpClient client = AndroidHttpClient
+                .newInstance(userAgent != null ? userAgent : sDefaultUserAgent);
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
             Log.d(LOG_TAG, "retrieveResponseFromService - Request user agent : " + userAgent);
         }
 
@@ -295,13 +309,15 @@ public class NetworkConnection2 {
                         }
                     }
 
-                    if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                        Log.i(LOG_TAG, "retrieveResponseFromService - GET Request - complete URL with parameters if any : ");
+                    if (LogConfig.DD_INFO_LOGS_ENABLED) {
+                        Log.i(LOG_TAG,
+                                "retrieveResponseFromService - GET Request - complete URL with parameters if any : ");
                         final String completeUrl = sb.toString();
                         int pos = 0;
                         int dumpLength = completeUrl.length();
                         while (pos < dumpLength) {
-                            Log.i(LOG_TAG, completeUrl.substring(pos, Math.min(dumpLength - 1, pos + 120)));
+                            Log.i(LOG_TAG,
+                                    completeUrl.substring(pos, Math.min(dumpLength - 1, pos + 120)));
                             pos = pos + 120;
                         }
                     }
@@ -330,21 +346,25 @@ public class NetworkConnection2 {
 
                         for (int i = 0; i < keyListLength; i++) {
                             final String key = keyList.get(i);
-                            postRequestParameters.add(new BasicNameValuePair(key, parameters.get(key)));
+                            postRequestParameters.add(new BasicNameValuePair(key, parameters
+                                    .get(key)));
                         }
 
-                        if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                            Log.i(LOG_TAG, "retrieveResponseFromService - POST Request - parameters list (key => value) : ");
+                        if (LogConfig.DD_INFO_LOGS_ENABLED) {
+                            Log.i(LOG_TAG,
+                                    "retrieveResponseFromService - POST Request - parameters list (key => value) : ");
 
                             final int postRequestParametersLength = postRequestParameters.size();
                             for (int i = 0; i < postRequestParametersLength; i++) {
                                 final NameValuePair nameValuePair = postRequestParameters.get(i);
-                                Log.i(LOG_TAG, "- " + nameValuePair.getName() + " => " + nameValuePair.getValue());
+                                Log.i(LOG_TAG, "- " + nameValuePair.getName() + " => "
+                                        + nameValuePair.getValue());
                             }
                         }
 
                         request.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
-                        ((HttpPost) request).setEntity(new UrlEncodedFormEntity(postRequestParameters, "UTF-8"));
+                        ((HttpPost) request).setEntity(new UrlEncodedFormEntity(
+                                postRequestParameters, "UTF-8"));
                     } else if (null != postText) { // Add post text (send xml
                                                    // for
                         // example)
@@ -353,8 +373,9 @@ public class NetworkConnection2 {
                     break;
                 }
                 default: {
-                    if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                        Log.e(LOG_TAG, "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
+                    if (LogConfig.DD_ERROR_LOGS_ENABLED) {
+                        Log.e(LOG_TAG,
+                                "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
                     }
                     throw new IllegalArgumentException(
                             "retrieveResponseFromService - Request method must be Method.GET, Method.POST, Method.PUT or Method.DELETE");
@@ -366,8 +387,9 @@ public class NetworkConnection2 {
                 AndroidHttpClient.modifyRequestToAcceptGzipResponse(request);
             }
 
-            if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                Log.i(LOG_TAG, "retrieveResponseFromService - Request - headers list (name => value) : ");
+            if (LogConfig.DD_INFO_LOGS_ENABLED) {
+                Log.i(LOG_TAG,
+                        "retrieveResponseFromService - Request - headers list (name => value) : ");
 
                 final HeaderIterator iterator = request.headerIterator();
                 while (iterator.hasNext()) {
@@ -388,38 +410,47 @@ public class NetworkConnection2 {
 
             // Launch the request
             String result = null;
-            if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
+            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "retrieveResponseFromService - Executing the request");
             }
             final HttpResponse response = client.execute(request);
 
             // Get the response status
             final StatusLine status = response.getStatusLine();
-            if (LogConfig.DP_DEBUG_LOGS_ENABLED) {
-                Log.d(LOG_TAG, "retrieveResponseFromService - Response status : " + status.getStatusCode());
+            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+                Log.d(LOG_TAG,
+                        "retrieveResponseFromService - Response status : " + status.getStatusCode());
             }
             final int statusCode = status.getStatusCode();
             if (statusCode != HttpStatus.SC_OK) {
-                if (LogConfig.DP_ERROR_LOGS_ENABLED) {
-                    Log.e(LOG_TAG, "retrieveResponseFromService - Invalid response from server : " + status.toString());
+                if (LogConfig.DD_ERROR_LOGS_ENABLED) {
+                    Log.e(LOG_TAG, "retrieveResponseFromService - Invalid response from server : "
+                            + status.toString());
                 }
                 if (statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
                     final Header newLocation = response.getFirstHeader("Location");
-                    if (LogConfig.DP_INFO_LOGS_ENABLED) {
-                        Log.i(LOG_TAG, "retrieveResponseFromService - New location : " + newLocation.getValue());
+                    if (LogConfig.DD_INFO_LOGS_ENABLED) {
+                        Log.i(LOG_TAG, "retrieveResponseFromService - New location : "
+                                + newLocation.getValue());
                     }
-                    throw new RestClientException("New location : " + newLocation, newLocation.getValue());
+                    throw new RestClientException("New location : " + newLocation,
+                            newLocation.getValue());
                 } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY) {
                     if (method == Method.GET) {
                         final String newUrl = response.getHeaders("Location")[0].getValue();
                         if (!previousUrlList.contains(newUrl)) {
-                            Log.d(LOG_TAG, "retrieveResponseFromService - Url moved permanently - Trying the new url : " + newUrl);
+                            Log.d(LOG_TAG,
+                                    "retrieveResponseFromService - Url moved permanently - Trying the new url : "
+                                            + newUrl);
                             previousUrlList.add(newUrl);
                             // TODO
-                            // return retrieveResponseFromService(newUrl, method, parameters, headers, isGzipEnabled, userAgent, postText);
+                            // return retrieveResponseFromService(newUrl, method, parameters,
+                            // headers, isGzipEnabled, userAgent, postText);
                         } else {
-                            // It's an url already checked. We are in a loop. So let's throw an Exception
-                            throw new RestClientException("Moved permanently - Loop detected", statusCode);
+                            // It's an url already checked. We are in a loop. So let's throw an
+                            // Exception
+                            throw new RestClientException("Moved permanently - Loop detected",
+                                    statusCode);
                         }
                     } else {
                         throw new RestClientException("Invalid response from server : ", statusCode);
@@ -435,11 +466,12 @@ public class NetworkConnection2 {
             final Header contentEncoding = response.getFirstHeader("Content-Encoding");
 
             if (entity != null) {
-                result = convertStreamToString(entity.getContent(), contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"),
+                result = convertStreamToString(entity.getContent(), contentEncoding != null
+                        && contentEncoding.getValue().equalsIgnoreCase("gzip"),
                         method, (int) entity.getContentLength());
             }
 
-            if (LogConfig.DP_INFO_LOGS_ENABLED) {
+            if (LogConfig.DD_INFO_LOGS_ENABLED) {
                 Log.i(LOG_TAG, "retrieveResponseFromService - Result from webservice : " + result);
             }
 
@@ -457,7 +489,8 @@ public class NetworkConnection2 {
      * @return String from the InputStream
      * @throws IOException If a problem occurs while reading the InputStream
      */
-    private static String convertStreamToString(final InputStream is, final boolean isGzipEnabled, final Method method, final int contentLength)
+    private static String convertStreamToString(final InputStream is, final boolean isGzipEnabled,
+            final Method method, final int contentLength)
             throws IOException {
         InputStream cleanedIs = is;
         if (isGzipEnabled) {
@@ -469,7 +502,8 @@ public class NetworkConnection2 {
                 case GET:
                 case PUT:
                 case DELETE: {
-                    final BufferedReader reader = new BufferedReader(new InputStreamReader(cleanedIs));
+                    final BufferedReader reader = new BufferedReader(new InputStreamReader(
+                            cleanedIs));
                     final StringBuilder sb = new StringBuilder();
 
                     String line = null;

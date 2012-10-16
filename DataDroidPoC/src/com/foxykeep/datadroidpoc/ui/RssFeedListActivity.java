@@ -1,14 +1,12 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroidpoc.ui;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroidpoc.ui;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -41,7 +39,10 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 
-public class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener, OnClickListener, OnItemClickListener {
+import java.util.ArrayList;
+
+public class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener,
+        OnClickListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -187,11 +188,12 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
                 b = new Builder(this);
                 b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        callRssFeedWS();
-                    }
-                });
+                b.setPositiveButton(getString(R.string.dialog_button_retry),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                callRssFeedWS();
+                            }
+                        });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
@@ -218,7 +220,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
 
         setProgressBarIndeterminateVisibility(true);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getRssFeed(mFeedUrlArray[mSpinnerFeedUrl.getSelectedItemPosition()]);
+        mRequestId = mRequestManager.getRssFeed(mFeedUrlArray[mSpinnerFeedUrl
+                .getSelectedItemPosition()]);
     }
 
     @Override
@@ -232,7 +235,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
     }
 
     @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
+            final long id) {
 
         final RssItem rssItem = ((RssItemListAdapter) parent.getAdapter()).getItem(position);
         if (rssItem != null) {
@@ -248,7 +252,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
-                    final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
+                    final int errorType = payload.getInt(
+                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
@@ -260,7 +265,8 @@ public class RssFeedListActivity extends ListActivity implements OnRequestFinish
                     showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                 }
             } else {
-                final RssFeed rssFeed = payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_RSS_FEED_DATA);
+                final RssFeed rssFeed = payload
+                        .getParcelable(PoCRequestManager.RECEIVER_EXTRA_RSS_FEED_DATA);
 
                 final RssItemListAdapter adapter = (RssItemListAdapter) getListAdapter();
                 adapter.setNotifyOnChange(false);

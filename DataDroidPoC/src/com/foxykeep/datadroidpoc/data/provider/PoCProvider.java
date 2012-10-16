@@ -1,14 +1,12 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroidpoc.data.provider;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroidpoc.data.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -29,6 +27,8 @@ import com.foxykeep.datadroidpoc.config.LogConfig;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PhoneDao;
 
+import java.util.ArrayList;
+
 public class PoCProvider extends ContentProvider {
 
     private static final String LOG_TAG = PoCProvider.class.getSimpleName();
@@ -41,7 +41,8 @@ public class PoCProvider extends ContentProvider {
 
     public static final String AUTHORITY = "com.foxykeep.datadroidpoc.data.provider.PoCProvider";
 
-    public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY + "/integrityCheck");
+    public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY
+            + "/integrityCheck");
 
     private static final int PERSON_BASE = 0;
     private static final int PERSON = PERSON_BASE;
@@ -64,21 +65,21 @@ public class PoCProvider extends ContentProvider {
     static {
         final UriMatcher matcher = sURIMatcher;
 
-        // All persons
+        // All persons.
         matcher.addURI(AUTHORITY, PersonDao.TABLE_NAME, PERSON);
-        // A specific person
+        // A specific person.
         matcher.addURI(AUTHORITY, PersonDao.TABLE_NAME + "/#", PERSON_ID);
 
-        // All phones
+        // All phones.
         matcher.addURI(AUTHORITY, PhoneDao.TABLE_NAME, PHONE);
-        // A specific phone
+        // A specific phone.
         matcher.addURI(AUTHORITY, PhoneDao.TABLE_NAME + "/#", PHONE_ID);
     }
 
     private SQLiteDatabase mDatabase;
 
     public synchronized SQLiteDatabase getDatabase(final Context context) {
-        // Always return the cached database, if we've got one
+        // Always return the cached database, if we've got one.
         if (mDatabase != null) {
             return mDatabase;
         }
@@ -107,7 +108,7 @@ public class PoCProvider extends ContentProvider {
         public void onCreate(final SQLiteDatabase db) {
             Log.d(LOG_TAG, "Creating database");
 
-            // Creates all tables here; each class has its own method
+            // Creates all tables here; each class has its own method.
             if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "PoCProvider | createPersonTable start");
             }
@@ -137,7 +138,7 @@ public class PoCProvider extends ContentProvider {
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
 
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         String id = "0";
@@ -189,7 +190,7 @@ public class PoCProvider extends ContentProvider {
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
 
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         long id;
@@ -211,13 +212,14 @@ public class PoCProvider extends ContentProvider {
         }
 
         // Notify with the base uri, not the new uri (nobody is watching a new
-        // record)
+        // record).
         getContext().getContentResolver().notifyChange(uri, null);
         return resultUri;
     }
 
     @Override
-    public ContentProviderResult[] applyBatch(final ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+    public ContentProviderResult[] applyBatch(final ArrayList<ContentProviderOperation> operations)
+            throws OperationApplicationException {
         final SQLiteDatabase db = getDatabase(getContext());
         db.beginTransaction();
         try {
@@ -234,7 +236,8 @@ public class PoCProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
+    public Cursor query(final Uri uri, final String[] projection, final String selection,
+            final String[] selectionArgs, final String sortOrder) {
 
         Cursor c = null;
         final Uri notificationUri = PoCContent.CONTENT_URI;
@@ -253,11 +256,13 @@ public class PoCProvider extends ContentProvider {
             case PERSON_ID:
             case PHONE_ID:
                 id = uri.getPathSegments().get(1);
-                c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null, sortOrder);
+                c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection),
+                        selectionArgs, null, null, sortOrder);
                 break;
             case PERSON:
             case PHONE:
-                c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);
+                c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null,
+                        sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -283,11 +288,12 @@ public class PoCProvider extends ContentProvider {
     }
 
     @Override
-    public int update(final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
+    public int update(final Uri uri, final ContentValues values, final String selection,
+            final String[] selectionArgs) {
 
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         int result;
@@ -300,7 +306,8 @@ public class PoCProvider extends ContentProvider {
             case PERSON_ID:
             case PHONE_ID:
                 final String id = uri.getPathSegments().get(1);
-                result = db.update(TABLE_NAMES[table], values, whereWithId(id, selection), selectionArgs);
+                result = db.update(TABLE_NAMES[table], values, whereWithId(id, selection),
+                        selectionArgs);
                 break;
             case PERSON:
             case PHONE:

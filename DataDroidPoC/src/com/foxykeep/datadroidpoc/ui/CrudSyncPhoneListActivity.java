@@ -1,14 +1,12 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroidpoc.ui;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroidpoc.ui;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -45,7 +43,10 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.ArrayUtils;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener, OnItemClickListener {
+import java.util.ArrayList;
+
+public class CrudSyncPhoneListActivity extends ListActivity implements OnRequestFinishedListener,
+        OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_REQUEST_TYPE = "savedStateRequestType";
@@ -125,7 +126,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 mRequestManager.addOnRequestFinishedListener(this);
                 if (mRequestType == REQUEST_TYPE_LIST) {
                     setProgressBarIndeterminateVisibility(true);
-                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL
+                        || mRequestType == REQUEST_TYPE_DELETE_MONO) {
                     showDialog(DialogConfig.DIALOG_PROGRESS);
                 }
             } else {
@@ -151,7 +153,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                         }
                         adapter.notifyDataSetChanged();
                     }
-                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL
+                        || mRequestType == REQUEST_TYPE_DELETE_MONO) {
                     if (mMemoryProvider.syncPhoneDeleteData == null) {
                         showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                     } else {
@@ -233,17 +236,18 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 b = new Builder(this);
                 b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        if (mRequestType == REQUEST_TYPE_LIST) {
-                            callSyncPhoneListWS();
-                        } else if (mRequestType == REQUEST_TYPE_DELETE_ALL) {
-                            callSyncPhoneDeleteAllWS();
-                        } else if (mRequestType == REQUEST_TYPE_DELETE_MONO) {
-                            callSyncPhoneDeleteMonoWS();
-                        }
-                    }
-                });
+                b.setPositiveButton(getString(R.string.dialog_button_retry),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                if (mRequestType == REQUEST_TYPE_LIST) {
+                                    callSyncPhoneListWS();
+                                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL) {
+                                    callSyncPhoneDeleteAllWS();
+                                } else if (mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                                    callSyncPhoneDeleteMonoWS();
+                                }
+                            }
+                        });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
@@ -274,7 +278,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 b = new Builder(this);
                 b.setIcon(android.R.drawable.ic_dialog_alert);
                 b.setTitle(R.string.crud_phone_list_dialog_delete_confirm_title);
-                b.setMessage(getString(R.string.crud_phone_list_dialog_delete_confirm_message, phone.name));
+                b.setMessage(getString(R.string.crud_phone_list_dialog_delete_confirm_message,
+                        phone.name));
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -297,7 +302,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                 ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
                 break;
             case DialogConfig.DIALOG_DELETE_CONFIRM:
-                ((AlertDialog) dialog).setMessage(getString(R.string.crud_phone_list_dialog_delete_confirm_message,
+                ((AlertDialog) dialog).setMessage(getString(
+                        R.string.crud_phone_list_dialog_delete_confirm_message,
                         ((PhoneListAdapter) getListAdapter()).getItem(mPositionToDelete).name));
                 break;
             default:
@@ -311,7 +317,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         switch (requestCode) {
             case ACTIVITY_FOR_RESULT_VIEW: {
                 if (resultCode == RESULT_OK) {
-                    final long deletedPhoneId = data.getLongExtra(RESULT_EXTRA_DELETED_PHONE_ID, -1);
+                    final long deletedPhoneId = data
+                            .getLongExtra(RESULT_EXTRA_DELETED_PHONE_ID, -1);
                     final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
 
                     if (deletedPhoneId != -1) {
@@ -399,7 +406,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.menu_add:
-                startActivityForResult(new Intent(this, CrudSyncPhoneAddEditActivity.class), ACTIVITY_FOR_RESULT_ADD);
+                startActivityForResult(new Intent(this, CrudSyncPhoneAddEditActivity.class),
+                        ACTIVITY_FOR_RESULT_ADD);
                 return true;
             case R.id.menu_delete_all:
                 showDialog(DialogConfig.DIALOG_DELETE_ALL_CONFIRM);
@@ -418,7 +426,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
 
     private void callSyncPhoneDeleteMonoWS() {
         mRequestType = REQUEST_TYPE_DELETE_MONO;
-        callSyncPhoneDeleteWS(String.valueOf(((PhoneListAdapter) getListAdapter()).getItem(mPositionToDelete).serverId));
+        callSyncPhoneDeleteWS(String.valueOf(((PhoneListAdapter) getListAdapter())
+                .getItem(mPositionToDelete).serverId));
     }
 
     private void callSyncPhoneDeleteAllWS() {
@@ -442,7 +451,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     }
 
     @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
+            final long id) {
         if (parent == getListView()) {
             Intent intent = new Intent(this, CrudSyncPhoneViewActivity.class);
             intent.putExtra(CrudSyncPhoneViewActivity.INTENT_EXTRA_PHONE,
@@ -452,12 +462,14 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
     }
 
     @Override
-    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v,
+            final ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.crud_phone_list_context, menu);
 
-        menu.setHeaderTitle(((PhoneListAdapter) getListAdapter()).getItem(((AdapterContextMenuInfo) menuInfo).position).name);
+        menu.setHeaderTitle(((PhoneListAdapter) getListAdapter())
+                .getItem(((AdapterContextMenuInfo) menuInfo).position).name);
     }
 
     @Override
@@ -487,14 +499,16 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
         if (requestId == mRequestId) {
             if (mRequestType == REQUEST_TYPE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
-            } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+            } else if (mRequestType == REQUEST_TYPE_DELETE_ALL
+                    || mRequestType == REQUEST_TYPE_DELETE_MONO) {
                 dismissDialog(DialogConfig.DIALOG_PROGRESS);
             }
             mRequestId = -1;
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
-                    final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
+                    final int errorType = payload.getInt(
+                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
@@ -523,7 +537,8 @@ public class CrudSyncPhoneListActivity extends ListActivity implements OnRequest
                         adapter.add(phone);
                     }
                     adapter.notifyDataSetChanged();
-                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL || mRequestType == REQUEST_TYPE_DELETE_MONO) {
+                } else if (mRequestType == REQUEST_TYPE_DELETE_ALL
+                        || mRequestType == REQUEST_TYPE_DELETE_MONO) {
                     final long[] syncDeletedPhoneIdArray = payload
                             .getLongArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_DELETE_DATA);
 

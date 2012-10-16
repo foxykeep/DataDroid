@@ -1,25 +1,17 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.data.service;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.xml.sax.SAXException;
 
 import com.foxykeep.datadroid.exception.RestClientException;
 import com.foxykeep.datadroid.network.NetworkConnection;
@@ -32,9 +24,17 @@ import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneListWorker;
 import com.foxykeep.datadroidpoc.data.worker.PersonListWorker;
 import com.foxykeep.datadroidpoc.data.worker.RssFeedWorker;
 
+import org.json.JSONException;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 /**
- * This class is called by the {@link PoCRequestManager} through the {@link Intent} system. Get the parameters stored in the {@link Intent} and call
- * the right Worker.
+ * This class is called by the {@link PoCRequestManager} through the {@link Intent} system. Get the
+ * parameters stored in the {@link Intent} and call the right Worker.
  * 
  * @author Foxykeep
  */
@@ -42,10 +42,10 @@ public class PoCService extends WorkerService {
 
     private static final String LOG_TAG = PoCService.class.getSimpleName();
 
-    // Max number of parallel threads used
+    // Max number of parallel threads used.
     private static final int MAX_THREADS = 3;
 
-    // Worker types
+    // Worker types.
     public static final int WORKER_TYPE_PERSON_LIST = 0;
     public static final int WORKER_TYPE_CITY_LIST = 1;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_LIST = 2;
@@ -54,22 +54,22 @@ public class PoCService extends WorkerService {
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_EDIT = 5;
     public static final int WORKER_TYPE_RSS_FEED = 10;
 
-    // Worker params
-    // - PersonList WS params
+    // Worker params.
+    // - PersonList WS params.
     public static final String INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT = "com.foxykeep.datadroidpoc.extras.personsReturnFormat";
-    // - CrudSyncPhoneList WS params
+    // - CrudSyncPhoneList WS params.
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneListUserId";
-    // - CrudSyncPhoneDelete WS params
+    // - CrudSyncPhoneDelete WS params.
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneDeleteUserId";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST = "com.foxykeep.datadroidpoc.extras.crudPhoneDeletePhoneIdList";
-    // - CrudSyncPhoneAdd WS params
+    // - CrudSyncPhoneAdd WS params.
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneAddUserId";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME = "com.foxykeep.datadroidpoc.extras.crudPhoneAddName";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER = "com.foxykeep.datadroidpoc.extras.crudPhoneAddManufacturer";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION = "com.foxykeep.datadroidpoc.extras.crudPhoneAddAndroidVersion";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.crudPhoneAddScreenSize";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE = "com.foxykeep.datadroidpoc.extras.crudPhoneAddPrice";
-    // - CrudSyncPhoneEdit WS params
+    // - CrudSyncPhoneEdit WS params.
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneEditUserId";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ID = "com.foxykeep.datadroidpoc.extras.crudPhoneEditId";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME = "com.foxykeep.datadroidpoc.extras.crudPhoneEditName";
@@ -77,7 +77,7 @@ public class PoCService extends WorkerService {
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION = "com.foxykeep.datadroidpoc.extras.crudPhoneEditAndroidVersion";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.crudPhoneEditScreenSize";
     public static final String INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_PRICE = "com.foxykeep.datadroidpoc.extras.crudPhoneEditPrice";
-    // - RssFeed WS params
+    // - RssFeed WS params.
     public static final String INTENT_EXTRA_RSS_FEED_URL = "com.foxykeep.datadroidpoc.extras.rssFeedUrl";
 
     public PoCService() {
@@ -86,7 +86,8 @@ public class PoCService extends WorkerService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
-        // This line will generate the Android User Agent which will be used in your webservice calls if you don't specify a special one
+        // This line will generate the Android User Agent which will be used in your webservice
+        // calls if you don't specify a special one.
         NetworkConnection.generateDefaultUserAgent(this);
 
         final int workerType = intent.getIntExtra(INTENT_EXTRA_WORKER_TYPE, -1);
@@ -94,44 +95,54 @@ public class PoCService extends WorkerService {
         try {
             switch (workerType) {
                 case WORKER_TYPE_PERSON_LIST:
-                    PersonListWorker.start(this, intent.getIntExtra(INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, PersonListWorker.RETURN_FORMAT_XML));
+                    PersonListWorker.start(this, intent.getIntExtra(
+                            INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT,
+                            PersonListWorker.RETURN_FORMAT_XML));
                     sendSuccess(intent, null);
                     break;
                 case WORKER_TYPE_CITY_LIST:
                     sendSuccess(intent, CityListWorker.start());
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
-                    sendSuccess(intent, CrudSyncPhoneListWorker.start(intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID)));
+                    sendSuccess(intent, CrudSyncPhoneListWorker.start(intent
+                            .getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_LIST_USER_ID)));
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
                     sendSuccess(
                             intent,
-                            CrudSyncPhoneDeleteWorker.start(intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
+                            CrudSyncPhoneDeleteWorker.start(
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_USER_ID),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_DELETE_PHONE_ID_LIST)));
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
                     sendSuccess(
                             intent,
-                            CrudSyncPhoneAddEditWorker.start(intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID), -1,
+                            CrudSyncPhoneAddEditWorker.start(
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_USER_ID),
+                                    -1,
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_NAME),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_MANUFACTURER),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_ANDROID_VERSION),
-                                    intent.getDoubleExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, -1),
+                                    intent.getDoubleExtra(
+                                            INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_SCREEN_SIZE, -1),
                                     intent.getIntExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_ADD_PRICE, -1)));
                     break;
                 case WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
                     sendSuccess(
                             intent,
-                            CrudSyncPhoneAddEditWorker.start(intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID),
+                            CrudSyncPhoneAddEditWorker.start(
+                                    intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_USER_ID),
                                     intent.getLongExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ID, -1),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_NAME),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_MANUFACTURER),
                                     intent.getStringExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_ANDROID_VERSION),
-                                    intent.getDoubleExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE, -1),
+                                    intent.getDoubleExtra(
+                                            INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_SCREEN_SIZE, -1),
                                     intent.getIntExtra(INTENT_EXTRA_CRUD_SYNC_PHONE_EDIT_PRICE, -1)));
                     break;
                 case WORKER_TYPE_RSS_FEED:
-                    sendSuccess(intent, RssFeedWorker.start(intent.getStringExtra(INTENT_EXTRA_RSS_FEED_URL)));
+                    sendSuccess(intent,
+                            RssFeedWorker.start(intent.getStringExtra(INTENT_EXTRA_RSS_FEED_URL)));
             }
         } catch (final IllegalStateException e) {
             Log.e(LOG_TAG, "IllegalStateException", e);
@@ -161,12 +172,10 @@ public class PoCService extends WorkerService {
             Log.e(LOG_TAG, "OperationApplicationException", e);
             sendDataFailure(intent, null);
         }
-        // This block (which should be the last one in your implementation)
-        // will catch all the RuntimeException and send you back an error
-        // that you can manage. If you remove this catch, the
-        // RuntimeException will still crash the PoCService but you will not be
-        // informed (as it is in 'background') so you should never remove this
-        // catch
+        // This block (which should be the last one in your implementation) will catch all the
+        // RuntimeException and send you back an error that you can manage. If you remove this
+        // catch, the RuntimeException will still crash the PoCService but you will not be informed
+        // (as it is in 'background') so you should not remove this catch.
         catch (final RuntimeException e) {
             Log.e(LOG_TAG, "RuntimeException", e);
             sendDataFailure(intent, null);

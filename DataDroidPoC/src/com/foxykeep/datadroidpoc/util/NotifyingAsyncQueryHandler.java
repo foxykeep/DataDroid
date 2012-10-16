@@ -1,22 +1,22 @@
-/*
+/**
+ * <pre>
  * Copyright (C) 2009 The Android Open Source Project
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * </pre>
  */
 
 package com.foxykeep.datadroidpoc.util;
-
-import java.lang.ref.WeakReference;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
@@ -25,15 +25,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import java.lang.ref.WeakReference;
+
 /**
- * Slightly more abstract {@link AsyncQueryHandler} that helps keep a
- * {@link WeakReference} back to a listener. Will properly close any
- * {@link Cursor} if the listener ceases to exist.
+ * Slightly more abstract {@link AsyncQueryHandler} that helps keep a {@link WeakReference} back to
+ * a listener. Will properly close any {@link Cursor} if the listener ceases to exist.
  * <p>
- * This pattern can be used to perform background queries without leaking
- * {@link Context} objects.
- * 
- * @hide pending API council review
+ * This pattern can be used to perform background queries without leaking {@link Context} objects.
  */
 public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
     private WeakReference<AsyncQueryListener> mListener;
@@ -45,14 +43,15 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
         void onQueryComplete(int token, Object cookie, Cursor cursor);
     }
 
-    public NotifyingAsyncQueryHandler(final ContentResolver resolver, final AsyncQueryListener listener) {
+    public NotifyingAsyncQueryHandler(final ContentResolver resolver,
+            final AsyncQueryListener listener) {
         super(resolver);
         setQueryListener(listener);
     }
 
     /**
-     * Assign the given {@link AsyncQueryListener} to receive query events from
-     * asynchronous calls. Will replace any existing listener.
+     * Assign the given {@link AsyncQueryListener} to receive query events from asynchronous calls.
+     * Will replace any existing listener.
      */
     public void setQueryListener(final AsyncQueryListener listener) {
         mListener = new WeakReference<AsyncQueryListener>(listener);
@@ -68,8 +67,8 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
 
     /**
      * Begin an asynchronous query with the given arguments. When finished,
-     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called
-     * if a valid {@link AsyncQueryListener} is present.
+     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
+     * {@link AsyncQueryListener} is present.
      */
     public void startQuery(final Uri uri, final String[] projection) {
         startQuery(-1, null, uri, projection, null, null, null);
@@ -77,8 +76,8 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
 
     /**
      * Begin an asynchronous query with the given arguments. When finished,
-     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called
-     * if a valid {@link AsyncQueryListener} is present.
+     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
+     * {@link AsyncQueryListener} is present.
      * 
      * @param token Unique identifier passed through to
      *            {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)}
@@ -89,8 +88,8 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
 
     /**
      * Begin an asynchronous query with the given arguments. When finished,
-     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called
-     * if a valid {@link AsyncQueryListener} is present.
+     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
+     * {@link AsyncQueryListener} is present.
      */
     public void startQuery(final Uri uri, final String[] projection, final String sortOrder) {
         startQuery(-1, null, uri, projection, null, null, sortOrder);
@@ -98,8 +97,8 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
 
     /**
      * Begin an asynchronous query with the given arguments. When finished,
-     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called
-     * if a valid {@link AsyncQueryListener} is present.
+     * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
+     * {@link AsyncQueryListener} is present.
      */
     public void startQuery(final Uri uri, final String[] projection, final String selection,
             final String[] selectionArgs, final String orderBy) {

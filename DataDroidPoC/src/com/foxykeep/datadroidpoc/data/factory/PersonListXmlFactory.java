@@ -1,12 +1,21 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.data.factory;
+
+import com.foxykeep.datadroidpoc.config.XMLTag;
+import com.foxykeep.datadroidpoc.data.model.Person;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,18 +25,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-
-import com.foxykeep.datadroidpoc.config.XMLTag;
-import com.foxykeep.datadroidpoc.data.model.Person;
-
 public class PersonListXmlFactory {
 
-    public static ArrayList<Person> parseResult(final String wsContent) throws ParserConfigurationException,
+    public static ArrayList<Person> parseResult(final String wsContent)
+            throws ParserConfigurationException,
             SAXException, IOException {
 
         SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -62,7 +63,8 @@ class PersonHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
+    public void endElement(final String namespaceURI, final String localName, final String qName)
+            throws SAXException {
 
         if (localName.equals(XMLTag.TAG_PERSON)) {
             mPersonList.add(mCurrentPerson);

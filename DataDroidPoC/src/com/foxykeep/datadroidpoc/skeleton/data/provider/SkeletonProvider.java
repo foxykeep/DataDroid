@@ -1,14 +1,12 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroidpoc.skeleton.data.provider;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroidpoc.skeleton.data.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -28,6 +26,8 @@ import android.util.Log;
 import com.foxykeep.datadroidpoc.config.LogConfig;
 import com.foxykeep.datadroidpoc.skeleton.data.provider.SkeletonContent.Skeleton;
 
+import java.util.ArrayList;
+
 // TODO : Change the className
 public class SkeletonProvider extends ContentProvider {
 
@@ -43,7 +43,8 @@ public class SkeletonProvider extends ContentProvider {
     // TODO : Set the authority
     public static final String AUTHORITY = "com.foxykeep.datadroidpoc.skeleton.data.provider.SkeletonProvider";
 
-    public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY + "/integrityCheck");
+    public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY
+            + "/integrityCheck");
 
     // TODO : Create the uri constants using the model
     private static final int SKELETON_BASE = 0;
@@ -61,7 +62,7 @@ public class SkeletonProvider extends ContentProvider {
 
     // TODO : add the table names
     private static final String[] TABLE_NAMES = {
-        Skeleton.TABLE_NAME
+            Skeleton.TABLE_NAME
     };
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -70,16 +71,16 @@ public class SkeletonProvider extends ContentProvider {
         final UriMatcher matcher = sURIMatcher;
 
         // TODO : Add a match for each possible call
-        // All skeletons
+        // All skeletons.
         matcher.addURI(AUTHORITY, Skeleton.TABLE_NAME, SKELETON);
-        // A specific skeleton
+        // A specific skeleton.
         matcher.addURI(AUTHORITY, Skeleton.TABLE_NAME + "/#", SKELETON_ID);
     }
 
     private SQLiteDatabase mDatabase;
 
     public synchronized SQLiteDatabase getDatabase(final Context context) {
-        // Always return the cached database, if we've got one
+        // Always return the cached database, if we've got one.
         if (mDatabase != null) {
             return mDatabase;
         }
@@ -94,7 +95,8 @@ public class SkeletonProvider extends ContentProvider {
     }
 
     static SQLiteDatabase getReadableDatabase(final Context context) {
-        final DatabaseHelper helper = new SkeletonProvider().new DatabaseHelper(context, DATABASE_NAME);
+        final DatabaseHelper helper = new SkeletonProvider().new DatabaseHelper(context,
+                DATABASE_NAME);
         return helper.getReadableDatabase();
     }
 
@@ -109,7 +111,7 @@ public class SkeletonProvider extends ContentProvider {
             Log.d(LOG_TAG, "Creating database");
 
             // TODO : Add the calls to the methods created in SkeletonContent
-            // Creates all tables here; each class has its own method
+            // Creates all tables here; each class has its own method.
             if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
                 Log.d(LOG_TAG, "Skeleton | createTable start");
             }
@@ -136,7 +138,7 @@ public class SkeletonProvider extends ContentProvider {
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
 
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         String id = "0";
@@ -186,7 +188,7 @@ public class SkeletonProvider extends ContentProvider {
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
 
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         long id;
@@ -208,14 +210,14 @@ public class SkeletonProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        // Notify with the base uri, not the new uri (nobody is watching a new
-        // record)
+        // Notify with the base uri, not the new uri (nobody is watching a new record).
         getContext().getContentResolver().notifyChange(uri, null);
         return resultUri;
     }
 
     @Override
-    public ContentProviderResult[] applyBatch(final ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+    public ContentProviderResult[] applyBatch(final ArrayList<ContentProviderOperation> operations)
+            throws OperationApplicationException {
         final SQLiteDatabase db = getDatabase(getContext());
         db.beginTransaction();
         try {
@@ -232,14 +234,15 @@ public class SkeletonProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
+    public Cursor query(final Uri uri, final String[] projection, final String selection,
+            final String[] selectionArgs, final String sortOrder) {
 
         Cursor c = null;
         // TODO : Change the SkeletonContent into your class name
         final Uri notificationUri = SkeletonContent.CONTENT_URI;
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         String id;
@@ -253,11 +256,13 @@ public class SkeletonProvider extends ContentProvider {
             case SKELETON_ID:
                 // case PROGRAM_ID:
                 id = uri.getPathSegments().get(1);
-                c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null, sortOrder);
+                c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection),
+                        selectionArgs, null, null, sortOrder);
                 break;
             case SKELETON:
                 // case PROGRAM:
-                c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);
+                c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null,
+                        sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -283,11 +288,12 @@ public class SkeletonProvider extends ContentProvider {
     }
 
     @Override
-    public int update(final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
+    public int update(final Uri uri, final ContentValues values, final String selection,
+            final String[] selectionArgs) {
 
         final int match = sURIMatcher.match(uri);
         final Context context = getContext();
-        // Pick the correct database for this operation
+        // Pick the correct database for this operation.
         final SQLiteDatabase db = getDatabase(context);
         final int table = match >> BASE_SHIFT;
         int result;
@@ -301,7 +307,8 @@ public class SkeletonProvider extends ContentProvider {
             case SKELETON_ID:
                 // case PROGRAM_ID:
                 final String id = uri.getPathSegments().get(1);
-                result = db.update(TABLE_NAMES[table], values, whereWithId(id, selection), selectionArgs);
+                result = db.update(TABLE_NAMES[table], values, whereWithId(id, selection),
+                        selectionArgs);
                 break;
             case SKELETON:
                 // case PROGRAM:

@@ -1,14 +1,12 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroidpoc.ui;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroidpoc.ui;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -34,7 +32,10 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 
-public class CityListActivity extends ListActivity implements OnRequestFinishedListener, OnClickListener {
+import java.util.ArrayList;
+
+public class CityListActivity extends ListActivity implements OnRequestFinishedListener,
+        OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -171,11 +172,12 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
                 b = new Builder(this);
                 b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        callCityListWS();
-                    }
-                });
+                b.setPositiveButton(getString(R.string.dialog_button_retry),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                callCityListWS();
+                            }
+                        });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
@@ -223,7 +225,8 @@ public class CityListActivity extends ListActivity implements OnRequestFinishedL
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
-                    final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
+                    final int errorType = payload.getInt(
+                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);

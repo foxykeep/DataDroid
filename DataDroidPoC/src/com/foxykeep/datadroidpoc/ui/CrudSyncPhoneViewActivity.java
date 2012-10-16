@@ -1,11 +1,11 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.ui;
 
 import android.app.Activity;
@@ -97,7 +97,8 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                     final long[] syncDeletedPhoneIdArray = mMemoryProvider.syncPhoneDeleteData;
 
                     Intent data = new Intent();
-                    data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID, syncDeletedPhoneIdArray[0]);
+                    data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID,
+                            syncDeletedPhoneIdArray[0]);
                     setResult(RESULT_OK, data);
                     finish();
                 }
@@ -130,7 +131,8 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
         ((TextView) findViewById(R.id.tv_android_version)).setText(mPhone.androidVersion);
         ((TextView) findViewById(R.id.tv_screen_size)).setText(getString(
                 R.string.crud_phone_view_tv_screen_size_format, mPhone.screenSize));
-        ((TextView) findViewById(R.id.tv_price)).setText(getString(R.string.crud_phone_view_tv_price_format,
+        ((TextView) findViewById(R.id.tv_price)).setText(getString(
+                R.string.crud_phone_view_tv_price_format,
                 mPhone.price));
     }
 
@@ -149,11 +151,12 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                 b = new Builder(this);
                 b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        callSyncPhoneDeleteWS();
-                    }
-                });
+                b.setPositiveButton(getString(R.string.dialog_button_retry),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                callSyncPhoneDeleteWS();
+                            }
+                        });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
@@ -168,7 +171,8 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                 b = new Builder(this);
                 b.setIcon(android.R.drawable.ic_dialog_alert);
                 b.setTitle(R.string.crud_phone_view_dialog_delete_confirm_title);
-                b.setMessage(getString(R.string.crud_phone_view_dialog_delete_confirm_message, mPhone.name));
+                b.setMessage(getString(R.string.crud_phone_view_dialog_delete_confirm_message,
+                        mPhone.name));
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -266,7 +270,8 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
-                    final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
+                    final int errorType = payload.getInt(
+                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
@@ -282,7 +287,8 @@ public class CrudSyncPhoneViewActivity extends Activity implements OnRequestFini
                         .getLongArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_DELETE_DATA);
 
                 Intent data = new Intent();
-                data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID, syncDeletedPhoneIdArray[0]);
+                data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID,
+                        syncDeletedPhoneIdArray[0]);
                 setResult(RESULT_OK, data);
                 finish();
             }

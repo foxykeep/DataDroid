@@ -1,11 +1,11 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.ui;
 
 import android.app.AlertDialog;
@@ -36,7 +36,8 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class PersonListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
+public class PersonListActivity extends ListActivity implements OnRequestFinishedListener,
+        AsyncQueryListener,
         OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
@@ -75,7 +76,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
         mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
         mInflater = getLayoutInflater();
 
-        mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION, PersonDao.LAST_NAME_ORDER_BY);
+        mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
+                PersonDao.LAST_NAME_ORDER_BY);
     }
 
     @Override
@@ -146,11 +148,12 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
                 b = new Builder(this);
                 b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        callPersonListWS();
-                    }
-                });
+                b.setPositiveButton(getString(R.string.dialog_button_retry),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                callPersonListWS();
+                            }
+                        });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
@@ -195,7 +198,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
-                    final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
+                    final int errorType = payload.getInt(
+                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
@@ -250,10 +254,12 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
 
         public void populateView(final Cursor c) {
             c.copyStringToBuffer(PersonDao.CONTENT_FIRST_NAME_COLUMN, mCharArrayBufferFirstName);
-            mTextViewFirstName.setText(mCharArrayBufferFirstName.data, 0, mCharArrayBufferFirstName.sizeCopied);
+            mTextViewFirstName.setText(mCharArrayBufferFirstName.data, 0,
+                    mCharArrayBufferFirstName.sizeCopied);
 
             c.copyStringToBuffer(PersonDao.CONTENT_LAST_NAME_COLUMN, mCharArrayBufferLastName);
-            mTextViewLastName.setText(mCharArrayBufferLastName.data, 0, mCharArrayBufferLastName.sizeCopied);
+            mTextViewLastName.setText(mCharArrayBufferLastName.data, 0,
+                    mCharArrayBufferLastName.sizeCopied);
 
             mTextViewAge.setText(getString(R.string.person_list_item_tv_age_format,
                     c.getInt(PersonDao.CONTENT_AGE_COLUMN)));
@@ -261,7 +267,8 @@ public class PersonListActivity extends ListActivity implements OnRequestFinishe
             c.copyStringToBuffer(PersonDao.CONTENT_EMAIL_COLUMN, mCharArrayBufferEmail);
             mTextViewEmail.setText(mCharArrayBufferEmail.data, 0, mCharArrayBufferEmail.sizeCopied);
 
-            mTextViewPostalCode.setText(String.valueOf(c.getInt(PersonDao.CONTENT_POSTAL_CODE_COLUMN)));
+            mTextViewPostalCode.setText(String.valueOf(c
+                    .getInt(PersonDao.CONTENT_POSTAL_CODE_COLUMN)));
 
             c.copyStringToBuffer(PersonDao.CONTENT_CITY_COLUMN, mCharArrayBufferCity);
             mTextViewCity.setText(mCharArrayBufferCity.data, 0, mCharArrayBufferCity.sizeCopied);

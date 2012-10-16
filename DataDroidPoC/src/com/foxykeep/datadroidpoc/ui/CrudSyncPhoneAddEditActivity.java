@@ -1,11 +1,11 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.ui;
 
 import android.app.Activity;
@@ -33,7 +33,8 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequest
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestFinishedListener, OnClickListener,
+public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestFinishedListener,
+        OnClickListener,
         TextWatcher {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
@@ -87,7 +88,8 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
             mPhone = intent.getParcelableExtra(INTENT_EXTRA_PHONE);
         }
 
-        setTitle(mPhone == null ? R.string.crud_sync_phone_add_title : R.string.crud_sync_phone_edit_title);
+        setTitle(mPhone == null ? R.string.crud_sync_phone_add_title
+                : R.string.crud_sync_phone_edit_title);
 
         populateViews();
     }
@@ -189,15 +191,16 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
                 b = new Builder(this);
                 b.setCancelable(true);
                 b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        if (mRequestType == REQUEST_TYPE_ADD) {
-                            callSyncPhoneAddWS();
-                        } else if (mRequestType == REQUEST_TYPE_EDIT) {
-                            callSyncPhoneEditWS();
-                        }
-                    }
-                });
+                b.setPositiveButton(getString(R.string.dialog_button_retry),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int which) {
+                                if (mRequestType == REQUEST_TYPE_ADD) {
+                                    callSyncPhoneAddWS();
+                                } else if (mRequestType == REQUEST_TYPE_EDIT) {
+                                    callSyncPhoneEditWS();
+                                }
+                            }
+                        });
                 b.setTitle(R.string.dialog_error_connexion_error_title);
                 b.setMessage(R.string.dialog_error_connexion_error_message);
                 return b.create();
@@ -230,18 +233,22 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
         showDialog(DialogConfig.DIALOG_PROGRESS);
         mRequestManager.addOnRequestFinishedListener(this);
         mRequestType = REQUEST_TYPE_ADD;
-        mRequestId = mRequestManager.addSyncPhone(mUserId, mEditTextName.getText().toString(), mEditTextManufacturer
-                .getText().toString(), mEditTextAndroidVersion.getText().toString(), Double
-                .parseDouble(mEditTextScreenSize.getText().toString()), Integer.parseInt(mEditTextPrice.getText()
-                .toString()));
+        mRequestId = mRequestManager.addSyncPhone(mUserId, mEditTextName.getText().toString(),
+                mEditTextManufacturer
+                        .getText().toString(), mEditTextAndroidVersion.getText().toString(), Double
+                        .parseDouble(mEditTextScreenSize.getText().toString()),
+                Integer.parseInt(mEditTextPrice.getText()
+                        .toString()));
     }
 
     private void callSyncPhoneEditWS() {
         showDialog(DialogConfig.DIALOG_PROGRESS);
         mRequestManager.addOnRequestFinishedListener(this);
         mRequestType = REQUEST_TYPE_EDIT;
-        mRequestId = mRequestManager.editSyncPhone(mUserId, mPhone.serverId, mEditTextName.getText().toString(),
-                mEditTextManufacturer.getText().toString(), mEditTextAndroidVersion.getText().toString(),
+        mRequestId = mRequestManager.editSyncPhone(mUserId, mPhone.serverId, mEditTextName
+                .getText().toString(),
+                mEditTextManufacturer.getText().toString(), mEditTextAndroidVersion.getText()
+                        .toString(),
                 Double.parseDouble(mEditTextScreenSize.getText().toString()),
                 Integer.parseInt(mEditTextPrice.getText().toString()));
     }
@@ -267,11 +274,13 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
     }
 
     @Override
-    public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+    public void beforeTextChanged(final CharSequence s, final int start, final int count,
+            final int after) {
     }
 
     @Override
-    public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+    public void onTextChanged(final CharSequence s, final int start, final int before,
+            final int count) {
     }
 
     @Override
@@ -282,7 +291,8 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
             mRequestManager.removeOnRequestFinishedListener(this);
             if (resultCode == PoCService.ERROR_CODE) {
                 if (payload != null) {
-                    final int errorType = payload.getInt(PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
+                    final int errorType = payload.getInt(
+                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
                     if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
                         mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
                         mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
@@ -296,14 +306,18 @@ public class CrudSyncPhoneAddEditActivity extends Activity implements OnRequestF
             } else {
                 if (mRequestType == REQUEST_TYPE_ADD) {
                     Intent resultData = new Intent();
-                    resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE,
-                            payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
+                    resultData
+                            .putExtra(
+                                    CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE,
+                                    payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
                     setResult(RESULT_OK, resultData);
                     finish();
                 } else if (mRequestType == REQUEST_TYPE_EDIT) {
                     Intent resultData = new Intent();
-                    resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE,
-                            payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
+                    resultData
+                            .putExtra(
+                                    CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE,
+                                    payload.getParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA));
                     setResult(RESULT_OK, resultData);
                     finish();
                 }

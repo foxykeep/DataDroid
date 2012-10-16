@@ -1,29 +1,29 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroid.model;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroid.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.foxykeep.datadroid.factory.RssFactory;
 
+import java.util.ArrayList;
+
 /**
- * Class defining an RSS item
+ * Class defining an RSS item.
  * <p>
  * Fields are based on this definition : http://www.w3schools.com/rss/rss_item.asp
- * </p>
  * <p>
- * If you need to add more fields, subclass this class and add your fields. (Don't forget to call the corresponding <code>super</code> method in both
- * constructors) <br/>
- * You'll also need to modify the method {@link RssFeed#readRssItemList(Parcel)} as well as the {@link RssFactory}
+ * If you need to add more fields, subclass this class and add your fields. (Don't forget to call
+ * the corresponding <code>super</code> method in both constructors) <br/>
+ * You'll also need to modify the method {@link RssFeed#readRssItemList(Parcel)} as well as the
+ * {@link RssFactory}.
  * 
  * @author Foxykeep
  */

@@ -1,26 +1,25 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroid.model;
 
-import java.util.ArrayList;
+package com.foxykeep.datadroid.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
- * Class defining an RSS feed
+ * Class defining an RSS feed.
  * <p>
  * Fields are based on this definition : http://www.w3schools.com/rss/rss_channel.asp
- * </p>
  * <p>
- * If you need to add more fields, subclass this class and add your fields. (Don't forget to call the corresponding <code>super</code> method in both
- * constructors)
+ * If you need to add more fields, subclass this class and add your fields. (Don't forget to call
+ * the corresponding <code>super</code> method in both constructors).
  * 
  * @author Foxykeep
  */
@@ -50,13 +49,13 @@ public class RssFeed implements Parcelable {
     public String webmaster = null;
 
     /**
-     * Array of days where the aggregators should skip updating
+     * Array of days where the aggregators should skip updating.
      * <p>
      * 0 => monday, 1 => tuesday, ...
      */
     public int[] skipDayArray = null;
     /**
-     * Array of hours where the aggregators should skip updating
+     * Array of hours where the aggregators should skip updating.
      * <p>
      * 0 => 00:00, 1 => 01:00, ..., 13 => 13:00, ...
      */
@@ -105,12 +104,12 @@ public class RssFeed implements Parcelable {
     }
 
     /**
-     * Read the list of {@link RssItem} from the {@link Parcel}
+     * Read the list of {@link RssItem} from the {@link Parcel}.
      * <p>
-     * If you subclass {@link RssItem} in your project, subclass also {@link RssFeed} and modify this method to use your CREATOR instead of the one
-     * from {@link RssItem}
+     * If you subclass {@link RssItem} in your project, subclass also {@link RssFeed} and modify
+     * this method to use your CREATOR instead of the one from {@link RssItem}.
      * 
-     * @param in
+     * @param in The Parcel in which to read the list.
      */
     protected void readRssItemList(final Parcel in) {
         in.readTypedList(rssItemList, RssItem.CREATOR);

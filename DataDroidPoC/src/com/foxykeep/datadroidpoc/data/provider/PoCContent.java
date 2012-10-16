@@ -1,11 +1,11 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.data.provider;
 
 import android.content.ContentValues;
@@ -19,10 +19,9 @@ import com.foxykeep.datadroidpoc.data.model.Person;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 
 /**
- * {@link PoCContent} is the superclass of the various classes of content stored by {@link PoCProvider}. It adds to {@link DatabaseContent} the
- * {@link #AUTHORITY} and {@link #CONTENT_URI}
- * <p>
- * </p>
+ * {@link PoCContent} is the superclass of the various classes of content stored by
+ * {@link PoCProvider}. It adds to {@link DatabaseContent} the {@link #AUTHORITY} and
+ * {@link #CONTENT_URI}.
  */
 public abstract class PoCContent {
     public static final Uri CONTENT_URI = Uri.parse("content://" + PoCProvider.AUTHORITY);
@@ -67,8 +66,10 @@ public abstract class PoCContent {
         };
 
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME + " text, " + LAST_NAME + " text, " + EMAIL + " text, "
-                    + CITY + " text, " + POSTAL_CODE + " integer, " + AGE + " integer, " + IS_WORKING + " integer " + ");";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + FIRST_NAME
+                    + " text, " + LAST_NAME + " text, " + EMAIL + " text, "
+                    + CITY + " text, " + POSTAL_CODE + " integer, " + AGE + " integer, "
+                    + IS_WORKING + " integer " + ");";
 
             db.execSQL("create table " + TABLE_NAME + s);
 
@@ -132,8 +133,10 @@ public abstract class PoCContent {
         };
 
         static void createTable(final SQLiteDatabase db) {
-            final String s = " (" + _ID + " integer primary key autoincrement, " + SERVER_ID + " integer, " + NAME + " text, " + MANUFACTURER
-                    + " text, " + ANDROID_VERSION + " text, " + SCREEN_SIZE + " text, " + PRICE + " integer );";
+            final String s = " (" + _ID + " integer primary key autoincrement, " + SERVER_ID
+                    + " integer, " + NAME + " text, " + MANUFACTURER
+                    + " text, " + ANDROID_VERSION + " text, " + SCREEN_SIZE + " text, " + PRICE
+                    + " integer );";
 
             db.execSQL("create table " + TABLE_NAME + s);
 

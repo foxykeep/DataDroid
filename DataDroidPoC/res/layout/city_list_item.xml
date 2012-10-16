@@ -1,40 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
-	License : As long as you retain this notice you can do whatever you want 
-	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-	android:layout_height="fill_parent"
-	android:padding="5dp"
-	android:paddingRight="?android:attr/scrollbarSize">
-	<TextView
-		android:id="@+id/tv_postal_code"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_name"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_toLeftOf="@+id/tv_postal_code"
-		android:layout_alignParentTop="true"
-		android:ellipsize="end"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_county_number"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_name"
-		android:layout_alignParentLeft="true" />
-	<TextView
-		android:id="@+id/tv_county_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@id/tv_county_number"
-		android:layout_toRightOf="@id/tv_county_number"
-		android:paddingLeft="10dp" />
+<!--
+    2011 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License : 
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
+    day, and you think this stuff is worth it, you can buy me a beer in return
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:padding="5dp"
+    android:paddingRight="?android:attr/scrollbarSize" >
+
+    <TextView
+        android:id="@+id/tv_postal_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tv_postal_code"
+        android:ellipsize="end"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tv_county_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tv_name" />
+
+    <TextView
+        android:id="@+id/tv_county_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_county_number"
+        android:layout_toRightOf="@id/tv_county_number"
+        android:paddingLeft="10dp" />
+
 </RelativeLayout>

@@ -1,21 +1,21 @@
-/*
+/**
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
+
 package com.foxykeep.datadroidpoc.data.factory;
 
-import java.util.ArrayList;
+import com.foxykeep.datadroidpoc.config.JSONTag;
+import com.foxykeep.datadroidpoc.data.model.Person;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.foxykeep.datadroidpoc.config.JSONTag;
-import com.foxykeep.datadroidpoc.data.model.Person;
+import java.util.ArrayList;
 
 public class PersonListJsonFactory {
 

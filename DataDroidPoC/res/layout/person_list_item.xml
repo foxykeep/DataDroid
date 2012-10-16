@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
-	License : As long as you retain this notice you can do whatever you want 
-	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-	android:layout_height="fill_parent"
-	android:padding="5dp"
-	android:paddingRight="?android:attr/scrollbarSize">
-	<TextView
-		android:id="@+id/tv_first_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_last_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@id/tv_first_name"
-		android:layout_toRightOf="@id/tv_first_name"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_age"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_email"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_first_name"
-		android:layout_alignParentLeft="true" />
-	<TextView
-		android:id="@+id/tv_postal_code"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_email"
-		android:layout_alignParentLeft="true" />
-	<TextView
-		android:id="@+id/tv_city"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@id/tv_postal_code"
-		android:layout_toRightOf="@id/tv_postal_code"
-		android:paddingLeft="5dp" />
+<!--
+    2011 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License : 
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
+    day, and you think this stuff is worth it, you can buy me a beer in return
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:padding="5dp"
+    android:paddingRight="?android:attr/scrollbarSize" >
+
+    <TextView
+        android:id="@+id/tv_first_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tv_last_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_first_name"
+        android:layout_toRightOf="@id/tv_first_name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tv_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tv_first_name" />
+
+    <TextView
+        android:id="@+id/tv_postal_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tv_email" />
+
+    <TextView
+        android:id="@+id/tv_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_postal_code"
+        android:layout_toRightOf="@id/tv_postal_code"
+        android:paddingLeft="5dp" />
+
 </RelativeLayout>

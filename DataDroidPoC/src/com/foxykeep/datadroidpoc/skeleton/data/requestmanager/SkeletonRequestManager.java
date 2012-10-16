@@ -1,16 +1,12 @@
-/*
- * 2011 Foxykeep (http://datadroid.foxykeep.com)
- *
- * Licensed under the Beerware License :
- * 
- *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
- *   this stuff is worth it, you can buy me a beer in return
+/**
+ * 2 * 2011 Foxykeep (http://datadroid.foxykeep.com)
+ * <p>
+ * Licensed under the Beerware License : <br />
+ * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-package com.foxykeep.datadroidpoc.skeleton.data.requestmanager;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.EventListener;
+package com.foxykeep.datadroidpoc.skeleton.data.requestmanager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,9 +18,14 @@ import android.util.SparseArray;
 
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.EventListener;
+
 /**
- * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the service and manages the Intent creation. It also
- * assures that a request will not be sent again if an exactly identical one is already in progress
+ * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the
+ * service and manages the Intent creation. It also assures that a request will not be sent again if
+ * an exactly identical one is already in progress.
  * 
  * @author Foxykeep
  */
@@ -62,7 +63,7 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * The ResultReceiver that will receive the result from the Service
+     * The ResultReceiver that will receive the result from the Service.
      */
     private class EvalReceiver extends ResultReceiver {
         EvalReceiver(final Handler h) {
@@ -76,7 +77,7 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Clients may implements this interface to be notified when a request is finished
+     * Clients may implements this interface to be notified when a request is finished.
      * 
      * @author Foxykeep
      */
@@ -93,14 +94,14 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}. Clients may use it in order to listen to events fired when a
-     * request is finished.
+     * Add a {@link OnRequestFinishedListener} to this {@link SkeletonRequestManager}. Clients may
+     * use it in order to listen to events fired when a request is finished.
      * <p>
-     * <b>Warning !! </b> If it's an {@link Activity} that is used as a Listener, it must be detached when {@link Activity#onPause} is called in an
-     * {@link Activity}.
+     * <b>Warning !! </b> If it's an {@link Activity} that is used as a Listener, it must be
+     * detached when {@link Activity#onPause} is called in an {@link Activity}.
      * </p>
      * 
-     * @param listener The listener to add to this {@link SkeletonRequestManager} .
+     * @param listener The listener to add to this {@link SkeletonRequestManager}.
      */
     public void addOnRequestFinishedListener(final OnRequestFinishedListener listener) {
         if (listener == null) {
@@ -140,30 +141,31 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Return whether a request (specified by its id) is still in progress or not
+     * Return whether a request (specified by its id) is still in progress or not.
      * 
-     * @param requestId The request id
-     * @return whether the request is still in progress or not.
+     * @param requestId The request id.
+     * @return Whether the request is still in progress or not.
      */
     public boolean isRequestInProgress(final int requestId) {
         return (mRequestSparseArray.indexOfKey(requestId) >= 0);
     }
 
     /**
-     * This method is call whenever a request is finished. Call all the available listeners to let them know about the finished request
+     * This method is call whenever a request is finished. Call all the available listeners to let
+     * them know about the finished request.
      * 
-     * @param resultCode The result code of the request
-     * @param resultData The bundle sent back by the service
+     * @param resultCode The result code of the request.
+     * @param resultData The bundle sent back by the service.
      */
     protected void handleResult(final int resultCode, final Bundle resultData) {
 
-        // Get the request Id
+        // Get the request Id.
         final int requestId = resultData.getInt(RECEIVER_EXTRA_REQUEST_ID);
 
-        // Remove the request Id from the "in progress" request list
+        // Remove the request Id from the "in progress" request list.
         mRequestSparseArray.remove(requestId);
 
-        // Call the available listeners
+        // Call the available listeners.
         synchronized (mListenerList) {
             for (int i = 0; i < mListenerList.size(); i++) {
                 final WeakReference<OnRequestFinishedListener> weakRef = mListenerList.get(i);
@@ -179,10 +181,8 @@ public class SkeletonRequestManager extends RequestManager {
     }
 
     /**
-     * Here begin the special methods
+     * Here begin the special methods.
      */
 
-    // TODO : This is where you will add your methods which will call the
-    // service
-
+    // TODO : This is where you will add your methods which will call the service
 }

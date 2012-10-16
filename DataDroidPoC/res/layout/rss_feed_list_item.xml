@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
-	License : As long as you retain this notice you can do whatever you want 
-	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return
+    2011 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License : 
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
+    day, and you think this stuff is worth it, you can buy me a beer in return
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
