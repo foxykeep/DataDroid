@@ -32,11 +32,11 @@ import android.widget.TextView;
 
 import com.foxykeep.datadroid.model.RssFeed;
 import com.foxykeep.datadroid.model.RssItem;
+import com.foxykeep.datadroid.requestmanager.RequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.config.DialogConfig;
 import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager.OnRequestFinishedListener;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
 
 import java.util.ArrayList;
