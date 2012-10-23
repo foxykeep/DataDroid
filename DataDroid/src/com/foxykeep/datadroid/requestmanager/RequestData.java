@@ -408,6 +408,16 @@ public class RequestData implements Parcelable {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        ArrayList<Object> objectList = new ArrayList<Object>();
+        objectList.add(mRequestType);
+        for (int i = 0, length = mParamList.size(); i < length; i++) {
+            objectList.add(mBundle.get(mParamList.get(i)));
+        }
+        return objectList.hashCode();
+    }
+
     // Parcelable management
     private RequestData(final Parcel in) {
         mRequestType = in.readInt();
