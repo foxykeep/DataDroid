@@ -12,8 +12,8 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
+import com.foxykeep.datadroid.network.NetworkConnection.Builder;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
-import com.foxykeep.datadroid.network.NetworkConnection.NetworkConnectionBuilder;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
@@ -25,7 +25,7 @@ public final class CityListOperation implements Operation {
 
     @Override
     public Bundle execute(Request request) throws ConnectionException, DataException {
-        ConnectionResult result = new NetworkConnectionBuilder(WSConfig.WS_CITY_LIST_URL).execute();
+        ConnectionResult result = new Builder(WSConfig.WS_CITY_LIST_URL).execute();
 
         return CityListJsonFactory.parseResult(result.body);
     }

@@ -24,7 +24,7 @@ import java.util.HashMap;
 /**
  * This class gives the user an API to easily call a webservice and return the received response.
  * <p>
- * Use the {@link NetworkConnectionBuilder} to prepare your webservice call.
+ * Use the {@link Builder} to prepare your webservice call.
  * 
  * @author Foxykeep
  */
@@ -64,7 +64,7 @@ public final class NetworkConnection {
      *
      * @author Foxykeep
      */
-    public static final class NetworkConnectionBuilder {
+    public static final class Builder {
         private final String mUrl;
         private Method mMethod = Method.GET;
         private HashMap<String, String> mParameterMap = null;
@@ -75,7 +75,7 @@ public final class NetworkConnection {
         private UsernamePasswordCredentials mCredentials = null;
         private boolean mIsSslValidationEnabled = true;
 
-        public NetworkConnectionBuilder(final String url) {
+        public Builder(final String url) {
             if (url == null) {
                 if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                     Log.e(LOG_TAG,
@@ -92,7 +92,7 @@ public final class NetworkConnection {
          * @param method The method to use.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setMethod(final Method method) {
+        public Builder setMethod(final Method method) {
             mMethod = method;
             if (method != Method.POST) {
                 mPostText = null;
@@ -106,7 +106,7 @@ public final class NetworkConnection {
          * @param parameterMap The parameters to add to the request.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setParameters(final HashMap<String, String> parameterMap) {
+        public Builder setParameters(final HashMap<String, String> parameterMap) {
             mParameterMap = parameterMap;
             return this;
         }
@@ -117,7 +117,7 @@ public final class NetworkConnection {
          * @param headerList The headers to add to the request.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setHeaderList(final ArrayList<Header> headerList) {
+        public Builder setHeaderList(final ArrayList<Header> headerList) {
             mHeaderList = headerList;
             return this;
         }
@@ -130,7 +130,7 @@ public final class NetworkConnection {
          *            server.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setGzipEnabled(final boolean isGzipEnabled) {
+        public Builder setGzipEnabled(final boolean isGzipEnabled) {
             mIsGzipEnabled = isGzipEnabled;
             return this;
         }
@@ -144,7 +144,7 @@ public final class NetworkConnection {
          * @param userAgent The user agent.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setUserAgent(final String userAgent) {
+        public Builder setUserAgent(final String userAgent) {
             mUserAgent = userAgent;
             return this;
         }
@@ -156,7 +156,7 @@ public final class NetworkConnection {
          * @param postText The POSTDATA text that will be added in the request.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setPostText(final String postText) {
+        public Builder setPostText(final String postText) {
             mPostText = postText;
             mMethod = Method.POST;
             return this;
@@ -169,7 +169,7 @@ public final class NetworkConnection {
          * @param credentials The credentials to use for authentication.
          * @return The builder.
          */
-        public NetworkConnectionBuilder setCredentials(UsernamePasswordCredentials credentials) {
+        public Builder setCredentials(UsernamePasswordCredentials credentials) {
             mCredentials = credentials;
             return this;
         }
@@ -181,7 +181,7 @@ public final class NetworkConnection {
          * @param enabled Whether the request will validate the SSL certificates.
          * @return The Builder.
          */
-        public NetworkConnectionBuilder setSslValidationEnabled(boolean enabled) {
+        public Builder setSslValidationEnabled(boolean enabled) {
             mIsSslValidationEnabled = enabled;
             return this;
         }
