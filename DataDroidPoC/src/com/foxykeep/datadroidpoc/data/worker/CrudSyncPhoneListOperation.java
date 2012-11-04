@@ -10,38 +10,38 @@ package com.foxykeep.datadroidpoc.data.worker;
 
 import android.os.Bundle;
 
-import com.foxykeep.datadroid.exception.RestClientException;
-import com.foxykeep.datadroid.network.NetworkConnection;
-import com.foxykeep.datadroid.network.NetworkConnection.NetworkConnectionResult;
+import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.exception.DataException;
+import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.PhoneListFactory;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public final class CrudSyncPhoneListOperation {
+public final class CrudSyncPhoneListOperation implements Operation {
 
-    private CrudSyncPhoneListOperation() {
-        // No public constructor
-    }
+    public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extras.userId";
 
-    public static Bundle start(final String userId) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException, JSONException {
+    public CrudSyncPhoneListOperation() {}
 
+    @Override
+    public Bundle execute(Request request) throws ConnectionException, DataException {
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_UDID, userId);
+        params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_UDID,
+                request.getString(PARAM_USER_ID));
 
-        NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
-                WSConfig.WS_CRUD_PHONE_LIST_URL,
-                NetworkConnection.METHOD_GET, params);
+        Builder builder = new Builder(WSConfig.WS_CRUD_PHONE_LIST_URL);
+        builder.setParameters(params);
 
-        ArrayList<Phone> phoneList = PhoneListFactory.parseResult(wsResult.body);
+        ConnectionResult result = builder.execute();
+
+        ArrayList<Phone> phoneList = PhoneListFactory.parseResult(result.body);
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_PHONE_LIST, phoneList);

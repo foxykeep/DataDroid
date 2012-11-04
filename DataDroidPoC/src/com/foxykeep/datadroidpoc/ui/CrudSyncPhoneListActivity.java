@@ -447,7 +447,7 @@ public final class CrudSyncPhoneListActivity extends ListActivity implements
     private void callSyncPhoneDeleteWS(final String phoneIdList) {
         showDialog(DialogConfig.DIALOG_PROGRESS);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.deleteSyncPhones(mUserId, phoneIdList);
+        mRequestId = mRequestManager.deleteSyncPhone(mUserId, phoneIdList);
     }
 
     @Override

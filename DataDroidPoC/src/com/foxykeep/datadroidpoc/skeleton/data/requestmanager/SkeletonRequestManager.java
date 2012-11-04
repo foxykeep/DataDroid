@@ -9,11 +9,9 @@
 package com.foxykeep.datadroidpoc.skeleton.data.requestmanager;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import com.foxykeep.datadroid.requestmanager.RequestManager;
-
-import java.lang.ref.WeakReference;
+import com.foxykeep.datadroidpoc.skeleton.data.service.SkeletonService;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the
@@ -36,38 +34,7 @@ public final class SkeletonRequestManager extends RequestManager {
     }
 
     private SkeletonRequestManager(final Context context) {
-        super(context);
-    }
-
-    /**
-     * This method is call whenever a request is finished. Call all the available listeners to let
-     * them know about the finished request.
-     *
-     * @param resultCode The result code of the request.
-     * @param resultData The bundle sent back by the service.
-     */
-    @Override
-    protected void handleResult(final int resultCode, final Bundle resultData) {
-
-        // Get the request Id.
-        final int requestId = resultData.getInt(RECEIVER_EXTRA_REQUEST_ID);
-
-        // Remove the request Id from the "in progress" request list.
-        mRequestSparseArray.remove(requestId);
-
-        // Call the available listeners.
-        synchronized (mListenerList) {
-            for (int i = 0; i < mListenerList.size(); i++) {
-                final WeakReference<OnRequestFinishedListener> weakRef = mListenerList.get(i);
-                final OnRequestFinishedListener listener = weakRef.get();
-                if (listener != null) {
-                    listener.onRequestFinished(requestId, resultCode, resultData);
-                } else {
-                    mListenerList.remove(i);
-                    i--;
-                }
-            }
-        }
+        super(context, SkeletonService.class);
     }
 
     /**

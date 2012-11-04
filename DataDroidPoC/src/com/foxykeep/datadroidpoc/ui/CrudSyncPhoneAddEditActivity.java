@@ -102,14 +102,14 @@ public final class CrudSyncPhoneAddEditActivity extends Activity implements
                 showDialog(DialogConfig.DIALOG_PROGRESS);
             } else {
                 if (mRequestType == REQUEST_TYPE_ADD) {
-                    if (mMemoryProvider.syncPhoneAddedPhone == null) {
+                    if (mMemoryProvider.syncPhoneAddedEditedPhone == null) {
                         showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
                     } else {
                         mRequestType = -1;
 
                         Intent resultData = new Intent();
                         resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE,
-                                mMemoryProvider.syncPhoneAddedPhone);
+                                mMemoryProvider.syncPhoneAddedEditedPhone);
                         setResult(RESULT_OK, resultData);
                         finish();
                     }

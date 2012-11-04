@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
+import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
 
 import org.json.JSONArray;
@@ -20,19 +21,25 @@ public final class PhoneDeleteFactory {
         // No public constructor
     }
 
-    public static long[] parseResult(final String wsResponse) throws JSONException {
+    public static long[] parseResult(String wsResponse) throws DataException {
 
-        final JSONObject parser = new JSONObject(wsResponse);
-        final JSONObject jsonRoot = parser.getJSONObject(JSONTag.CRUD_PHONE_DELETE_ELEM_PHONES);
-        final JSONArray jsonPhoneArray = jsonRoot
-                .getJSONArray(JSONTag.CRUD_PHONE_DELETE_ELEM_PHONE);
-        final int size = jsonPhoneArray.length();
+        long[] deletedPhoneIdArray = null;
 
-        final long[] deletedPhoneIdArray = new long[size];
+        try {
+            JSONObject parser = new JSONObject(wsResponse);
+            JSONObject jsonRoot = parser.getJSONObject(JSONTag.CRUD_PHONE_DELETE_ELEM_PHONES);
+            JSONArray jsonPhoneArray = jsonRoot
+                    .getJSONArray(JSONTag.CRUD_PHONE_DELETE_ELEM_PHONE);
+            int size = jsonPhoneArray.length();
 
-        for (int i = 0; i < size; i++) {
-            deletedPhoneIdArray[i] = jsonPhoneArray.getJSONObject(i).getLong(
-                    JSONTag.CRUD_PHONE_DELETE_ELEM_ID);
+            deletedPhoneIdArray = new long[size];
+
+            for (int i = 0; i < size; i++) {
+                deletedPhoneIdArray[i] = jsonPhoneArray.getJSONObject(i).getLong(
+                        JSONTag.CRUD_PHONE_DELETE_ELEM_ID);
+            }
+        } catch (JSONException e) {
+            throw new DataException(e);
         }
 
         return deletedPhoneIdArray;

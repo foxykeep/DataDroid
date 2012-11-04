@@ -10,39 +10,29 @@ package com.foxykeep.datadroidpoc.data.worker;
 
 import android.os.Bundle;
 
-import com.foxykeep.datadroid.exception.RestClientException;
+import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.factory.RssFactory;
 import com.foxykeep.datadroid.model.RssFeed;
-import com.foxykeep.datadroid.network.NetworkConnection;
-import com.foxykeep.datadroid.network.NetworkConnection.NetworkConnectionResult;
+import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 
-import org.json.JSONException;
-import org.xml.sax.SAXException;
+public final class RssFeedOperation implements Operation {
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-public final class RssFeedOperation {
-
-    private RssFeedOperation() {
-        // No public constructor
+    public RssFeedOperation() {
     }
 
-    public static final int RETURN_FORMAT_XML = 0;
-    public static final int RETURN_FORMAT_JSON = 1;
+    public static final String PARAM_FEED_URL = "com.foxykeep.datadroidpoc.extras.feedUrl";
 
-    public static Bundle start(final String feedUrl) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException,
-            ParserConfigurationException, SAXException, JSONException {
-
-        NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(feedUrl,
-                NetworkConnection.METHOD_GET);
+    @Override
+    public Bundle execute(Request request) throws ConnectionException, DataException {
+        ConnectionResult result = new Builder(request.getString(PARAM_FEED_URL)).execute();
 
         final Bundle bundle = new Bundle();
-        final RssFeed rssFeed = RssFactory.parseResult(wsResult.body);
+        final RssFeed rssFeed = RssFactory.parseResult(result.body);
         bundle.putParcelable(PoCRequestManager.RECEIVER_EXTRA_RSS_FEED_DATA, rssFeed);
         return bundle;
     }

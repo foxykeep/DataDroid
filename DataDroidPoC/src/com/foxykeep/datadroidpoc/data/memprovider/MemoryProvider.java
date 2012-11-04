@@ -42,11 +42,8 @@ public final class MemoryProvider {
     // SyncPhoneDelete WS
     public long[] syncPhoneDeleteData;
 
-    // SyncPhoneAdd WS
-    public Phone syncPhoneAddedPhone;
-
-    // SyncPhoneEdit WS
-    public Phone syncPhoneEditedPhone;
+    // SyncPhoneAddEdit WS
+    public Phone syncPhoneAddedEditedPhone;
 
     // RssFeed WS
     public RssFeed rssFeed;

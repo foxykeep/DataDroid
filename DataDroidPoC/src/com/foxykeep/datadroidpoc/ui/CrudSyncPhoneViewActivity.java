@@ -203,7 +203,7 @@ public final class CrudSyncPhoneViewActivity extends Activity implements OnReque
     private void callSyncPhoneDeleteWS() {
         showDialog(DialogConfig.DIALOG_PROGRESS);
         mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.deleteSyncPhones(mUserId, String.valueOf(mPhone.serverId));
+        mRequestId = mRequestManager.deleteSyncPhone(mUserId, String.valueOf(mPhone.serverId));
     }
 
     @Override

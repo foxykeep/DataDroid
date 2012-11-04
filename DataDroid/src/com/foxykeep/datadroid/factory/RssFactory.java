@@ -10,6 +10,7 @@ package com.foxykeep.datadroid.factory;
 
 import android.text.TextUtils;
 
+import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.model.RssFeed;
 import com.foxykeep.datadroid.model.RssItem;
 
@@ -31,7 +32,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Factory used to parse the RSS feed.
- * 
+ *
  * @author Foxykeep
  */
 public final class RssFactory {
@@ -40,18 +41,26 @@ public final class RssFactory {
         // No public constructor
     }
 
-    public static RssFeed parseResult(final String wsResponse) throws ParserConfigurationException,
-            SAXException, IOException {
-
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp = spf.newSAXParser();
-        XMLReader xr = sp.getXMLReader();
+    public static RssFeed parseResult(String wsResponse) throws DataException {
 
         RssHandler parser = new RssHandler();
-        xr.setContentHandler(parser);
-        StringReader sr = new StringReader(wsResponse);
-        InputSource is = new InputSource(sr);
-        xr.parse(is);
+
+        try {
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser sp = spf.newSAXParser();
+            XMLReader xr = sp.getXMLReader();
+
+            xr.setContentHandler(parser);
+            StringReader sr = new StringReader(wsResponse);
+            InputSource is = new InputSource(sr);
+            xr.parse(is);
+        } catch (ParserConfigurationException e) {
+            throw new DataException(e);
+        } catch (SAXException e) {
+            throw new DataException(e);
+        } catch (IOException e) {
+            throw new DataException(e);
+        }
 
         return parser.mRssFeed;
     }
@@ -74,9 +83,8 @@ public final class RssFactory {
         private ArrayList<String> mSkipHourList = new ArrayList<String>();
 
         @Override
-        public void startElement(final String namespaceURI, final String localName,
-                final String qName,
-                final Attributes atts) throws SAXException {
+        public void startElement(String namespaceURI, String localName, String qName,
+                Attributes atts) throws SAXException {
             mSb.setLength(0);
 
             if (TextUtils.isEmpty(namespaceURI)) {
@@ -88,7 +96,7 @@ public final class RssFactory {
                     mRssFeed.imageWidth = 31; // Default value from W3Schools
                     mRssFeed.imageHeight = 88; // Default value from W3Schools
                 } else if (localName.equals("guid")) {
-                    final String isPermaLink = atts.getValue("isPermaLink");
+                    String isPermaLink = atts.getValue("isPermaLink");
                     mCurrentRssItem.isGuidPermaLink = isPermaLink != null
                             && isPermaLink.equals("true");
                 } else if (localName.equals("source")) {
@@ -102,7 +110,7 @@ public final class RssFactory {
         }
 
         @Override
-        public void endElement(final String namespaceURI, final String localName, final String qName)
+        public void endElement(String namespaceURI, String localName, String qName)
                 throws SAXException {
             if (TextUtils.isEmpty(namespaceURI)) {
                 if (localName.equals("item")) {
@@ -175,7 +183,7 @@ public final class RssFactory {
                 } else if (localName.equals("day")) {
                     mSkipDayList.add(mSb.toString().toLowerCase());
                 } else if (localName.equals("skipDays")) {
-                    final int skipDayListSize = mSkipDayList.size();
+                    int skipDayListSize = mSkipDayList.size();
                     mRssFeed.skipDayArray = new int[skipDayListSize];
                     for (int i = 0; i < skipDayListSize; i++) {
                         final String day = mSkipDayList.get(i);
@@ -198,7 +206,7 @@ public final class RssFactory {
                 } else if (localName.equals("hour")) {
                     mSkipHourList.add(mSb.toString().toLowerCase());
                 } else if (localName.equals("skipHours")) {
-                    final int skipHourListSize = mSkipHourList.size();
+                    int skipHourListSize = mSkipHourList.size();
                     mRssFeed.skipHourArray = new int[skipHourListSize];
                     for (int i = 0; i < skipHourListSize; i++) {
                         mRssFeed.skipHourArray[i] = Integer.parseInt(mSkipHourList.get(i));
@@ -210,7 +218,7 @@ public final class RssFactory {
         }
 
         @Override
-        public void characters(final char[] ch, final int start, final int length)
+        public void characters(char[] ch, int start, int length)
                 throws SAXException {
             super.characters(ch, start, length);
             mSb.append(ch, start, length);
@@ -218,13 +226,13 @@ public final class RssFactory {
 
         /**
          * Method used to get the milliseconds corresponding to the 2 common formats for the date.
-         * 
+         *
          * @param date The given date.
          * @return The timestamp corresponding to the given date.
          * @throws SAXException Exception thrown if the given date doesn't follow on the 2 common
          *             formats.
          */
-        private long getMillisFromDate(final String date) throws SAXException {
+        private long getMillisFromDate(String date) throws SAXException {
             long millis = -1;
 
             try {
