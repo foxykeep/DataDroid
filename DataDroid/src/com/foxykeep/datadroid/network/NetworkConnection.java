@@ -24,8 +24,8 @@ import java.util.HashMap;
 /**
  * This class gives the user an API to easily call a webservice and return the received response.
  * <p>
- * Use the {@link NetworkConnection2Builder} to prepare your webservice call.
- *
+ * Use the {@link NetworkConnectionBuilder} to prepare your webservice call.
+ * 
  * @author Foxykeep
  */
 public final class NetworkConnection {
@@ -48,12 +48,12 @@ public final class NetworkConnection {
      *
      * @author Foxykeep
      */
-    public static final class WebserviceResult {
+    public static final class ConnectionResult {
 
         public Header[] headerArray;
         public String body;
 
-        public WebserviceResult(final Header[] headerArray, final String body) {
+        public ConnectionResult(final Header[] headerArray, final String body) {
             this.headerArray = headerArray;
             this.body = body;
         }
@@ -64,7 +64,7 @@ public final class NetworkConnection {
      *
      * @author Foxykeep
      */
-    public static final class NetworkConnection2Builder {
+    public static final class NetworkConnectionBuilder {
         private final String mUrl;
         private Method mMethod = Method.GET;
         private HashMap<String, String> mParameterMap = null;
@@ -75,11 +75,11 @@ public final class NetworkConnection {
         private UsernamePasswordCredentials mCredentials = null;
         private boolean mIsSslValidationEnabled = true;
 
-        public NetworkConnection2Builder(final String url) {
+        public NetworkConnectionBuilder(final String url) {
             if (url == null) {
                 if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                     Log.e(LOG_TAG,
-                            "NetworkConnection2Builder - Compulsory Parameter : request URL has not been set.");
+                            "NetworkConnectionBuilder - Compulsory Parameter : request URL has not been set.");
                 }
                 throw new CompulsoryParameterException("Request URL has not been set.");
             }
@@ -92,7 +92,7 @@ public final class NetworkConnection {
          * @param method The method to use.
          * @return The builder.
          */
-        public NetworkConnection2Builder setMethod(final Method method) {
+        public NetworkConnectionBuilder setMethod(final Method method) {
             mMethod = method;
             if (method != Method.POST) {
                 mPostText = null;
@@ -106,7 +106,7 @@ public final class NetworkConnection {
          * @param parameterMap The parameters to add to the request.
          * @return The builder.
          */
-        public NetworkConnection2Builder setParameters(final HashMap<String, String> parameterMap) {
+        public NetworkConnectionBuilder setParameters(final HashMap<String, String> parameterMap) {
             mParameterMap = parameterMap;
             return this;
         }
@@ -117,7 +117,7 @@ public final class NetworkConnection {
          * @param headerList The headers to add to the request.
          * @return The builder.
          */
-        public NetworkConnection2Builder setHeaderList(final ArrayList<Header> headerList) {
+        public NetworkConnectionBuilder setHeaderList(final ArrayList<Header> headerList) {
             mHeaderList = headerList;
             return this;
         }
@@ -130,7 +130,7 @@ public final class NetworkConnection {
          *            server.
          * @return The builder.
          */
-        public NetworkConnection2Builder setGzipEnabled(final boolean isGzipEnabled) {
+        public NetworkConnectionBuilder setGzipEnabled(final boolean isGzipEnabled) {
             mIsGzipEnabled = isGzipEnabled;
             return this;
         }
@@ -144,7 +144,7 @@ public final class NetworkConnection {
          * @param userAgent The user agent.
          * @return The builder.
          */
-        public NetworkConnection2Builder setUserAgent(final String userAgent) {
+        public NetworkConnectionBuilder setUserAgent(final String userAgent) {
             mUserAgent = userAgent;
             return this;
         }
@@ -156,7 +156,7 @@ public final class NetworkConnection {
          * @param postText The POSTDATA text that will be added in the request.
          * @return The builder.
          */
-        public NetworkConnection2Builder setPostText(final String postText) {
+        public NetworkConnectionBuilder setPostText(final String postText) {
             mPostText = postText;
             mMethod = Method.POST;
             return this;
@@ -169,7 +169,7 @@ public final class NetworkConnection {
          * @param credentials The credentials to use for authentication.
          * @return The builder.
          */
-        public NetworkConnection2Builder setCredentials(UsernamePasswordCredentials credentials) {
+        public NetworkConnectionBuilder setCredentials(UsernamePasswordCredentials credentials) {
             mCredentials = credentials;
             return this;
         }
@@ -181,18 +181,18 @@ public final class NetworkConnection {
          * @param enabled Whether the request will validate the SSL certificates.
          * @return The Builder.
          */
-        public NetworkConnection2Builder setSslValidationEnabled(boolean enabled) {
+        public NetworkConnectionBuilder setSslValidationEnabled(boolean enabled) {
             mIsSslValidationEnabled = enabled;
             return this;
         }
 
         // TODO add the exceptions
         /**
-         * Execute the webservice call and return the {@link WebserviceResult}.
+         * Execute the webservice call and return the {@link ConnectionResult}.
          *
          * @return The result of the webservice call.
          */
-        public WebserviceResult execute() throws ConnectionException {
+        public ConnectionResult execute() throws ConnectionException {
             return NetworkConnectionImpl.execute(mUrl, mMethod, mParameterMap, mHeaderList,
                         mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
                         mIsSslValidationEnabled);

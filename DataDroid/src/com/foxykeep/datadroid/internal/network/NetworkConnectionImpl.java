@@ -10,7 +10,7 @@ package com.foxykeep.datadroid.internal.network;
 
 import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
-import com.foxykeep.datadroid.network.NetworkConnection.WebserviceResult;
+import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 
 import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -47,7 +47,7 @@ public final class NetworkConnectionImpl {
      * @param isSslValidationEnabled Whether the request will validate the SSL certificates.
      * @return The result of the webservice call.
      */
-    public static WebserviceResult execute(String url, Method method,
+    public static ConnectionResult execute(String url, Method method,
             HashMap<String, String> parameterMap, ArrayList<Header> headerList,
             boolean isGzipEnabled, String userAgent, String postText,
             UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) {

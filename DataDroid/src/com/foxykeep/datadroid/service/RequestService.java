@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.exception.CustomException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
@@ -43,11 +44,12 @@ public abstract class RequestService extends MultiThreadedIntentService {
          * @throws DataException Thrown when a problem occurs while managing the data of the
          *             webservice. It will be propagated to the {@link RequestManager} as a
          *             {@link RequestManager#ERROR_TYPE_DATA}.
-         * @throws Exception Any other exception you may have to throw. A call to
+         * @throws CustomException Any other exception you may have to throw. A call to
          *             {@link RequestService#onCustomError(Exception)} will be made with the
          *             Exception thrown.
          */
-        public Bundle execute(Request request) throws ConnectionException, DataException, Exception;
+        public Bundle execute(Request request) throws ConnectionException, DataException,
+                CustomException;
     }
 
     public static final String LOG_TAG = RequestService.class.getSimpleName();
@@ -142,16 +144,16 @@ public abstract class RequestService extends MultiThreadedIntentService {
                 Log.e(LOG_TAG, "DataException", e);
             }
             sendDataFailure(receiver, null);
+        } catch (CustomException e) {
+            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
+                Log.e(LOG_TAG, "Custom Exception", e);
+            }
+            sendDataFailure(receiver, onCustomError(e));
         } catch (RuntimeException e) {
             if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                 Log.e(LOG_TAG, "RuntimeException", e);
             }
             sendDataFailure(receiver, null);
-        } catch (Exception e) {
-            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "Custom Exception", e);
-            }
-            sendDataFailure(receiver, onCustomError(e));
         }
 
     }
@@ -165,18 +167,18 @@ public abstract class RequestService extends MultiThreadedIntentService {
     public abstract Operation getOperationForType(int requestType);
 
     /**
-     * Call if a custom {@link Exception} is thrown by an {@link Operation}. You may return a Bundle
+     * Call if a {@link CustomException} is thrown by an {@link Operation}. You may return a Bundle
      * containing data to return to the {@link RequestManager}.
      * <p>
      * Default implementation return null. You may want to override this method in your
      * implementation of {@link RequestService} to execute specific action and/or return specific
      * data.
      *
-     * @param exception The custom {@link Exception} thrown.
+     * @param exception The {@link CustomException} thrown.
      * @return A {@link Bundle} containing data to return to the {@link RequestManager}. Default
      *         implementation return null.
      */
-    protected Bundle onCustomError(Exception exception) {
+    protected Bundle onCustomError(CustomException exception) {
         return null;
     }
 
