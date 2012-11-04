@@ -8,9 +8,9 @@
 
 package com.foxykeep.datadroid.internal.network;
 
-import com.foxykeep.datadroid.network.NetworkConnection2;
-import com.foxykeep.datadroid.network.NetworkConnection2.Method;
-import com.foxykeep.datadroid.network.NetworkConnection2.WebserviceResult;
+import com.foxykeep.datadroid.network.NetworkConnection;
+import com.foxykeep.datadroid.network.NetworkConnection.Method;
+import com.foxykeep.datadroid.network.NetworkConnection.WebserviceResult;
 
 import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -19,21 +19,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Implementation of {@link NetworkConnection2} for Gingerbread devices and up.
- * 
+ * Implementation of {@link NetworkConnection}.
+ *
  * @author Foxykeep
- * @see NetworkConnectionImplFY
+ * @see NetworkConnectionImplGB
  */
-public final class NetworkConnectionImplGB {
+public final class NetworkConnectionImpl {
 
-    private NetworkConnectionImplGB() {
+    private NetworkConnectionImpl() {
         // No public constructor
     }
 
     /**
      * Call the webservice using the given parameters to construct the request and return the
      * result.
-     * 
+     *
      * @param url The webservice URL.
      * @param method The request method to use.
      * @param parameterMap The parameters to add to the request.
@@ -55,5 +55,4 @@ public final class NetworkConnectionImplGB {
         // TODO add the http response cache for ICS+
         return null;
     }
-
 }
