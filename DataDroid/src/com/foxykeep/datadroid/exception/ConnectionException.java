@@ -9,11 +9,11 @@
 package com.foxykeep.datadroid.exception;
 
 /**
- * Thrown to indicate that a compulsory parameter is missing.
- * 
+ * Thrown to indicate that a connection error occurred.
+ *
  * @author Foxykeep
  */
-public final class RestClientException extends Exception {
+public final class ConnectionException extends Exception {
 
     private static final long serialVersionUID = 4658308128254827562L;
 
@@ -21,64 +21,64 @@ public final class RestClientException extends Exception {
     private int mErrorStatusCode = -1;
 
     /**
-     * Constructs a new {@link RestClientException} that includes the current stack trace.
+     * Constructs a new {@link ConnectionException} that includes the current stack trace.
      */
-    public RestClientException() {
+    public ConnectionException() {
         super();
     }
 
     /**
-     * Constructs a new {@link RestClientException} that includes the current stack trace, the
+     * Constructs a new {@link ConnectionException} that includes the current stack trace, the
      * specified detail message and the specified cause.
-     * 
+     *
      * @param detailMessage The detail message for this exception.
      * @param throwable The cause of this exception.
      */
-    public RestClientException(final String detailMessage, final Throwable throwable) {
+    public ConnectionException(final String detailMessage, final Throwable throwable) {
         super(detailMessage, throwable);
     }
 
     /**
-     * Constructs a new {@link RestClientException} that includes the current stack trace and the
+     * Constructs a new {@link ConnectionException} that includes the current stack trace and the
      * specified detail message.
-     * 
+     *
      * @param detailMessage The detail message for this exception.
      */
-    public RestClientException(final String detailMessage) {
+    public ConnectionException(final String detailMessage) {
         super(detailMessage);
     }
 
     /**
-     * Constructs a new {@link RestClientException} that includes the current stack trace and the
+     * Constructs a new {@link ConnectionException} that includes the current stack trace and the
      * specified detail message.
-     * 
+     *
      * @param detailMessage The detail message for this exception.
      * @param redirection The redirection URL.
      */
-    public RestClientException(final String detailMessage, final String redirectionUrl) {
+    public ConnectionException(final String detailMessage, final String redirectionUrl) {
         super(detailMessage);
         mRedirectionUrl = redirectionUrl;
     }
 
     /**
-     * Constructs a new {@link RestClientException} that includes the current stack trace and the
+     * Constructs a new {@link ConnectionException} that includes the current stack trace and the
      * specified detail message and the error status code
-     * 
+     *
      * @param detailMessage The detail message for this exception.
      * @param errorStatusCode The HTTP status code
      */
-    public RestClientException(final String detailMessage, final int errorStatusCode) {
+    public ConnectionException(final String detailMessage, final int errorStatusCode) {
         super(detailMessage);
         mErrorStatusCode = errorStatusCode;
     }
 
     /**
-     * Constructs a new {@link RestClientException} that includes the current stack trace and the
+     * Constructs a new {@link ConnectionException} that includes the current stack trace and the
      * specified cause.
-     * 
+     *
      * @param throwable The cause of this exception.
      */
-    public RestClientException(final Throwable throwable) {
+    public ConnectionException(final Throwable throwable) {
         super(throwable);
     }
 

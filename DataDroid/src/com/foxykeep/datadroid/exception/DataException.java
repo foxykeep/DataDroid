@@ -13,45 +13,45 @@ package com.foxykeep.datadroid.exception;
  * 
  * @author Foxykeep
  */
-public final class ParsingException extends Exception {
+public final class DataException extends Exception {
 
     private static final long serialVersionUID = -6031863210486494461L;
 
     /**
-     * Constructs a new {@link ParsingException} that includes the current stack trace.
+     * Constructs a new {@link DataException} that includes the current stack trace.
      */
-    public ParsingException() {
+    public DataException() {
         super();
     }
 
     /**
-     * Constructs a new {@link ParsingException} that includes the current stack trace, the
+     * Constructs a new {@link DataException} that includes the current stack trace, the
      * specified detail message and the specified cause.
      * 
      * @param detailMessage The detail message for this exception.
      * @param throwable The cause of this exception.
      */
-    public ParsingException(final String detailMessage, final Throwable throwable) {
+    public DataException(final String detailMessage, final Throwable throwable) {
         super(detailMessage, throwable);
     }
 
     /**
-     * Constructs a new {@link ParsingException} that includes the current stack trace and the
+     * Constructs a new {@link DataException} that includes the current stack trace and the
      * specified detail message.
      * 
      * @param detailMessage The detail message for this exception.
      */
-    public ParsingException(final String detailMessage) {
+    public DataException(final String detailMessage) {
         super(detailMessage);
     }
 
     /**
-     * Constructs a new {@link ParsingException} that includes the current stack trace and the
+     * Constructs a new {@link DataException} that includes the current stack trace and the
      * specified cause.
      * 
      * @param throwable The cause of this exception.
      */
-    public ParsingException(final Throwable throwable) {
+    public DataException(final Throwable throwable) {
         super(throwable);
     }
 

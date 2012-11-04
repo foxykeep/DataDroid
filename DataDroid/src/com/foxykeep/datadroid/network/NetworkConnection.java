@@ -18,7 +18,7 @@ import android.webkit.WebView;
 
 import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.CompulsoryParameterException;
-import com.foxykeep.datadroid.exception.RestClientException;
+import com.foxykeep.datadroid.exception.ConnectionException;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
@@ -139,11 +139,11 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url)
             throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
+            URISyntaxException, ConnectionException {
         return retrieveResponseFromService(url, METHOD_GET);
     }
 
@@ -157,11 +157,11 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url,
             final int method) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
+            URISyntaxException, ConnectionException {
         return retrieveResponseFromService(url, method, null);
     }
 
@@ -176,11 +176,11 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url,
             final int method, final Map<String, String> parameters)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+            throws IllegalStateException, IOException, URISyntaxException, ConnectionException {
         return retrieveResponseFromService(url, method, parameters, null);
     }
 
@@ -196,12 +196,12 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url,
             final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
+            URISyntaxException, ConnectionException {
         return retrieveResponseFromService(url, method, parameters, headers, false);
     }
 
@@ -218,13 +218,13 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url,
             final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled)
             throws IllegalStateException, IOException, URISyntaxException,
-            RestClientException {
+            ConnectionException {
         return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled, null);
     }
 
@@ -243,13 +243,13 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url,
             final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent)
             throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
+            URISyntaxException, ConnectionException {
         return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled,
                 userAgent, null);
     }
@@ -271,13 +271,13 @@ public final class NetworkConnection {
      * @throws IllegalStateException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws RestClientException
+     * @throws ConnectionException
      */
     public static NetworkConnectionResult retrieveResponseFromService(final String url,
             final int method, final Map<String, String> parameters,
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent,
             final String postText)
-            throws IllegalStateException, IOException, URISyntaxException, RestClientException {
+            throws IllegalStateException, IOException, URISyntaxException, ConnectionException {
         return retrieveResponseFromService(url, method, parameters, headers, isGzipEnabled,
                 userAgent, postText, new ArrayList<String>());
     }
@@ -287,7 +287,7 @@ public final class NetworkConnection {
             final ArrayList<Header> headers, final boolean isGzipEnabled, final String userAgent,
             final String postText,
             final ArrayList<String> previousUrlList) throws IllegalStateException, IOException,
-            URISyntaxException, RestClientException {
+            URISyntaxException, ConnectionException {
         // Get the request URL
         if (url == null) {
             if (LogConfig.DD_ERROR_LOGS_ENABLED) {
@@ -483,7 +483,7 @@ public final class NetworkConnection {
                         Log.i(LOG_TAG, "retrieveResponseFromService - New location : "
                                 + newLocation.getValue());
                     }
-                    throw new RestClientException("New location : " + newLocation,
+                    throw new ConnectionException("New location : " + newLocation,
                             newLocation.getValue());
                 } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY) {
                     if (method == METHOD_GET) {
@@ -498,14 +498,14 @@ public final class NetworkConnection {
                         } else {
                             // It's an url already checked. We are in a loop. So let's throw an
                             // Exception
-                            throw new RestClientException("Moved permanently - Loop detected",
+                            throw new ConnectionException("Moved permanently - Loop detected",
                                     statusCode);
                         }
                     } else {
-                        throw new RestClientException("Invalid response from server : ", statusCode);
+                        throw new ConnectionException("Invalid response from server : ", statusCode);
                     }
                 } else {
-                    throw new RestClientException("Invalid response from server : ", statusCode);
+                    throw new ConnectionException("Invalid response from server : ", statusCode);
                 }
             }
 

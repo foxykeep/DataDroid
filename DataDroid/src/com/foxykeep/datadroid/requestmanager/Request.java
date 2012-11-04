@@ -21,7 +21,7 @@ import java.util.ArrayList;
  *
  * @author Foxykeep
  */
-public class RequestData implements Parcelable {
+public class Request implements Parcelable {
 
     private static final int TYPE_BOOLEAN = 1;
     private static final int TYPE_BYTE = 2;
@@ -44,7 +44,7 @@ public class RequestData implements Parcelable {
      *
      * @param requestType The request type.
      */
-    public RequestData(int requestType) {
+    public Request(int requestType) {
         mRequestType = requestType;
     }
 
@@ -64,8 +64,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, boolean value) {
-        cleanName(name);
+    public Request put(String name, boolean value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_BOOLEAN);
         mBundle.putBoolean(name, value);
@@ -79,8 +79,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, byte value) {
-        cleanName(name);
+    public Request put(String name, byte value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_BYTE);
         mBundle.putByte(name, value);
@@ -94,8 +94,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, char value) {
-        cleanName(name);
+    public Request put(String name, char value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_CHAR);
         mBundle.putChar(name, value);
@@ -109,8 +109,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, short value) {
-        cleanName(name);
+    public Request put(String name, short value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_SHORT);
         mBundle.putShort(name, value);
@@ -124,8 +124,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, int value) {
-        cleanName(name);
+    public Request put(String name, int value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_INT);
         mBundle.putInt(name, value);
@@ -139,8 +139,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, long value) {
-        cleanName(name);
+    public Request put(String name, long value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_LONG);
         mBundle.putLong(name, value);
@@ -154,8 +154,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, float value) {
-        cleanName(name);
+    public Request put(String name, float value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_FLOAT);
         mBundle.putFloat(name, value);
@@ -169,8 +169,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, double value) {
-        cleanName(name);
+    public Request put(String name, double value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_DOUBLE);
         mBundle.putDouble(name, value);
@@ -184,8 +184,8 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, String value) {
-        cleanName(name);
+    public Request put(String name, String value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_STRING);
         mBundle.putString(name, value);
@@ -199,15 +199,15 @@ public class RequestData implements Parcelable {
      * @param value The parameter value.
      * @return This RequestData.
      */
-    public RequestData put(String name, CharSequence value) {
-        cleanName(name);
+    public Request put(String name, CharSequence value) {
+        removeFromRequestData(name);
         mParamList.add(name);
         mTypeList.add(TYPE_CHARSEQUENCE);
         mBundle.putCharSequence(name, value);
         return this;
     }
 
-    private void cleanName(String name) {
+    private void removeFromRequestData(String name) {
         if (mParamList.contains(name)) {
             final int index = mParamList.indexOf(name);
             mParamList.remove(index);
@@ -328,8 +328,8 @@ public class RequestData implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof RequestData) {
-            RequestData oParams = (RequestData) o;
+        if (o instanceof Request) {
+            Request oParams = (Request) o;
             if (mParamList.size() != oParams.mParamList.size()) {
                 return false;
             }
@@ -419,7 +419,7 @@ public class RequestData implements Parcelable {
     }
 
     // Parcelable management
-    private RequestData(final Parcel in) {
+    private Request(final Parcel in) {
         mRequestType = in.readInt();
         in.readStringList(mParamList);
         for (int i = 0, n = in.readInt(); i < n; i++) {
@@ -444,13 +444,13 @@ public class RequestData implements Parcelable {
         dest.writeParcelable(mBundle, flags);
     }
 
-    public static final Creator<RequestData> CREATOR = new Creator<RequestData>() {
-        public RequestData createFromParcel(final Parcel in) {
-            return new RequestData(in);
+    public static final Creator<Request> CREATOR = new Creator<Request>() {
+        public Request createFromParcel(final Parcel in) {
+            return new Request(in);
         }
 
-        public RequestData[] newArray(final int size) {
-            return new RequestData[size];
+        public Request[] newArray(final int size) {
+            return new Request[size];
         }
     };
 }
