@@ -25,9 +25,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public final class CrudSyncPhoneListWorker {
+public final class CrudSyncPhoneListOperation {
 
-    private CrudSyncPhoneListWorker() {
+    private CrudSyncPhoneListOperation() {
         // No public constructor
     }
 

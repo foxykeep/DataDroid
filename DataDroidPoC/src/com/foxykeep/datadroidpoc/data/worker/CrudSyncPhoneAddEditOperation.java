@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-public final class CrudSyncPhoneAddEditWorker {
+public final class CrudSyncPhoneAddEditOperation {
 
-    private CrudSyncPhoneAddEditWorker() {
+    private CrudSyncPhoneAddEditOperation() {
         // No public constructor
     }
 

@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-public final class CrudSyncPhoneDeleteWorker {
+public final class CrudSyncPhoneDeleteOperation {
 
-    private CrudSyncPhoneDeleteWorker() {
+    private CrudSyncPhoneDeleteOperation() {
         // No public constructor
     }
 

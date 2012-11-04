@@ -25,9 +25,9 @@ import java.net.URISyntaxException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public final class RssFeedWorker {
+public final class RssFeedOperation {
 
-    private RssFeedWorker() {
+    private RssFeedOperation() {
         // No public constructor
     }
 

@@ -12,11 +12,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
-
-import java.lang.ref.WeakReference;
+import com.foxykeep.datadroidpoc.data.worker.PersonListOperation;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the
@@ -47,66 +47,35 @@ public final class PoCRequestManager extends RequestManager {
     private MemoryProvider mMemoryProvider = MemoryProvider.getInstance();
 
     private PoCRequestManager(final Context context) {
-        super(context);
+        super(context, PoCService.class);
     }
 
-    /**
-     * This method is call whenever a request is finished. Call all the available listeners to let
-     * them know about the finished request.
-     *
-     * @param resultCode The result code of the request.
-     * @param resultData The bundle sent back by the service.
-     */
     @Override
-    protected void handleResult(final int resultCode, final Bundle resultData) {
-
-        // Get the request Id
-        final int requestId = resultData.getInt(RECEIVER_EXTRA_REQUEST_ID);
-
-        if (resultCode == PoCService.SUCCESS_CODE) {
-            final Intent intent = mRequestSparseArray.get(requestId);
-            switch (intent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1)) {
-                case PoCService.WORKER_TYPE_CITY_LIST:
-                    mMemoryProvider.cityList = resultData
-                            .getParcelableArrayList(RECEIVER_EXTRA_CITY_LIST);
-                    break;
-                case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
-                    mMemoryProvider.syncPhoneList = resultData
-                            .getParcelableArrayList(RECEIVER_EXTRA_PHONE_LIST);
-                    break;
-                case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
-                    mMemoryProvider.syncPhoneDeleteData = resultData
-                            .getLongArray(RECEIVER_EXTRA_PHONE_DELETE_DATA);
-                    break;
-                case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
-                    mMemoryProvider.syncPhoneAddedPhone = resultData
-                            .getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
-                    break;
-                case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
-                    mMemoryProvider.syncPhoneEditedPhone = resultData
-                            .getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
-                    break;
-                case PoCService.WORKER_TYPE_RSS_FEED:
-                    mMemoryProvider.rssFeed = resultData
-                            .getParcelable(RECEIVER_EXTRA_RSS_FEED_DATA);
-            }
-        }
-
-        // Remove the request Id from the "in progress" request list
-        mRequestSparseArray.remove(requestId);
-
-        // Call the available listeners
-        synchronized (mListenerList) {
-            for (int i = 0; i < mListenerList.size(); i++) {
-                final WeakReference<OnRequestFinishedListener> weakRef = mListenerList.get(i);
-                final OnRequestFinishedListener listener = weakRef.get();
-                if (listener != null) {
-                    listener.onRequestFinished(requestId, resultCode, resultData);
-                } else {
-                    mListenerList.remove(i);
-                    i--;
-                }
-            }
+    protected void persistDataToMemory(Request request, int resultCode, Bundle resultData) {
+        switch (request.getRequestType()) {
+            case PoCService.WORKER_TYPE_CITY_LIST:
+                mMemoryProvider.cityList = resultData
+                        .getParcelableArrayList(RECEIVER_EXTRA_CITY_LIST);
+                break;
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
+                mMemoryProvider.syncPhoneList = resultData
+                        .getParcelableArrayList(RECEIVER_EXTRA_PHONE_LIST);
+                break;
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
+                mMemoryProvider.syncPhoneDeleteData = resultData
+                        .getLongArray(RECEIVER_EXTRA_PHONE_DELETE_DATA);
+                break;
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
+                mMemoryProvider.syncPhoneAddedPhone = resultData
+                        .getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
+                break;
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
+                mMemoryProvider.syncPhoneEditedPhone = resultData
+                        .getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
+                break;
+            case PoCService.WORKER_TYPE_RSS_FEED:
+                mMemoryProvider.rssFeed = resultData
+                        .getParcelable(RECEIVER_EXTRA_RSS_FEED_DATA);
         }
     }
 
@@ -114,71 +83,33 @@ public final class PoCRequestManager extends RequestManager {
      * Gets the list of persons and save it in the database.
      *
      * @param returnFormat 0 for XML, 1 for JSON.
-     * @return The request Id.
+     * @return The request.
      */
-    public int getPersonList(final int returnFormat) {
+    public Request getPersonList(final int returnFormat) {
+        Request request = new Request(PoCService.WORKER_TYPE_PERSON_LIST);
+        request.put(PersonListOperation.PARAM_RETURN_FORMAT, returnFormat);
 
-        // Check if a match to this request is already launched
-        final int requestSparseArrayLength = mRequestSparseArray.size();
-        for (int i = 0; i < requestSparseArrayLength; i++) {
-            final Intent savedIntent = mRequestSparseArray.valueAt(i);
+        execute(request);
 
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_PERSON_LIST) {
-                continue;
-            }
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, -1) != returnFormat) {
-                continue;
-            }
-            return mRequestSparseArray.keyAt(i);
-        }
-
-        final int requestId = mRandom.nextInt(MAX_RANDOM_REQUEST_ID);
-
-        final Intent intent = new Intent(mContext, PoCService.class);
-        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_PERSON_LIST);
-        intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
-        intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
-        intent.putExtra(PoCService.INTENT_EXTRA_PERSON_LIST_RETURN_FORMAT, returnFormat);
-        mContext.startService(intent);
-
-        mRequestSparseArray.append(requestId, intent);
-
-        return requestId;
+        return request;
     }
 
 
     /**
      * Gets the list of cities and save it in the memory provider.
      *
-     * @return The request Id.
+     * @return The request.
      */
-    public int getCityList() {
-
-        // Check if a match to this request is already launched
-        final int requestSparseArrayLength = mRequestSparseArray.size();
-        for (int i = 0; i < requestSparseArrayLength; i++) {
-            final Intent savedIntent = mRequestSparseArray.valueAt(i);
-
-            if (savedIntent.getIntExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, -1) != PoCService.WORKER_TYPE_CITY_LIST) {
-                continue;
-            }
-            return mRequestSparseArray.keyAt(i);
-        }
-
-        final int requestId = mRandom.nextInt(MAX_RANDOM_REQUEST_ID);
-
-        final Intent intent = new Intent(mContext, PoCService.class);
-        intent.putExtra(PoCService.INTENT_EXTRA_WORKER_TYPE, PoCService.WORKER_TYPE_CITY_LIST);
-        intent.putExtra(PoCService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
-        intent.putExtra(PoCService.INTENT_EXTRA_REQUEST_ID, requestId);
-        mContext.startService(intent);
-
-        mRequestSparseArray.append(requestId, intent);
+    public Request getCityList() {
+        Request request = new Request(PoCService.WORKER_TYPE_CITY_LIST);
 
         // Reset the cityList in the provider
         mMemoryProvider.cityList = null;
 
-        return requestId;
+        // Execute the request
+        execute(request);
+
+        return request;
     }
 
     /**

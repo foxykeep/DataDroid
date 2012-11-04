@@ -10,6 +10,7 @@ package com.foxykeep.datadroidpoc.data.factory;
 
 import android.os.Bundle;
 
+import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
 import com.foxykeep.datadroidpoc.data.model.City;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
@@ -26,23 +27,27 @@ public final class CityListJsonFactory {
         // No public constructor
     }
 
-    public static Bundle parseResult(final String wsResponse) throws JSONException {
+    public static Bundle parseResult(final String wsResponse) throws DataException {
         final ArrayList<City> cityList = new ArrayList<City>();
 
-        final JSONObject parser = new JSONObject(wsResponse);
-        final JSONObject jsonRoot = parser.getJSONObject(JSONTag.CITY_LIST_ELEM_CITIES);
-        final JSONArray jsonPersonArray = jsonRoot.getJSONArray(JSONTag.CITY_LIST_ELEM_CITY);
-        final int size = jsonPersonArray.length();
-        for (int i = 0; i < size; i++) {
-            final JSONObject jsonPerson = jsonPersonArray.getJSONObject(i);
-            final City city = new City();
+        try {
+            final JSONObject parser = new JSONObject(wsResponse);
+            final JSONObject jsonRoot = parser.getJSONObject(JSONTag.CITY_LIST_ELEM_CITIES);
+            final JSONArray jsonPersonArray = jsonRoot.getJSONArray(JSONTag.CITY_LIST_ELEM_CITY);
+            final int size = jsonPersonArray.length();
+            for (int i = 0; i < size; i++) {
+                final JSONObject jsonPerson = jsonPersonArray.getJSONObject(i);
+                final City city = new City();
 
-            city.name = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_NAME);
-            city.postalCode = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_POSTAL_CODE);
-            city.countyNumber = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_COUNTY_NUMBER);
-            city.countyName = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_COUNTY_NAME);
+                city.name = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_NAME);
+                city.postalCode = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_POSTAL_CODE);
+                city.countyNumber = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_COUNTY_NUMBER);
+                city.countyName = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_COUNTY_NAME);
 
-            cityList.add(city);
+                cityList.add(city);
+            }
+        } catch (JSONException e) {
+            throw new DataException(e);
         }
 
         Bundle bundle = new Bundle();

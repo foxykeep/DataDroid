@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
+import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.XMLTag;
 import com.foxykeep.datadroidpoc.data.model.Person;
 
@@ -31,20 +32,25 @@ public final class PersonListXmlFactory {
         // No public constructor
     }
 
-    public static ArrayList<Person> parseResult(final String wsContent)
-            throws ParserConfigurationException,
-            SAXException, IOException {
-
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp = spf.newSAXParser();
-        XMLReader xr = sp.getXMLReader();
-
+    public static ArrayList<Person> parseResult(final String wsContent) throws DataException {
         PersonHandler parser = new PersonHandler();
-        xr.setContentHandler(parser);
-        StringReader sr = new StringReader(wsContent);
-        InputSource is = new InputSource(sr);
-        xr.parse(is);
+        try {
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser sp;
+            sp = spf.newSAXParser();
+            XMLReader xr = sp.getXMLReader();
 
+            xr.setContentHandler(parser);
+            StringReader sr = new StringReader(wsContent);
+            InputSource is = new InputSource(sr);
+            xr.parse(is);
+        } catch (ParserConfigurationException e) {
+            throw new DataException(e);
+        } catch (SAXException e) {
+            throw new DataException(e);
+        } catch (IOException e) {
+            throw new DataException(e);
+        }
         return parser.mPersonList;
     }
 
@@ -55,9 +61,8 @@ public final class PersonListXmlFactory {
         public Person mCurrentPerson = null;
 
         @Override
-        public void startElement(final String namespaceURI, final String localName,
-                final String qName,
-                final Attributes atts) throws SAXException {
+        public void startElement(String namespaceURI, String localName, String qName,
+                Attributes atts) throws SAXException {
             mSb.setLength(0);
 
             if (localName.equals(XMLTag.TAG_PERSON)) {
@@ -66,7 +71,7 @@ public final class PersonListXmlFactory {
         }
 
         @Override
-        public void endElement(final String namespaceURI, final String localName, final String qName)
+        public void endElement(String namespaceURI, String localName, String qName)
                 throws SAXException {
 
             if (localName.equals(XMLTag.TAG_PERSON)) {
@@ -89,7 +94,7 @@ public final class PersonListXmlFactory {
         }
 
         @Override
-        public void characters(final char[] ch, final int start, final int length)
+        public void characters(char[] ch, int start, int length)
                 throws SAXException {
             super.characters(ch, start, length);
             mSb.append(ch, start, length);
