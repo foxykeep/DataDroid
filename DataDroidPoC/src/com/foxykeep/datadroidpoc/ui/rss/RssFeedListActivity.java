@@ -11,7 +11,6 @@ package com.foxykeep.datadroidpoc.ui.rss;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,11 +37,12 @@ import com.foxykeep.datadroidpoc.config.DialogConfig;
 import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
 import java.util.ArrayList;
 
-public final class RssFeedListActivity extends ListActivity implements OnRequestFinishedListener,
-        OnClickListener, OnItemClickListener {
+public final class RssFeedListActivity extends DataDroidActivity implements
+        OnRequestFinishedListener, OnClickListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";

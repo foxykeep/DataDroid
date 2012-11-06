@@ -11,7 +11,6 @@ package com.foxykeep.datadroidpoc.ui.ws;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -31,10 +30,11 @@ import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.model.City;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
 import java.util.ArrayList;
 
-public final class CityListActivity extends ListActivity implements OnRequestFinishedListener,
+public final class CityListActivity extends DataDroidActivity implements OnRequestFinishedListener,
         OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";

@@ -11,7 +11,6 @@ package com.foxykeep.datadroidpoc.ui.ws;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.CharArrayBuffer;
@@ -33,11 +32,12 @@ import com.foxykeep.datadroidpoc.config.DialogConfig;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public final class PersonListActivity extends ListActivity implements OnRequestFinishedListener,
-        AsyncQueryListener, OnClickListener {
+public final class PersonListActivity extends DataDroidActivity implements
+        OnRequestFinishedListener, AsyncQueryListener, OnClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
     private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";

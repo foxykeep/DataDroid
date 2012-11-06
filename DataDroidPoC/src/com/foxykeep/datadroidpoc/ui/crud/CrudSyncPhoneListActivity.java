@@ -11,7 +11,6 @@ package com.foxykeep.datadroidpoc.ui.crud;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,12 +39,13 @@ import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.ArrayUtils;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
 import java.util.ArrayList;
 
-public final class CrudSyncPhoneListActivity extends ListActivity implements
+public final class CrudSyncPhoneListActivity extends DataDroidActivity implements
         OnRequestFinishedListener, OnItemClickListener {
 
     private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
