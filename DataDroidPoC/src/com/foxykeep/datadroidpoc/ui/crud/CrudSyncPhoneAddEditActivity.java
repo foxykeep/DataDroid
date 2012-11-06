@@ -6,7 +6,7 @@
  * day, and you think this stuff is worth it, you can buy me a beer in return
  */
 
-package com.foxykeep.datadroidpoc.ui;
+package com.foxykeep.datadroidpoc.ui.crud;
 
 import android.app.Activity;
 import android.app.AlertDialog;

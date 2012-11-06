@@ -29,10 +29,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PersonListActivity"
+            android:name=".ui.ws.PersonListActivity"
             android:label="@string/person_list_title" />
         <activity
-            android:name=".ui.CityListActivity"
+            android:name=".ui.ws.CityListActivityity"
             android:label="@string/city_list_title" />
         <activity
             android:name=".ui.CrudSyncPhoneListActivity"
@@ -42,7 +42,7 @@
             android:label="@string/crud_sync_phone_view_title" />
         <activity android:name=".ui.CrudSyncPhoneAddEditActivity" />
         <activity
-            android:name=".ui.RssFeedListActivity"
+            android:name=".ui.rss.RssFeedListActivity"
             android:label="@string/rss_feed_list_title" />
 
         <service

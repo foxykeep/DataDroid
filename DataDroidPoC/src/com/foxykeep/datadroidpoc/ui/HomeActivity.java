@@ -16,6 +16,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
+import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
 
 public final class HomeActivity extends Activity implements OnClickListener {
 
