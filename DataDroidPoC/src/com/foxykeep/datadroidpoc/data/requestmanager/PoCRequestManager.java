@@ -68,7 +68,8 @@ public final class PoCRequestManager extends RequestManager {
                 mMemoryProvider.syncPhoneDeleteData = resultData
                         .getLongArray(RECEIVER_EXTRA_PHONE_DELETE_DATA);
                 break;
-            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD_EDIT:
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
+            case PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
                 mMemoryProvider.syncPhoneAddedEditedPhone = resultData
                         .getParcelable(RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
                 break;
@@ -76,6 +77,10 @@ public final class PoCRequestManager extends RequestManager {
                 mMemoryProvider.rssFeed = resultData
                         .getParcelable(RECEIVER_EXTRA_RSS_FEED_DATA);
         }
+    }
+
+    public MemoryProvider getMemoryProvider() {
+        return mMemoryProvider;
     }
 
     /**
@@ -164,7 +169,9 @@ public final class PoCRequestManager extends RequestManager {
      */
     public Request addSyncPhone(String userId, String name, String manufacturer,
             String androidVersion, double screenSize, int price) {
-        return editSyncPhone(userId, -1, name, manufacturer, androidVersion, screenSize, price);
+        Request request = new Request(PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD);
+        return addEditSyncPhone(request, userId, -1, name, manufacturer, androidVersion,
+                screenSize, price);
     }
 
     /**
@@ -181,7 +188,13 @@ public final class PoCRequestManager extends RequestManager {
      */
     public Request editSyncPhone(String userId, long phoneId, String name, String manufacturer,
             String androidVersion, double screenSize, int price) {
-        Request request = new Request(PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD_EDIT);
+        Request request = new Request(PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT);
+        return addEditSyncPhone(request, userId, phoneId, name, manufacturer, androidVersion,
+                screenSize, price);
+    }
+
+    private Request addEditSyncPhone(Request request, String userId, long phoneId, String name,
+            String manufacturer, String androidVersion, double screenSize, int price) {
         request.put(CrudSyncPhoneAddEditOperation.PARAM_USER_ID, userId);
         request.put(CrudSyncPhoneAddEditOperation.PARAM_PHONE_ID, phoneId);
         request.put(CrudSyncPhoneAddEditOperation.PARAM_NAME, name);

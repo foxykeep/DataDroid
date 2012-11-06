@@ -35,7 +35,8 @@ public final class PoCService extends RequestService {
 
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_LIST = 10;
     public static final int WORKER_TYPE_CRUD_SYNC_PHONE_DELETE = 11;
-    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_ADD_EDIT = 12;
+    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_ADD = 12;
+    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_EDIT = 13;
 
     public static final int WORKER_TYPE_RSS_FEED = 20;
 
@@ -54,7 +55,8 @@ public final class PoCService extends RequestService {
                 return new CrudSyncPhoneListOperation();
             case WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
                 return new CrudSyncPhoneDeleteOperation();
-            case WORKER_TYPE_CRUD_SYNC_PHONE_ADD_EDIT:
+            case WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
+            case WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
                 return new CrudSyncPhoneAddEditOperation();
             case WORKER_TYPE_RSS_FEED:
                 return new RssFeedOperation();
