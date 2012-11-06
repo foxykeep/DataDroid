@@ -10,8 +10,8 @@
     <string name="app_name">DataDroid PoC</string>
 
     <!-- Dialog texts -->
-    <string name="dialog_error_connexion_error_title">Connexion error</string>
-    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>
+    <string name="dialog_error_connection_error_title">Connexion error</string>
+    <string name="dialog_error_connection_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>
     <string name="dialog_error_data_error_title">Incorrect data</string>
     <string name="dialog_error_data_error_message">Received data are invalid.</string>
     <string name="dialog_button_retry">Retry</string>

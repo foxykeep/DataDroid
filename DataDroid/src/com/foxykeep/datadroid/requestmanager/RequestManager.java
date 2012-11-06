@@ -43,7 +43,7 @@ public abstract class RequestManager {
      *
      * @author Foxykeep
      */
-    public static interface OnRequestFinishedListener extends EventListener {
+    public static interface RequestListener extends EventListener {
 
         /**
          * Event fired when a request is finished.
@@ -56,7 +56,21 @@ public abstract class RequestManager {
          *            </ul>
          * @param resultData The result of the service execution.
          */
-        public void onRequestFinished(Request request, int resultCode, Bundle resultData);
+        public void onRequestFinished(Request request, Bundle resultData);
+
+        /**
+         * Event fired when a request encountered a connection error.
+         *
+         * @param request The {@link Request} defining the request.
+         */
+        public void onRequestConnectionError(Request request);
+
+        /**
+         * Event fired when a request encountered a data error.
+         *
+         * @param request The {@link Request} defining the request.
+         */
+        public void onRequestDataError(Request request);
     }
 
     public static final String RECEIVER_EXTRA_REQUEST_DATA =
@@ -80,11 +94,11 @@ public abstract class RequestManager {
     }
 
     /**
-     * Add a {@link OnRequestFinishedListener} to this {@link RequestManager} to a specific
+     * Add a {@link RequestListener} to this {@link RequestManager} to a specific
      * {@link Request}. Clients may use it in order to be notified when the corresponding request is
      * completed.
      * <p>
-     * The listener are automatically removed when the request is completed and they are notified.
+     * The listener is automatically removed when the request is completed and they are notified.
      * <p>
      * <b>Warning !! </b> If it's an {@link Activity} or a {@link Fragment} that is used as a
      * listener, it must be detached when {@link Activity#onPause} is called in an {@link Activity}.
@@ -92,7 +106,7 @@ public abstract class RequestManager {
      * @param listener The listener called when the Request is completed.
      * @param request The {@link Request} to listen to.
      */
-    public void addOnRequestFinishedListener(OnRequestFinishedListener listener,
+    public void addOnRequestFinishedListener(RequestListener listener,
             Request request) {
         if (listener == null) {
             return;
@@ -110,24 +124,24 @@ public abstract class RequestManager {
     }
 
     /**
-     * Remove a {@link OnRequestFinishedListener} to this {@link RequestManager} from every
+     * Remove a {@link RequestListener} to this {@link RequestManager} from every
      * {@link Request}s which it is listening to.
      *
      * @param listener The listener to remove.
      */
-    public void removeOnRequestFinishedListener(OnRequestFinishedListener listener) {
+    public void removeOnRequestFinishedListener(RequestListener listener) {
         removeOnRequestFinishedListener(listener, null);
     }
 
     /**
-     * Remove a {@link OnRequestFinishedListener} to this {@link RequestManager} from a specific
+     * Remove a {@link RequestListener} to this {@link RequestManager} from a specific
      * {@link Request}.
      *
      * @param listener The listener to remove.
      * @param request The {@link Request} associated with this listener. If null, the listener will
      *            be removed from every request it is currently associated with.
      */
-    public void removeOnRequestFinishedListener(OnRequestFinishedListener listener,
+    public void removeOnRequestFinishedListener(RequestListener listener,
             Request request) {
         if (listener == null) {
             return;
@@ -228,20 +242,29 @@ public abstract class RequestManager {
 
     private final class ListenerHolder {
 
-        private final WeakReference<OnRequestFinishedListener> mListenerRef;
+        private final WeakReference<RequestListener> mListenerRef;
         private final int mHashCode;
 
-        public ListenerHolder(OnRequestFinishedListener listener) {
-            mListenerRef = new WeakReference<OnRequestFinishedListener>(listener);
+        public ListenerHolder(RequestListener listener) {
+            mListenerRef = new WeakReference<RequestListener>(listener);
             mHashCode = 31 + listener.hashCode();
         }
 
         public void onRequestFinished(Request request, int resultCode, Bundle resultData) {
             mRequestReceiverMap.remove(request);
 
-            OnRequestFinishedListener listener = mListenerRef.get();
+            RequestListener listener = mListenerRef.get();
             if (listener != null) {
-                listener.onRequestFinished(request, resultCode, resultData);
+                if (resultCode == RequestService.ERROR_CODE) {
+                    final int errorType = resultData.getInt(RECEIVER_EXTRA_ERROR_TYPE);
+                    if (errorType == ERROR_TYPE_DATA) {
+                        listener.onRequestDataError(request);
+                    } else if (errorType == ERROR_TYPE_CONNEXION) {
+                        listener.onRequestConnectionError(request);
+                    }
+                } else {
+                    listener.onRequestFinished(request, resultData);
+                }
             }
         }
 
