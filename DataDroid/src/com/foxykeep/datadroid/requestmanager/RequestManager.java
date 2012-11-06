@@ -98,7 +98,7 @@ public abstract class RequestManager {
             return;
         }
         if (request == null) {
-            throw new IllegalArgumentException("RequestData cannot be null.");
+            throw new IllegalArgumentException("Request cannot be null.");
         }
         RequestReceiver requestReceiver = mRequestReceiverMap.get(request);
         if (requestReceiver == null) {
@@ -159,8 +159,12 @@ public abstract class RequestManager {
      * Execute the {@link Request}.
      *
      * @param request The request to execute.
+     * @param listener The listener called when the Request is completed.
      */
-    public void execute(Request request) {
+    public void execute(Request request, OnRequestFinishedListener listener) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request cannot be null.");
+        }
         if (mRequestReceiverMap.containsKey(request)) {
             // This exact request is already in progress. So nothing to do.
             return;
@@ -168,6 +172,10 @@ public abstract class RequestManager {
 
         RequestReceiver requestReceiver = new RequestReceiver(request);
         mRequestReceiverMap.put(request, requestReceiver);
+
+        addOnRequestFinishedListener(listener, request);
+
+        clearDataInMemory(request);
 
         Intent intent = new Intent(mContext, mRequestService);
         intent.putExtra(RequestService.INTENT_EXTRA_RECEIVER, requestReceiver);
@@ -180,12 +188,21 @@ public abstract class RequestManager {
      * <p>
      * This method is called before calling the request listeners if any.
      *
+     * @param request The executed request.
      * @param resultCode Arbitrary result code of the request.
      * @param resultData Any additional data part of the result of the request.
      */
-    protected void persistDataToMemory(Request request, int resultCode,
-            Bundle resultData) {
-    }
+    protected void persistDataToMemory(Request request, int resultCode, Bundle resultData) {}
+
+
+    /**
+     * Overrides this method to clear the data in memory corresponding to the given request.
+     * <p>
+     * This method is called before sending the request to the {@link RequestService}.
+     *
+     * @param request The request associated with the data.
+     */
+    protected void clearDataInMemory(Request request) {}
 
     private final class RequestReceiver extends ResultReceiver {
 
