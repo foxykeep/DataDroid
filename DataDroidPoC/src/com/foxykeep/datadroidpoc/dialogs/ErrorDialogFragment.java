@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.foxykeep.datadroidpoc.R;
+
 public class ErrorDialogFragment extends DialogFragment {
 
     private static final String FRAGMENT_TAG = "com.foxykeep.datadroidpoc.dialogs.errorDialog";

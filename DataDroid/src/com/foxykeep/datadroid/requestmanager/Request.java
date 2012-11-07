@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.foxykeep.datadroid.service.RequestService;
 import com.foxykeep.datadroid.util.ObjectUtils;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class Request implements Parcelable {
     private static final int TYPE_CHARSEQUENCE = 10;
 
     private int mRequestType = -1;
+    private boolean mMemoryCacheDataEnabled = false;
     private ArrayList<String> mParamList = new ArrayList<String>();
     private ArrayList<Integer> mTypeList = new ArrayList<Integer>();
     private Bundle mBundle = new Bundle();
@@ -49,12 +51,34 @@ public class Request implements Parcelable {
     }
 
     /**
-     * Returns the request type.
+     * Return the request type.
      *
      * @return The request type.
      */
     public int getRequestType() {
         return mRequestType;
+    }
+
+    /**
+     * Set whether the data returned from the {@link RequestService} must be cached in memory or
+     * not.
+     *
+     * @param enabled Whether the data returned from the {@link RequestService} must be cached in
+     *            memory or not.
+     */
+    public void setMemoryCacheEnabled(boolean enabled) {
+        mMemoryCacheDataEnabled = enabled;
+    }
+
+    /**
+     * Return whether the data returned from the {@link RequestService} must be cached in memory or
+     * not.
+     *
+     * @return Whether the data returned from the {@link RequestService} must be cached in memory or
+     *         not.
+     */
+    public boolean isMemoryCacheEnabled() {
+        return mMemoryCacheDataEnabled;
     }
 
     /**

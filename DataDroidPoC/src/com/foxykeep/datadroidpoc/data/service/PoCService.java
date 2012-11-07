@@ -11,6 +11,7 @@ package com.foxykeep.datadroidpoc.data.service;
 import android.content.Intent;
 
 import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.data.worker.CityListOperation;
 import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneAddEditOperation;
@@ -29,17 +30,6 @@ public final class PoCService extends RequestService {
     // Max number of parallel threads used
     private static final int MAX_THREADS = 3;
 
-    // Worker types
-    public static final int WORKER_TYPE_PERSON_LIST = 0;
-    public static final int WORKER_TYPE_CITY_LIST = 1;
-
-    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_LIST = 10;
-    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_DELETE = 11;
-    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_ADD = 12;
-    public static final int WORKER_TYPE_CRUD_SYNC_PHONE_EDIT = 13;
-
-    public static final int WORKER_TYPE_RSS_FEED = 20;
-
     public PoCService() {
         super(MAX_THREADS);
     }
@@ -47,18 +37,18 @@ public final class PoCService extends RequestService {
     @Override
     public Operation getOperationForType(int requestType) {
         switch (requestType) {
-            case WORKER_TYPE_PERSON_LIST:
-                return new PersonListOperation(this);
-            case WORKER_TYPE_CITY_LIST:
+            case PoCRequestFactory.REQUEST_TYPE_PERSON_LIST:
+                return new PersonListOperation(this /* Context */);
+            case PoCRequestFactory.REQUEST_TYPE_CITY_LIST:
                 return new CityListOperation();
-            case WORKER_TYPE_CRUD_SYNC_PHONE_LIST:
+            case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST:
                 return new CrudSyncPhoneListOperation();
-            case WORKER_TYPE_CRUD_SYNC_PHONE_DELETE:
+            case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE:
                 return new CrudSyncPhoneDeleteOperation();
-            case WORKER_TYPE_CRUD_SYNC_PHONE_ADD:
-            case WORKER_TYPE_CRUD_SYNC_PHONE_EDIT:
+            case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD:
+            case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_EDIT:
                 return new CrudSyncPhoneAddEditOperation();
-            case WORKER_TYPE_RSS_FEED:
+            case PoCRequestFactory.REQUEST_TYPE_RSS_FEED:
                 return new RssFeedOperation();
         }
         return null;

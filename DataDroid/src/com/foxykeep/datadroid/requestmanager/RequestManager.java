@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.foxykeep.datadroid.service.RequestService;
@@ -85,12 +86,14 @@ public abstract class RequestManager {
 
     private final Class<? extends RequestService> mRequestService;
     private final HashMap<Request, RequestReceiver> mRequestReceiverMap;
+    private final LruCache<Request, Bundle> mMemoryCache;
 
     protected RequestManager(Context context, Class<? extends RequestService> requestService) {
         mContext = context.getApplicationContext();
 
         mRequestService = requestService;
         mRequestReceiverMap = new HashMap<Request, RequestReceiver>();
+        mMemoryCache = new LruCache<Request, Bundle>(30);
     }
 
     /**
@@ -106,13 +109,13 @@ public abstract class RequestManager {
      * @param listener The listener called when the Request is completed.
      * @param request The {@link Request} to listen to.
      */
-    public void addOnRequestFinishedListener(RequestListener listener,
+    public void addRequestListener(RequestListener listener,
             Request request) {
         if (listener == null) {
             return;
         }
         if (request == null) {
-            throw new IllegalArgumentException("RequestData cannot be null.");
+            throw new IllegalArgumentException("Request cannot be null.");
         }
         RequestReceiver requestReceiver = mRequestReceiverMap.get(request);
         if (requestReceiver == null) {
@@ -129,8 +132,8 @@ public abstract class RequestManager {
      *
      * @param listener The listener to remove.
      */
-    public void removeOnRequestFinishedListener(RequestListener listener) {
-        removeOnRequestFinishedListener(listener, null);
+    public void removeRequestListener(RequestListener listener) {
+        removeRequestListener(listener, null);
     }
 
     /**
@@ -141,7 +144,7 @@ public abstract class RequestManager {
      * @param request The {@link Request} associated with this listener. If null, the listener will
      *            be removed from every request it is currently associated with.
      */
-    public void removeOnRequestFinishedListener(RequestListener listener,
+    public void removeRequestListener(RequestListener listener,
             Request request) {
         if (listener == null) {
             return;
@@ -170,18 +173,53 @@ public abstract class RequestManager {
     }
 
     /**
+     * Call the given listener synchronously with the memory cached data corresponding to the
+     * request. If there is no such data, no call to the listener will be made.
+     * <p>
+     * The method called in the listener will be
+     * {@link RequestListener#onRequestFinished(Request, Bundle)}.
+     *
+     * @param request The request associated with the memory cached data.
+     * @param listener The listener to call with the data if any.
+     */
+    public void callListenerWithCachedData(Request request, RequestListener listener) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request cannot be null.");
+        }
+        if (listener == null) {
+            return;
+        }
+
+        Bundle bundle = mMemoryCache.get(request);
+        if (bundle != null) {
+            listener.onRequestFinished(request, bundle);
+        }
+    }
+
+    /**
      * Execute the {@link Request}.
      *
      * @param request The request to execute.
+     * @param listener The listener called when the Request is completed.
      */
-    public void execute(Request request) {
+    public void execute(Request request, RequestListener listener) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request cannot be null.");
+        }
         if (mRequestReceiverMap.containsKey(request)) {
-            // This exact request is already in progress. So nothing to do.
+            // This exact request is already in progress.
+            // Just check if the new request has the memory cache enabled.
+            if (request.isMemoryCacheEnabled()) {
+                // If true, enable it in the RequestReceiver (if it's not the case already)
+                mRequestReceiverMap.get(request).enableMemoryCache();
+            }
             return;
         }
 
         RequestReceiver requestReceiver = new RequestReceiver(request);
         mRequestReceiverMap.put(request, requestReceiver);
+
+        addRequestListener(listener, request);
 
         Intent intent = new Intent(mContext, mRequestService);
         intent.putExtra(RequestService.INTENT_EXTRA_RECEIVER, requestReceiver);
@@ -189,37 +227,34 @@ public abstract class RequestManager {
         mContext.startService(intent);
     }
 
-    /**
-     * Overrides this method to persist your data in memory.
-     * <p>
-     * This method is called before calling the request listeners if any.
-     *
-     * @param resultCode Arbitrary result code of the request.
-     * @param resultData Any additional data part of the result of the request.
-     */
-    protected void persistDataToMemory(Request request, int resultCode,
-            Bundle resultData) {
-    }
-
     private final class RequestReceiver extends ResultReceiver {
 
         private final Request mRequest;
         private final Set<ListenerHolder> mListenerHolderSet;
+        private boolean mMemoryCacheEnabled;
 
-        RequestReceiver(Request request) {
+        /* package */RequestReceiver(Request request) {
             super(new Handler(Looper.getMainLooper()));
 
             mRequest = request;
             mListenerHolderSet = Collections.synchronizedSet(new HashSet<ListenerHolder>());
+            mMemoryCacheEnabled = request.isMemoryCacheEnabled();
+
+            // Clear the old memory cache if any
+            mMemoryCache.remove(request);
         }
 
-        void addListenerHolder(ListenerHolder listenerHolder) {
+        /* package */void enableMemoryCache() {
+            mMemoryCacheEnabled = true;
+        }
+
+        /* package */void addListenerHolder(ListenerHolder listenerHolder) {
             synchronized (mListenerHolderSet) {
                 mListenerHolderSet.add(listenerHolder);
             }
         }
 
-        void removeListenerHolder(ListenerHolder listenerHolder) {
+        /* package */void removeListenerHolder(ListenerHolder listenerHolder) {
             synchronized (mListenerHolderSet) {
                 mListenerHolderSet.remove(listenerHolder);
             }
@@ -227,7 +262,9 @@ public abstract class RequestManager {
 
         @Override
         public void onReceiveResult(int resultCode, Bundle resultData) {
-            persistDataToMemory(mRequest, resultCode, resultData);
+            if (mMemoryCacheEnabled) {
+                mMemoryCache.put(mRequest, resultData);
+            }
 
             mRequestReceiverMap.remove(mRequest);
 
@@ -245,12 +282,12 @@ public abstract class RequestManager {
         private final WeakReference<RequestListener> mListenerRef;
         private final int mHashCode;
 
-        public ListenerHolder(RequestListener listener) {
+        /* package */ListenerHolder(RequestListener listener) {
             mListenerRef = new WeakReference<RequestListener>(listener);
             mHashCode = 31 + listener.hashCode();
         }
 
-        public void onRequestFinished(Request request, int resultCode, Bundle resultData) {
+        /* package */void onRequestFinished(Request request, int resultCode, Bundle resultData) {
             mRequestReceiverMap.remove(request);
 
             RequestListener listener = mListenerRef.get();
