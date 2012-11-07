@@ -33,6 +33,18 @@ public final class PoCRequestFactory {
 
     public static final int REQUEST_TYPE_RSS_FEED = 20;
 
+    // Response data
+    public static final String BUNDLE_EXTRA_CITY_LIST =
+            "com.foxykeep.datadroidpoc.extras.cityList";
+    public static final String BUNDLE_EXTRA_PHONE_LIST =
+            "com.foxykeep.datadroidpoc.extras.phoneList";
+    public static final String BUNDLE_EXTRA_PHONE_DELETE_DATA =
+            "com.foxykeep.datadroidpoc.extras.phoneDeleteData";
+    public static final String BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA =
+            "com.foxykeep.datadroidpoc.extras.phoneAddEditData";
+    public static final String BUNDLE_EXTRA_RSS_FEED_DATA =
+            "com.foxykeep.datadroidpoc.extras.rssFeed";
+
     private PoCRequestFactory() {
         // no public constructor
     }
@@ -125,8 +137,9 @@ public final class PoCRequestFactory {
                 androidVersion, screenSize, price);
     }
 
-    public static Request createAddEditSyncPhoneRequest(Request request, String userId, long phoneId, String name,
-            String manufacturer, String androidVersion, double screenSize, int price) {
+    private static Request createAddEditSyncPhoneRequest(Request request, String userId,
+            long phoneId, String name, String manufacturer, String androidVersion,
+            double screenSize, int price) {
         request.setMemoryCacheEnabled(true);
         request.put(CrudSyncPhoneAddEditOperation.PARAM_USER_ID, userId);
         request.put(CrudSyncPhoneAddEditOperation.PARAM_PHONE_ID, phoneId);

@@ -19,7 +19,7 @@ import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.PhoneAddEditFactory;
 import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 import java.util.HashMap;
 
@@ -61,7 +61,7 @@ public final class CrudSyncPhoneAddEditOperation implements Operation {
         Phone phone = PhoneAddEditFactory.parseResult(result.body);
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA, phone);
+        bundle.putParcelable(PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA, phone);
         return bundle;
     }
 }

@@ -19,7 +19,7 @@ import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.PhoneListFactory;
 import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public final class CrudSyncPhoneListOperation implements Operation {
         ArrayList<Phone> phoneList = PhoneListFactory.parseResult(result.body);
 
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_PHONE_LIST, phoneList);
+        bundle.putParcelableArrayList(PoCRequestFactory.BUNDLE_EXTRA_PHONE_LIST, phoneList);
         return bundle;
     }
 }

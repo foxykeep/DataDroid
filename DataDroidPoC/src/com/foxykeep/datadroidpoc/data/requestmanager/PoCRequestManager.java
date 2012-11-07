@@ -33,12 +33,6 @@ public final class PoCRequestManager extends RequestManager {
         return sInstance;
     }
 
-    public static final String RECEIVER_EXTRA_CITY_LIST = "com.foxykeep.datadroidpoc.extras.cityList";
-    public static final String RECEIVER_EXTRA_PHONE_LIST = "com.foxykeep.datadroidpoc.extras.phoneList";
-    public static final String RECEIVER_EXTRA_PHONE_DELETE_DATA = "com.foxykeep.datadroidpoc.extras.phoneDeleteData";
-    public static final String RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA = "com.foxykeep.datadroidpoc.extras.phoneAddEditData";
-    public static final String RECEIVER_EXTRA_RSS_FEED_DATA = "com.foxykeep.datadroidpoc.extras.rssFeed";
-
     private PoCRequestManager(final Context context) {
         super(context, PoCService.class);
     }

@@ -19,7 +19,7 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.PhoneDeleteFactory;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 import java.util.HashMap;
 
@@ -47,7 +47,7 @@ public final class CrudSyncPhoneDeleteOperation implements Operation {
         long[] deletedPhoneIdArray = PhoneDeleteFactory.parseResult(result.body);
 
         Bundle bundle = new Bundle();
-        bundle.putLongArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_DELETE_DATA,
+        bundle.putLongArray(PoCRequestFactory.BUNDLE_EXTRA_PHONE_DELETE_DATA,
                 deletedPhoneIdArray);
         return bundle;
     }

@@ -74,8 +74,6 @@ public abstract class RequestManager {
         public void onRequestDataError(Request request);
     }
 
-    public static final String RECEIVER_EXTRA_REQUEST_DATA =
-            "com.foxykeep.datadroid.extras.request";
     public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.datadroid.extras.code";
     public static final String RECEIVER_EXTRA_PAYLOAD = "com.foxykeep.datadroid.extras.payload";
     public static final String RECEIVER_EXTRA_ERROR_TYPE = "com.foxykeep.datadroid.extras.error";
@@ -109,8 +107,7 @@ public abstract class RequestManager {
      * @param listener The listener called when the Request is completed.
      * @param request The {@link Request} to listen to.
      */
-    public void addRequestListener(RequestListener listener,
-            Request request) {
+    public void addRequestListener(RequestListener listener, Request request) {
         if (listener == null) {
             return;
         }
@@ -144,8 +141,7 @@ public abstract class RequestManager {
      * @param request The {@link Request} associated with this listener. If null, the listener will
      *            be removed from every request it is currently associated with.
      */
-    public void removeRequestListener(RequestListener listener,
-            Request request) {
+    public void removeRequestListener(RequestListener listener, Request request) {
         if (listener == null) {
             return;
         }
@@ -179,10 +175,10 @@ public abstract class RequestManager {
      * The method called in the listener will be
      * {@link RequestListener#onRequestFinished(Request, Bundle)}.
      *
-     * @param request The request associated with the memory cached data.
      * @param listener The listener to call with the data if any.
+     * @param request The request associated with the memory cached data.
      */
-    public void callListenerWithCachedData(Request request, RequestListener listener) {
+    public void callListenerWithCachedData(RequestListener listener, Request request) {
         if (request == null) {
             throw new IllegalArgumentException("Request cannot be null.");
         }

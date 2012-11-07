@@ -18,7 +18,7 @@ import com.foxykeep.datadroid.network.NetworkConnection.Builder;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 public final class RssFeedOperation implements Operation {
 
@@ -33,7 +33,7 @@ public final class RssFeedOperation implements Operation {
 
         final Bundle bundle = new Bundle();
         final RssFeed rssFeed = RssFactory.parseResult(result.body);
-        bundle.putParcelable(PoCRequestManager.RECEIVER_EXTRA_RSS_FEED_DATA, rssFeed);
+        bundle.putParcelable(PoCRequestFactory.BUNDLE_EXTRA_RSS_FEED_DATA, rssFeed);
         return bundle;
     }
 }
