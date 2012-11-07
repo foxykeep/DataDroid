@@ -22,8 +22,7 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
@@ -72,22 +71,10 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
             Request request = mRequestList.get(i);
 
             if (mRequestManager.isRequestInProgress(request)) {
-                mRequestManager.addOnRequestFinishedListener(this, request);
+                mRequestManager.addRequestListener(this, request);
             } else {
-                int requestType = request.getRequestType();
-                if (requestType == PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD) {
-                    Intent resultData = new Intent();
-                    resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE,
-                            mRequestManager.getMemoryProvider().syncPhoneAddedEditedPhone);
-                    setResult(RESULT_OK, resultData);
-                    finish();
-                } else if (requestType == PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT) {
-                    Intent resultData = new Intent();
-                    resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE,
-                            mRequestManager.getMemoryProvider().syncPhoneAddedEditedPhone);
-                    setResult(RESULT_OK, resultData);
-                    finish();
-                }
+                ProgressDialogFragment.dismiss(this);
+                mRequestManager.callListenerWithCachedData(this, request);
             }
         }
     }
@@ -95,9 +82,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     @Override
     protected void onPause() {
         super.onPause();
-        if (!mRequestList.isEmpty()) {
-            mRequestManager.removeOnRequestFinishedListener(this);
-        }
+        mRequestManager.removeRequestListener(this);
     }
 
     private void bindViews() {
@@ -131,14 +116,14 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = mRequestManager.addSyncPhone(
+        Request request = PoCRequestFactory.createAddSyncPhoneRequest(
                 mUserId,
                 mEditTextName.getText().toString(),
                 mEditTextManufacturer.getText().toString(),
                 mEditTextAndroidVersion.getText().toString(),
                 Double.parseDouble(mEditTextScreenSize.getText().toString()),
                 Integer.parseInt(mEditTextPrice.getText().toString()));
-        mRequestManager.addOnRequestFinishedListener(this, request);
+        mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
 
@@ -147,7 +132,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = mRequestManager.editSyncPhone(
+        Request request = PoCRequestFactory.createEditSyncPhoneRequest(
                 mUserId,
                 mPhone.serverId,
                 mEditTextName.getText().toString(),
@@ -155,7 +140,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 mEditTextAndroidVersion.getText().toString(),
                 Double.parseDouble(mEditTextScreenSize.getText().toString()),
                 Integer.parseInt(mEditTextPrice.getText().toString()));
-        mRequestManager.addOnRequestFinishedListener(this, request);
+        mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
 
@@ -196,16 +181,16 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
             mRequestList.remove(request);
 
             final int requestType = request.getRequestType();
-            if (requestType == PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_ADD) {
+            if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD) {
                 Phone phone = resultData.getParcelable(
-                        PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
+                        PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA);
                 Intent intent = new Intent();
                 intent.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE, phone);
                 setResult(RESULT_OK, intent);
                 finish();
-            } else if (requestType == PoCService.WORKER_TYPE_CRUD_SYNC_PHONE_EDIT) {
+            } else if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_EDIT) {
                 Phone phone = resultData.getParcelable(
-                        PoCRequestManager.RECEIVER_EXTRA_PHONE_ADD_EDIT_DATA);
+                        PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA);
                 Intent intent = new Intent();
                 intent.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE, phone);
                 setResult(RESULT_OK, intent);
@@ -231,6 +216,16 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
             mRequestList.remove(request);
 
             showBadDataErrorDialog();
+        }
+    }
+
+    @Override
+    public void onConnexionErrorDialogRetry(Request request) {
+        final int requestType = request.getRequestType();
+        if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD) {
+            callSyncPhoneAddWS();
+        } else if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_EDIT) {
+            callSyncPhoneEditWS();
         }
     }
 }
