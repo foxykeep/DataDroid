@@ -82,7 +82,9 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     @Override
     protected void onPause() {
         super.onPause();
-        mRequestManager.removeRequestListener(this);
+        if (!mRequestList.isEmpty()) {
+            mRequestManager.removeRequestListener(this);
+        }
     }
 
     private void bindViews() {
@@ -180,21 +182,25 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
             ProgressDialogFragment.dismiss(this);
             mRequestList.remove(request);
 
-            final int requestType = request.getRequestType();
-            if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD) {
-                Phone phone = resultData.getParcelable(
-                        PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA);
-                Intent intent = new Intent();
-                intent.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE, phone);
-                setResult(RESULT_OK, intent);
-                finish();
-            } else if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_EDIT) {
-                Phone phone = resultData.getParcelable(
-                        PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA);
-                Intent intent = new Intent();
-                intent.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE, phone);
-                setResult(RESULT_OK, intent);
-                finish();
+            switch(request.getRequestType()) {
+                case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD: {
+                    Phone phone = resultData.getParcelable(
+                            PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA);
+                    Intent intent = new Intent();
+                    intent.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_ADDED_PHONE, phone);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+                }
+                case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_EDIT: {
+                    Phone phone = resultData.getParcelable(
+                            PoCRequestFactory.BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA);
+                    Intent intent = new Intent();
+                    intent.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE, phone);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+                }
             }
         }
     }

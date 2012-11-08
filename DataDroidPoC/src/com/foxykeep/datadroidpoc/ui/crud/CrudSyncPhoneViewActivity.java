@@ -8,35 +8,30 @@
 
 package com.foxykeep.datadroidpoc.ui.crud;
 
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.foxykeep.datadroid.requestmanager.RequestManager.OnRequestFinishedListener;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.config.DialogConfig;
-import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
 import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public final class CrudSyncPhoneViewActivity extends DataDroidActivity implements
-        OnRequestFinishedListener {
+public final class CrudSyncPhoneViewActivity extends DataDroidActivity implements RequestListener {
 
-    private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
-    private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
-    private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
     private static final String SAVED_STATE_PHONE = "savedStatePhone";
     private static final String SAVED_STATE_IS_PHONE_EDITED = "savedStateIsPhoneEdited";
 
@@ -49,14 +44,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     private Phone mPhone;
     private boolean mIsPhoneEdited;
 
-    private PoCRequestManager mRequestManager;
-    private int mRequestId = -1;
     private String mUserId;
-
-    private MemoryProvider mMemoryProvider = MemoryProvider.getInstance();
-
-    private String mErrorDialogTitle;
-    private String mErrorDialogMessage;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -66,9 +54,6 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
         Intent intent = getIntent();
 
         if (savedInstanceState != null) {
-            mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
-            mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
-            mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
             mPhone = savedInstanceState.getParcelable(SAVED_STATE_PHONE);
             mIsPhoneEdited = savedInstanceState.getBoolean(SAVED_STATE_IS_PHONE_EDITED);
         } else if (intent != null) {
@@ -78,31 +63,20 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
 
         populateViews();
 
-        mRequestManager = PoCRequestManager.from(this);
         mUserId = UserManager.getUserId(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mRequestId != -1) {
-            if (mRequestManager.isRequestInProgress(mRequestId)) {
-                mRequestManager.addOnRequestFinishedListener(this);
-                showDialog(DialogConfig.DIALOG_PROGRESS);
+        for (int i = 0, length = mRequestList.size(); i < length; i++) {
+            Request request = mRequestList.get(i);
+
+            if (mRequestManager.isRequestInProgress(request)) {
+                mRequestManager.addRequestListener(this, request);
             } else {
-                mRequestId = -1;
-
-                if (mMemoryProvider.syncPhoneDeleteData == null) {
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                } else {
-                    final long[] syncDeletedPhoneIdArray = mMemoryProvider.syncPhoneDeleteData;
-
-                    Intent data = new Intent();
-                    data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID,
-                            syncDeletedPhoneIdArray[0]);
-                    setResult(RESULT_OK, data);
-                    finish();
-                }
+                ProgressDialogFragment.dismiss(this);
+                mRequestManager.callListenerWithCachedData(this, request);
             }
         }
     }
@@ -110,8 +84,8 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     @Override
     protected void onPause() {
         super.onPause();
-        if (mRequestId != -1) {
-            mRequestManager.removeOnRequestFinishedListener(this);
+        if (!mRequestList.isEmpty()) {
+            mRequestManager.removeRequestListener(this);
         }
     }
 
@@ -119,9 +93,6 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
-        outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
-        outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
         outState.putParcelable(SAVED_STATE_PHONE, mPhone);
         outState.putBoolean(SAVED_STATE_IS_PHONE_EDITED, mIsPhoneEdited);
     }
@@ -141,33 +112,6 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     protected Dialog onCreateDialog(final int id) {
         Builder b;
         switch (id) {
-            case DialogConfig.DIALOG_ERROR:
-                b = new Builder(this);
-                b.setTitle(mErrorDialogTitle);
-                b.setMessage(mErrorDialogMessage);
-                b.setCancelable(true);
-                b.setNeutralButton(android.R.string.ok, null);
-                return b.create();
-            case DialogConfig.DIALOG_CONNEXION_ERROR:
-                b = new Builder(this);
-                b.setCancelable(true);
-                b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int which) {
-                                callSyncPhoneDeleteWS();
-                            }
-                        });
-                b.setTitle(R.string.dialog_error_connexion_error_title);
-                b.setMessage(R.string.dialog_error_connexion_error_message);
-                return b.create();
-            case DialogConfig.DIALOG_PROGRESS:
-                ProgressDialog dialog = new ProgressDialog(this);
-                dialog.setTitle(R.string.progress_dialog_title);
-                dialog.setMessage(getString(R.string.progress_dialog_message));
-                dialog.setIndeterminate(true);
-                dialog.setCancelable(false);
-                return dialog;
             case DialogConfig.DIALOG_DELETE_CONFIRM:
                 b = new Builder(this);
                 b.setIcon(android.R.drawable.ic_dialog_alert);
@@ -188,23 +132,15 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
         }
     }
 
-    @Override
-    protected void onPrepareDialog(final int id, final Dialog dialog) {
-        switch (id) {
-            case DialogConfig.DIALOG_ERROR:
-                dialog.setTitle(mErrorDialogTitle);
-                ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
-                break;
-            default:
-                super.onPrepareDialog(id, dialog);
-                break;
-        }
-    }
-
     private void callSyncPhoneDeleteWS() {
-        showDialog(DialogConfig.DIALOG_PROGRESS);
-        mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.deleteSyncPhone(mUserId, String.valueOf(mPhone.serverId));
+        new ProgressDialogFragmentBuilder(this)
+                .setMessage(R.string.progress_dialog_message)
+                .setCancelable(true)
+                .show();
+        Request request = PoCRequestFactory.createDeleteSyncPhonesRequest(mUserId,
+                String.valueOf(mPhone.serverId));
+        mRequestManager.execute(request, this);
+        mRequestList.add(request);
     }
 
     @Override
@@ -224,18 +160,13 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     }
 
     @Override
-    public boolean onKeyUp(final int keyCode, final KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mIsPhoneEdited) {
-                Intent resultData = new Intent();
-                resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE, mPhone);
-                setResult(RESULT_OK, resultData);
-                finish();
-            }
-            return true;
-        } else {
-            return super.onKeyUp(keyCode, event);
+    public void onBackPressed() {
+        if (mIsPhoneEdited) {
+            Intent resultData = new Intent();
+            resultData.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_EDITED_PHONE, mPhone);
+            setResult(RESULT_OK, resultData);
         }
+        super.onBackPressed();
     }
 
     @Override
@@ -264,35 +195,39 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     }
 
     @Override
-    public void onRequestFinished(final int requestId, final int resultCode, final Bundle payload) {
-        if (requestId == mRequestId) {
-            dismissDialog(DialogConfig.DIALOG_PROGRESS);
-            mRequestId = -1;
-            mRequestManager.removeOnRequestFinishedListener(this);
-            if (resultCode == PoCService.ERROR_CODE) {
-                if (payload != null) {
-                    final int errorType = payload.getInt(
-                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
-                    if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
-                        mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
-                        mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
-                        showDialog(DialogConfig.DIALOG_ERROR);
-                    } else {
-                        showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                    }
-                } else {
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                }
-            } else {
-                final long[] syncDeletedPhoneIdArray = payload
-                        .getLongArray(PoCRequestManager.RECEIVER_EXTRA_PHONE_DELETE_DATA);
+    public void onRequestFinished(Request request, Bundle resultData) {
+        if (mRequestList.contains(request)) {
+            ProgressDialogFragment.dismiss(this);
+            mRequestList.remove(request);
 
-                Intent data = new Intent();
-                data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID,
-                        syncDeletedPhoneIdArray[0]);
-                setResult(RESULT_OK, data);
-                finish();
-            }
+            final long[] syncDeletedPhoneIdArray = resultData
+                    .getLongArray(PoCRequestFactory.BUNDLE_EXTRA_PHONE_DELETE_DATA);
+
+            Intent data = new Intent();
+            data.putExtra(CrudSyncPhoneListActivity.RESULT_EXTRA_DELETED_PHONE_ID,
+                    syncDeletedPhoneIdArray[0]);
+            setResult(RESULT_OK, data);
+            finish();
+        }
+    }
+
+    @Override
+    public void onRequestConnectionError(Request request) {
+        if (mRequestList.contains(request)) {
+            ProgressDialogFragment.dismiss(this);
+            mRequestList.remove(request);
+
+            ConnexionErrorDialogFragment.show(this, request, this);
+        }
+    }
+
+    @Override
+    public void onRequestDataError(Request request) {
+        if (mRequestList.contains(request)) {
+            ProgressDialogFragment.dismiss(this);
+            mRequestList.remove(request);
+
+            showBadDataErrorDialog();
         }
     }
 }

@@ -170,10 +170,13 @@ public abstract class RequestManager {
 
     /**
      * Call the given listener synchronously with the memory cached data corresponding to the
-     * request. If there is no such data, no call to the listener will be made.
+     * request.
      * <p>
      * The method called in the listener will be
      * {@link RequestListener#onRequestFinished(Request, Bundle)}.
+     * <p>
+     * If no cached data is found, {@link RequestListener#onRequestConnectionError(Request)} will be
+     * called instead
      *
      * @param listener The listener to call with the data if any.
      * @param request The request associated with the memory cached data.
@@ -189,6 +192,8 @@ public abstract class RequestManager {
         Bundle bundle = mMemoryCache.get(request);
         if (bundle != null) {
             listener.onRequestFinished(request, bundle);
+        } else {
+            listener.onRequestConnectionError(request);
         }
     }
 

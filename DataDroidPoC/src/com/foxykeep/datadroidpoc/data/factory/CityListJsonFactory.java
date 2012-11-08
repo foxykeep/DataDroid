@@ -13,7 +13,7 @@ import android.os.Bundle;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
 import com.foxykeep.datadroidpoc.data.model.City;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +51,7 @@ public final class CityListJsonFactory {
         }
 
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(PoCRequestManager.RECEIVER_EXTRA_CITY_LIST, cityList);
+        bundle.putParcelableArrayList(PoCRequestFactory.BUNDLE_EXTRA_CITY_LIST, cityList);
         return bundle;
     }
 }
