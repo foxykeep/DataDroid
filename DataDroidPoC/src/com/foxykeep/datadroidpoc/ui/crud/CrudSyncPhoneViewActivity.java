@@ -47,7 +47,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     private String mUserId;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crud_phone_view);
 
@@ -90,7 +90,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(SAVED_STATE_PHONE, mPhone);
@@ -109,7 +109,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected Dialog onCreateDialog(final int id) {
+    protected Dialog onCreateDialog(int id) {
         Builder b;
         switch (id) {
             case DialogConfig.DIALOG_DELETE_CONFIRM:
@@ -120,7 +120,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
                         mPhone.name));
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         callSyncPhoneDeleteWS();
                     }
                 });
@@ -144,7 +144,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case ACTIVITY_FOR_RESULT_EDIT:
                 if (resultCode == RESULT_OK) {
@@ -170,19 +170,19 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     }
 
     @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        final MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.crud_phone_view, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        final int itemId = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
         switch (itemId) {
             case R.id.menu_edit:
-                final Intent intent = new Intent(this, CrudSyncPhoneAddEditActivity.class);
+                Intent intent = new Intent(this, CrudSyncPhoneAddEditActivity.class);
                 intent.putExtra(CrudSyncPhoneAddEditActivity.INTENT_EXTRA_PHONE, mPhone);
                 startActivityForResult(intent, ACTIVITY_FOR_RESULT_EDIT);
                 return true;
@@ -200,7 +200,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
             ProgressDialogFragment.dismiss(this);
             mRequestList.remove(request);
 
-            final long[] syncDeletedPhoneIdArray = resultData
+            long[] syncDeletedPhoneIdArray = resultData
                     .getLongArray(PoCRequestFactory.BUNDLE_EXTRA_PHONE_DELETE_DATA);
 
             Intent data = new Intent();

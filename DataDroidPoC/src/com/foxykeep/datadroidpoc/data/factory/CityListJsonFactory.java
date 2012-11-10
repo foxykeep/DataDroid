@@ -27,17 +27,17 @@ public final class CityListJsonFactory {
         // No public constructor
     }
 
-    public static Bundle parseResult(final String wsResponse) throws DataException {
-        final ArrayList<City> cityList = new ArrayList<City>();
+    public static Bundle parseResult(String wsResponse) throws DataException {
+        ArrayList<City> cityList = new ArrayList<City>();
 
         try {
-            final JSONObject parser = new JSONObject(wsResponse);
-            final JSONObject jsonRoot = parser.getJSONObject(JSONTag.CITY_LIST_ELEM_CITIES);
-            final JSONArray jsonPersonArray = jsonRoot.getJSONArray(JSONTag.CITY_LIST_ELEM_CITY);
-            final int size = jsonPersonArray.length();
+            JSONObject parser = new JSONObject(wsResponse);
+            JSONObject jsonRoot = parser.getJSONObject(JSONTag.CITY_LIST_ELEM_CITIES);
+            JSONArray jsonPersonArray = jsonRoot.getJSONArray(JSONTag.CITY_LIST_ELEM_CITY);
+            int size = jsonPersonArray.length();
             for (int i = 0; i < size; i++) {
-                final JSONObject jsonPerson = jsonPersonArray.getJSONObject(i);
-                final City city = new City();
+                JSONObject jsonPerson = jsonPersonArray.getJSONObject(i);
+                City city = new City();
 
                 city.name = jsonPerson.getString(JSONTag.CITY_LIST_ELEM_CITY_NAME);
                 city.postalCode = jsonPerson.getInt(JSONTag.CITY_LIST_ELEM_CITY_POSTAL_CODE);

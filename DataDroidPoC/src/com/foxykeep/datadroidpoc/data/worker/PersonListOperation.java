@@ -25,7 +25,7 @@ import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.PersonListJsonFactory;
 import com.foxykeep.datadroidpoc.data.factory.PersonListXmlFactory;
 import com.foxykeep.datadroidpoc.data.model.Person;
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
+import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
 import com.foxykeep.datadroidpoc.data.provider.PoCProvider;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public final class PersonListOperation implements Operation {
     @Override
     public Bundle execute(Request request) throws ConnectionException, DataException,
             CustomException {
-        final int returnFormat = request.getInt(PARAM_RETURN_FORMAT);
+        int returnFormat = request.getInt(PARAM_RETURN_FORMAT);
 
         Builder builder = new Builder(
                 returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML
@@ -61,12 +61,12 @@ public final class PersonListOperation implements Operation {
         }
 
         // Clear the table
-        mContext.getContentResolver().delete(PersonDao.CONTENT_URI, null, null);
+        mContext.getContentResolver().delete(DbPerson.CONTENT_URI, null, null);
 
         // Adds the persons in the database
-        final int personListSize = personList.size();
+        int personListSize = personList.size();
         if (personList != null && personListSize > 0) {
-            final ArrayList<ContentProviderOperation> operationList =
+            ArrayList<ContentProviderOperation> operationList =
                     new ArrayList<ContentProviderOperation>();
 
             for (int i = 0; i < personListSize; i++) {

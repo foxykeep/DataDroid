@@ -45,7 +45,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     private Phone mPhone;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.crud_phone_add_edit);
@@ -53,7 +53,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
 
         mUserId = UserManager.getUserId(this);
 
-        final Intent intent = getIntent();
+        Intent intent = getIntent();
         if (intent != null) {
             mPhone = intent.getParcelableExtra(INTENT_EXTRA_PHONE);
         }
@@ -147,7 +147,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     }
 
     @Override
-    public void onClick(final View view) {
+    public void onClick(View view) {
         if (view == mButtonSubmit) {
             if (mPhone == null) {
                 callSyncPhoneAddWS();
@@ -158,7 +158,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     }
 
     @Override
-    public void afterTextChanged(final Editable s) {
+    public void afterTextChanged(Editable s) {
         mButtonSubmit.setEnabled(!TextUtils.isEmpty(mEditTextName.getText().toString())
                 && !TextUtils.isEmpty(mEditTextManufacturer.getText().toString())
                 && !TextUtils.isEmpty(mEditTextAndroidVersion.getText().toString())
@@ -167,14 +167,10 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     }
 
     @Override
-    public void beforeTextChanged(final CharSequence s, final int start, final int count,
-            final int after) {
-    }
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
     @Override
-    public void onTextChanged(final CharSequence s, final int start, final int before,
-            final int count) {
-    }
+    public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
     @Override
     public void onRequestFinished(Request request, Bundle resultData) {
@@ -227,7 +223,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
 
     @Override
     public void onConnexionErrorDialogRetry(Request request) {
-        final int requestType = request.getRequestType();
+        int requestType = request.getRequestType();
         if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD) {
             callSyncPhoneAddWS();
         } else if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_EDIT) {

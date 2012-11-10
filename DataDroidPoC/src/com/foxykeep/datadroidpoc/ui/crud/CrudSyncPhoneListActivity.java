@@ -54,8 +54,6 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     private static final String SAVED_STATE_PHONE_ARRAY_LIST = "savedStatePhoneArrayList";
 
     private static final int REQUEST_TYPE_LIST = 1;
-    private static final int REQUEST_TYPE_DELETE_MONO = 2;
-    private static final int REQUEST_TYPE_DELETE_ALL = 3;
 
     private static final int ACTIVITY_FOR_RESULT_ADD = 1;
     private static final int ACTIVITY_FOR_RESULT_EDIT = 2;
@@ -78,7 +76,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     private int mPositionToDelete;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
@@ -89,7 +87,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
             mPositionToDelete = savedInstanceState.getInt(SAVED_STATE_POSITION_TO_DELETE);
             mArePhonesLoaded = savedInstanceState.getBoolean(SAVED_STATE_ARE_PHONES_LOADED, false);
 
-            final ArrayList<Phone> phoneArrayList = savedInstanceState
+            ArrayList<Phone> phoneArrayList = savedInstanceState
                     .getParcelableArrayList(SAVED_STATE_PHONE_ARRAY_LIST);
             if (phoneArrayList != null && phoneArrayList.size() > 0) {
                 mListAdapter.setNotifyOnChange(false);
@@ -138,15 +136,15 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putInt(SAVED_STATE_POSITION_TO_DELETE, mPositionToDelete);
         outState.putBoolean(SAVED_STATE_ARE_PHONES_LOADED, mArePhonesLoaded);
 
-        final ArrayList<Phone> phoneArrayList = new ArrayList<Phone>();
+        ArrayList<Phone> phoneArrayList = new ArrayList<Phone>();
 
-        final int adapterCount = mListAdapter.getCount();
+        int adapterCount = mListAdapter.getCount();
         for (int i = 0; i < adapterCount; i++) {
             phoneArrayList.add(mListAdapter.getItem(i));
         }
@@ -164,7 +162,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected Dialog onCreateDialog(final int id) {
+    protected Dialog onCreateDialog(int id) {
         Builder b;
         switch (id) {
             case DialogConfig.DIALOG_DELETE_ALL_CONFIRM:
@@ -174,7 +172,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                 b.setMessage(R.string.crud_phone_list_dialog_delete_all_confirm_message);
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         callSyncPhoneDeleteAllWS();
                     }
                 });
@@ -191,7 +189,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                         phone.name));
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         callSyncPhoneDeleteMonoWS();
                     }
                 });
@@ -204,7 +202,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected void onPrepareDialog(final int id, final Dialog dialog) {
+    protected void onPrepareDialog(int id, Dialog dialog) {
         switch (id) {
             case DialogConfig.DIALOG_DELETE_CONFIRM:
                 ((AlertDialog) dialog).setMessage(getString(
@@ -218,18 +216,18 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case ACTIVITY_FOR_RESULT_VIEW: {
                 if (resultCode == RESULT_OK) {
-                    final long deletedPhoneId = data
+                    long deletedPhoneId = data
                             .getLongExtra(RESULT_EXTRA_DELETED_PHONE_ID, -1);
-                    final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
+                    Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
 
                     if (deletedPhoneId != -1) {
                         mListAdapter.setNotifyOnChange(false);
                         for (int i = 0; i < mListAdapter.getCount(); i++) {
-                            final Phone phone = mListAdapter.getItem(i);
+                            Phone phone = mListAdapter.getItem(i);
                             if (phone.serverId == deletedPhoneId) {
                                 mListAdapter.remove(phone);
                                 break;
@@ -237,10 +235,10 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                         }
                         mListAdapter.notifyDataSetChanged();
                     } else if (editedPhone != null) {
-                        final int adapterCount = mListAdapter.getCount();
+                        int adapterCount = mListAdapter.getCount();
                         mListAdapter.setNotifyOnChange(false);
                         for (int i = 0; i < adapterCount; i++) {
-                            final Phone phone = mListAdapter.getItem(i);
+                            Phone phone = mListAdapter.getItem(i);
                             if (phone.serverId == editedPhone.serverId) {
                                 phone.serverId = editedPhone.serverId;
                                 phone.name = editedPhone.name;
@@ -258,7 +256,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
             }
             case ACTIVITY_FOR_RESULT_ADD: {
                 if (resultCode == RESULT_OK) {
-                    final Phone addedPhone = data.getParcelableExtra(RESULT_EXTRA_ADDED_PHONE);
+                    Phone addedPhone = data.getParcelableExtra(RESULT_EXTRA_ADDED_PHONE);
 
                     mListAdapter.setNotifyOnChange(false);
                     mListAdapter.add(addedPhone);
@@ -268,12 +266,12 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
             }
             case ACTIVITY_FOR_RESULT_EDIT: {
                 if (resultCode == RESULT_OK) {
-                    final Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
+                    Phone editedPhone = data.getParcelableExtra(RESULT_EXTRA_EDITED_PHONE);
 
-                    final int adapterCount = mListAdapter.getCount();
+                    int adapterCount = mListAdapter.getCount();
                     mListAdapter.setNotifyOnChange(false);
                     for (int i = 0; i < adapterCount; i++) {
-                        final Phone phone = mListAdapter.getItem(i);
+                        Phone phone = mListAdapter.getItem(i);
                         if (phone.serverId == editedPhone.serverId) {
                             phone.serverId = editedPhone.serverId;
                             phone.name = editedPhone.name;
@@ -295,16 +293,16 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        final MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.crud_phone_list, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        final int itemId = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
         switch (itemId) {
             case R.id.menu_add:
                 startActivityForResult(new Intent(this, CrudSyncPhoneAddEditActivity.class),
@@ -331,8 +329,8 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     private void callSyncPhoneDeleteAllWS() {
-        final StringBuilder sb = new StringBuilder();
-        final int adapterCount = mListAdapter.getCount();
+        StringBuilder sb = new StringBuilder();
+        int adapterCount = mListAdapter.getCount();
         for (int i = 0; i < adapterCount; i++) {
             sb.append(mListAdapter.getItem(i).serverId);
             if (i != adapterCount - 1) {
@@ -342,7 +340,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
         callSyncPhoneDeleteWS(sb.toString());
     }
 
-    private void callSyncPhoneDeleteWS(final String phoneIdList) {
+    private void callSyncPhoneDeleteWS(String phoneIdList) {
         new ProgressDialogFragmentBuilder(this)
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
@@ -353,8 +351,8 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
-            final long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
         if (parent == mListView) {
             Intent intent = new Intent(this, CrudSyncPhoneViewActivity.class);
             intent.putExtra(CrudSyncPhoneViewActivity.INTENT_EXTRA_PHONE,
@@ -364,10 +362,10 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    public void onCreateContextMenu(final ContextMenu menu, final View v,
-            final ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        final MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.crud_phone_list_context, menu);
 
         menu.setHeaderTitle((mListAdapter)
@@ -375,10 +373,10 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    public boolean onContextItemSelected(final MenuItem item) {
-        final int itemId = item.getItemId();
+    public boolean onContextItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
 
-        final int position = ((AdapterContextMenuInfo) item.getMenuInfo()).position;
+        int position = ((AdapterContextMenuInfo) item.getMenuInfo()).position;
 
         switch (itemId) {
             case R.id.menu_edit:
@@ -399,7 +397,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     @Override
     public void onRequestFinished(Request request, Bundle resultData) {
         if (mRequestList.contains(request)) {
-            final int requestType = request.getRequestType();
+            int requestType = request.getRequestType();
             if (requestType == REQUEST_TYPE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
             } else {
@@ -411,7 +409,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                 case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST: {
                     mArePhonesLoaded = true;
 
-                    final ArrayList<Phone> syncPhoneList = resultData
+                    ArrayList<Phone> syncPhoneList = resultData
                             .getParcelableArrayList(PoCRequestFactory.BUNDLE_EXTRA_PHONE_LIST);
 
                     if (syncPhoneList.size() == 0) {
@@ -427,12 +425,12 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                     break;
                 }
                 case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE: {
-                    final long[] syncDeletedPhoneIdArray = resultData
+                    long[] syncDeletedPhoneIdArray = resultData
                             .getLongArray(PoCRequestFactory.BUNDLE_EXTRA_PHONE_DELETE_DATA);
 
                     mListAdapter.setNotifyOnChange(false);
                     for (int i = 0; i < mListAdapter.getCount(); i++) {
-                        final Phone phone = mListAdapter.getItem(i);
+                        Phone phone = mListAdapter.getItem(i);
                         if (ArrayUtils.inArray(syncDeletedPhoneIdArray, phone.serverId)) {
                             mListAdapter.remove(phone);
                             i--;
@@ -448,7 +446,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     @Override
     public void onRequestConnectionError(Request request) {
         if (mRequestList.contains(request)) {
-            final int requestType = request.getRequestType();
+            int requestType = request.getRequestType();
             if (requestType == REQUEST_TYPE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
             } else {
@@ -463,7 +461,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     @Override
     public void onRequestDataError(Request request) {
         if (mRequestList.contains(request)) {
-            final int requestType = request.getRequestType();
+            int requestType = request.getRequestType();
             if (requestType == REQUEST_TYPE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
             } else {
@@ -479,12 +477,12 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
         private TextView mTextViewName;
         private TextView mTextViewManufacturer;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(View view) {
             mTextViewName = (TextView) view.findViewById(R.id.tv_name);
             mTextViewManufacturer = (TextView) view.findViewById(R.id.tv_manufacturer);
         }
 
-        public void populateView(final Phone phone) {
+        public void populateView(Phone phone) {
             mTextViewName.setText(phone.name);
             mTextViewManufacturer.setText(phone.manufacturer);
         }
@@ -492,12 +490,12 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
 
     class PhoneListAdapter extends ArrayAdapter<Phone> {
 
-        public PhoneListAdapter(final Context context) {
+        public PhoneListAdapter(Context context) {
             super(context, -1);
         }
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
 
             if (convertView == null) {

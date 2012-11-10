@@ -30,7 +30,7 @@ public final class HomeActivity extends Activity implements OnClickListener {
     private Button mButtonRssFeed;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home);
@@ -52,7 +52,7 @@ public final class HomeActivity extends Activity implements OnClickListener {
     }
 
     @Override
-    public void onClick(final View view) {
+    public void onClick(View view) {
         Intent intent = null;
         if (view == mButtonPersonList) {
             intent = new Intent(this, PersonListActivity.class);

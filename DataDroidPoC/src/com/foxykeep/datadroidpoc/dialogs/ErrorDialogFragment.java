@@ -24,17 +24,17 @@ public class ErrorDialogFragment extends DialogFragment {
     private OnClickListener mOnClickListener;
     private OnCancelListener mOnCancelListener;
 
-    public ErrorDialogFragment() {
-    }
-
-    private ErrorDialogFragment(String title, String message, OnClickListener onClickListener,
-            OnCancelListener onCancelListener) {
-        mOnClickListener = onClickListener;
+    private static ErrorDialogFragment newInstance(String title, String message,
+            OnClickListener onClickListener, OnCancelListener onCancelListener) {
+        ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
+        dialogFragment.mOnClickListener = onClickListener;
 
         Bundle args = new Bundle();
         args.putString(BUNDLE_TITLE, title);
         args.putString(BUNDLE_MESSAGE, message);
-        setArguments(args);
+        dialogFragment.setArguments(args);
+
+        return dialogFragment;
     }
 
     @Override
@@ -103,8 +103,8 @@ public class ErrorDialogFragment extends DialogFragment {
             }
             fragmentTransaction.addToBackStack(null);
 
-            new ErrorDialogFragment(mTitle, mMessage, mOnClickListener, mOnCancelListener).show(
-                    fragmentManager, FRAGMENT_TAG);
+            ErrorDialogFragment.newInstance(mTitle, mMessage, mOnClickListener, mOnCancelListener)
+                    .show(fragmentManager, FRAGMENT_TAG);
         }
     }
 

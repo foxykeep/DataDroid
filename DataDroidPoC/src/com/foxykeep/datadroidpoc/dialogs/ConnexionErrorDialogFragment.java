@@ -1,7 +1,6 @@
 
 package com.foxykeep.datadroidpoc.dialogs;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -16,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.R;
 
-@SuppressLint("ValidFragment")
 public final class ConnexionErrorDialogFragment extends DialogFragment {
 
     public interface ConnexionErrorDialogListener {
@@ -31,12 +29,12 @@ public final class ConnexionErrorDialogFragment extends DialogFragment {
     private ConnexionErrorDialogListener mConnexionErrorDialogListener;
     private Request mRequest;
 
-    public ConnexionErrorDialogFragment() {}
-
-    private ConnexionErrorDialogFragment(Request request,
+    private static ConnexionErrorDialogFragment newInstance(Request request,
             ConnexionErrorDialogListener connexionErrorDialogListener) {
-        mConnexionErrorDialogListener = connexionErrorDialogListener;
-        mRequest = request;
+        ConnexionErrorDialogFragment dialogFragment = new ConnexionErrorDialogFragment();
+        dialogFragment.mConnexionErrorDialogListener = connexionErrorDialogListener;
+        dialogFragment.mRequest = request;
+        return dialogFragment;
     }
 
     @Override
@@ -82,7 +80,7 @@ public final class ConnexionErrorDialogFragment extends DialogFragment {
         }
         fragmentTransaction.addToBackStack(null);
 
-        new ConnexionErrorDialogFragment(request, connexionErrrorDialogListener)
+        ConnexionErrorDialogFragment.newInstance(request, connexionErrrorDialogListener)
                 .show(fragmentManager, FRAGMENT_TAG);
     }
 

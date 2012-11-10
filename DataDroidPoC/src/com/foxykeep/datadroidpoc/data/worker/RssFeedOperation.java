@@ -31,8 +31,8 @@ public final class RssFeedOperation implements Operation {
     public Bundle execute(Request request) throws ConnectionException, DataException {
         ConnectionResult result = new Builder(request.getString(PARAM_FEED_URL)).execute();
 
-        final Bundle bundle = new Bundle();
-        final RssFeed rssFeed = RssFactory.parseResult(result.body);
+        Bundle bundle = new Bundle();
+        RssFeed rssFeed = RssFactory.parseResult(result.body);
         bundle.putParcelable(PoCRequestFactory.BUNDLE_EXTRA_RSS_FEED_DATA, rssFeed);
         return bundle;
     }

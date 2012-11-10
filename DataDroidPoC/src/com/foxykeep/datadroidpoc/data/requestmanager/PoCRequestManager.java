@@ -25,7 +25,7 @@ public final class PoCRequestManager extends RequestManager {
     // Singleton management
     private static PoCRequestManager sInstance;
 
-    public static PoCRequestManager from(final Context context) {
+    public static PoCRequestManager from(Context context) {
         if (sInstance == null) {
             sInstance = new PoCRequestManager(context);
         }
@@ -33,7 +33,7 @@ public final class PoCRequestManager extends RequestManager {
         return sInstance;
     }
 
-    private PoCRequestManager(final Context context) {
+    private PoCRequestManager(Context context) {
         super(context, PoCService.class);
     }
 }

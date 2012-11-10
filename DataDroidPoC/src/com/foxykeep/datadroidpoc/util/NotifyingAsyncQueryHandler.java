@@ -1,13 +1,13 @@
 /**
  * <pre>
  * Copyright (C) 2009 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@ import java.lang.ref.WeakReference;
  * <p>
  * This pattern can be used to perform background queries without leaking {@link Context} objects.
  */
-public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
+public final class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
     private WeakReference<AsyncQueryListener> mListener;
 
     /**
@@ -43,8 +43,7 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
         void onQueryComplete(int token, Object cookie, Cursor cursor);
     }
 
-    public NotifyingAsyncQueryHandler(final ContentResolver resolver,
-            final AsyncQueryListener listener) {
+    public NotifyingAsyncQueryHandler(ContentResolver resolver, AsyncQueryListener listener) {
         super(resolver);
         setQueryListener(listener);
     }
@@ -53,7 +52,7 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
      * Assign the given {@link AsyncQueryListener} to receive query events from asynchronous calls.
      * Will replace any existing listener.
      */
-    public void setQueryListener(final AsyncQueryListener listener) {
+    public void setQueryListener(AsyncQueryListener listener) {
         mListener = new WeakReference<AsyncQueryListener>(listener);
     }
 
@@ -70,7 +69,7 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
      * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
      * {@link AsyncQueryListener} is present.
      */
-    public void startQuery(final Uri uri, final String[] projection) {
+    public void startQuery(Uri uri, String[] projection) {
         startQuery(-1, null, uri, projection, null, null, null);
     }
 
@@ -78,11 +77,11 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
      * Begin an asynchronous query with the given arguments. When finished,
      * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
      * {@link AsyncQueryListener} is present.
-     * 
+     *
      * @param token Unique identifier passed through to
      *            {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)}
      */
-    public void startQuery(final int token, final Uri uri, final String[] projection) {
+    public void startQuery(int token, Uri uri, String[] projection) {
         startQuery(token, null, uri, projection, null, null, null);
     }
 
@@ -91,7 +90,7 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
      * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
      * {@link AsyncQueryListener} is present.
      */
-    public void startQuery(final Uri uri, final String[] projection, final String sortOrder) {
+    public void startQuery(Uri uri, String[] projection, String sortOrder) {
         startQuery(-1, null, uri, projection, null, null, sortOrder);
     }
 
@@ -100,30 +99,30 @@ public class NotifyingAsyncQueryHandler extends AsyncQueryHandler {
      * {@link AsyncQueryListener#onQueryComplete(int, Object, Cursor)} is called if a valid
      * {@link AsyncQueryListener} is present.
      */
-    public void startQuery(final Uri uri, final String[] projection, final String selection,
-            final String[] selectionArgs, final String orderBy) {
+    public void startQuery(Uri uri, String[] projection, String selection, String[] selectionArgs,
+            String orderBy) {
         startQuery(-1, null, uri, projection, selection, selectionArgs, orderBy);
     }
 
     /**
      * Begin an asynchronous update with the given arguments.
      */
-    public void startUpdate(final Uri uri, final ContentValues values) {
+    public void startUpdate(Uri uri, ContentValues values) {
         startUpdate(-1, null, uri, values, null, null);
     }
 
-    public void startInsert(final Uri uri, final ContentValues values) {
+    public void startInsert(Uri uri, ContentValues values) {
         startInsert(-1, null, uri, values);
     }
 
-    public void startDelete(final Uri uri) {
+    public void startDelete(Uri uri) {
         startDelete(-1, null, uri, null, null);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected void onQueryComplete(final int token, final Object cookie, final Cursor cursor) {
-        final AsyncQueryListener listener = mListener == null ? null : mListener.get();
+    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+        AsyncQueryListener listener = mListener == null ? null : mListener.get();
         if (listener != null) {
             listener.onQueryComplete(token, cookie, cursor);
         } else if (cursor != null) {

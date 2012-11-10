@@ -24,18 +24,18 @@ public final class PhoneListFactory {
         // No public constructor
     }
 
-    public static ArrayList<Phone> parseResult(final String wsResponse) throws DataException {
-        final ArrayList<Phone> phoneList = new ArrayList<Phone>();
+    public static ArrayList<Phone> parseResult(String wsResponse) throws DataException {
+        ArrayList<Phone> phoneList = new ArrayList<Phone>();
 
         try {
-            final JSONObject parser = new JSONObject(wsResponse);
-            final JSONObject jsonRoot = parser.getJSONObject(JSONTag.CRUD_PHONE_LIST_ELEM_PHONES);
-            final JSONArray jsonPhoneArray = jsonRoot
+            JSONObject parser = new JSONObject(wsResponse);
+            JSONObject jsonRoot = parser.getJSONObject(JSONTag.CRUD_PHONE_LIST_ELEM_PHONES);
+            JSONArray jsonPhoneArray = jsonRoot
                     .getJSONArray(JSONTag.CRUD_PHONE_LIST_ELEM_PHONE);
-            final int size = jsonPhoneArray.length();
+            int size = jsonPhoneArray.length();
             for (int i = 0; i < size; i++) {
-                final JSONObject jsonPhone = jsonPhoneArray.getJSONObject(i);
-                final Phone phone = new Phone();
+                JSONObject jsonPhone = jsonPhoneArray.getJSONObject(i);
+                Phone phone = new Phone();
 
                 phone.serverId = jsonPhone.getLong(JSONTag.CRUD_PHONE_LIST_ELEM_ID);
                 phone.name = jsonPhone.getString(JSONTag.CRUD_PHONE_LIST_ELEM_NAME);

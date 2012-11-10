@@ -1,7 +1,6 @@
 
 package com.foxykeep.datadroidpoc.dialogs;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -15,7 +14,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.foxykeep.datadroidpoc.R;
 
-@SuppressLint("ValidFragment")
 public final class ProgressDialogFragment extends DialogFragment {
 
     private static final String FRAGMENT_TAG = "com.foxykeep.datadroidpoc.dialogs.progressDialog";
@@ -25,17 +23,18 @@ public final class ProgressDialogFragment extends DialogFragment {
 
     private OnCancelListener mOnCancelListener;
 
-    public ProgressDialogFragment() {
-    }
+    private static ProgressDialogFragment newInstance(String message,
+            OnCancelListener onCancelListener, boolean isCancelable) {
+        ProgressDialogFragment dialogFragment = new ProgressDialogFragment();
 
-    private ProgressDialogFragment(String message, OnCancelListener onCancelListener,
-            boolean isCancelable) {
+        dialogFragment.mOnCancelListener = onCancelListener;
+
         Bundle args = new Bundle();
         args.putString(BUNDLE_MESSAGE, message);
         args.putBoolean(BUNDLE_IS_CANCELABLE, isCancelable);
-        setArguments(args);
+        dialogFragment.setArguments(args);
 
-        mOnCancelListener = onCancelListener;
+        return dialogFragment;
     }
 
     @Override
@@ -100,8 +99,8 @@ public final class ProgressDialogFragment extends DialogFragment {
             }
             fragmentTransaction.addToBackStack(null);
 
-            new ProgressDialogFragment(mMessage, mOnCancelListener, mCancelable).show(
-                    fragmentManager, FRAGMENT_TAG);
+            ProgressDialogFragment.newInstance(mMessage, mOnCancelListener, mCancelable)
+                    .show(fragmentManager, FRAGMENT_TAG);
         }
     }
 

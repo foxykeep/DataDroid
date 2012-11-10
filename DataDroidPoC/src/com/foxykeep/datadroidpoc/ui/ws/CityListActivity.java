@@ -41,7 +41,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
     private LayoutInflater mInflater;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.city_list);
@@ -50,7 +50,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
         mInflater = getLayoutInflater();
 
-        final Object data = getLastNonConfigurationInstance();
+        Object data = getLastNonConfigurationInstance();
         if (data != null) {
             RetainData retainData = (RetainData) data;
 
@@ -93,9 +93,9 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
     @Override
     public Object onRetainNonConfigurationInstance() {
-        final int count = mListAdapter.getCount();
+        int count = mListAdapter.getCount();
 
-        final RetainData retainData = new RetainData();
+        RetainData retainData = new RetainData();
         retainData.cityArray = new City[count];
 
         for (int i = 0; i < count; i++) {
@@ -125,7 +125,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
     }
 
     @Override
-    public void onClick(final View view) {
+    public void onClick(View view) {
         if (view == mButtonLoad) {
             callCityListWS();
         } else if (view == mButtonClearMemory) {
@@ -139,7 +139,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);
 
-            final ArrayList<City> cityList = resultData
+            ArrayList<City> cityList = resultData
                     .getParcelableArrayList(PoCRequestFactory.BUNDLE_EXTRA_CITY_LIST);
 
             mListAdapter.setNotifyOnChange(false);
@@ -176,14 +176,14 @@ public final class CityListActivity extends DataDroidActivity implements Request
         private TextView mTextViewCountyNumber;
         private TextView mTextViewCountyName;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(View view) {
             mTextViewName = (TextView) view.findViewById(R.id.tv_name);
             mTextViewPostalCode = (TextView) view.findViewById(R.id.tv_postal_code);
             mTextViewCountyNumber = (TextView) view.findViewById(R.id.tv_county_number);
             mTextViewCountyName = (TextView) view.findViewById(R.id.tv_county_name);
         }
 
-        public void populateViews(final City city) {
+        public void populateViews(City city) {
             mTextViewName.setText(city.name);
             mTextViewPostalCode.setText(String.valueOf(city.postalCode));
             mTextViewCountyNumber.setText(String.valueOf(city.countyNumber));
@@ -193,12 +193,12 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
     class CityListAdapter extends ArrayAdapter<City> {
 
-        public CityListAdapter(final Context context) {
+        public CityListAdapter(Context context) {
             super(context, 0);
         }
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
 
             if (convertView == null) {

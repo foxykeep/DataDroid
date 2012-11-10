@@ -25,7 +25,7 @@ public final class SkeletonRequestManager extends RequestManager {
     // Singleton management
     private static SkeletonRequestManager sInstance;
 
-    public static SkeletonRequestManager from(final Context context) {
+    public static SkeletonRequestManager from(Context context) {
         if (sInstance == null) {
             sInstance = new SkeletonRequestManager(context);
         }
@@ -33,13 +33,8 @@ public final class SkeletonRequestManager extends RequestManager {
         return sInstance;
     }
 
-    private SkeletonRequestManager(final Context context) {
+    // TODO change the SkeletonService to your RequestService subclass
+    private SkeletonRequestManager(Context context) {
         super(context, SkeletonService.class);
     }
-
-    /**
-     * Here begin the special methods.
-     */
-
-    // TODO : This is where you will add your methods which will call the service
 }

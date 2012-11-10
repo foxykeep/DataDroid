@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
@@ -47,7 +46,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     private LayoutInflater mInflater;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
@@ -115,7 +114,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     }
 
     @Override
-    public void onClick(final View view) {
+    public void onClick(View view) {
         if (view == mButtonLoad) {
             callPersonListWS();
         } else if (view == mButtonClearDb) {
@@ -154,7 +153,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     }
 
     @Override
-    public void onQueryComplete(final int token, final Object cookie, final Cursor cursor) {
+    public void onQueryComplete(int token, Object cookie, Cursor cursor) {
         if (mListAdapter == null) {
             mListAdapter = new PersonListAdapter(this, cursor);
             mListView.setAdapter(mListAdapter);
@@ -175,7 +174,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         private TextView mTextViewCity;
         private CharArrayBuffer mCharArrayBufferCity;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(View view) {
             mTextViewFirstName = (TextView) view.findViewById(R.id.tv_first_name);
             mTextViewLastName = (TextView) view.findViewById(R.id.tv_last_name);
             mTextViewAge = (TextView) view.findViewById(R.id.tv_age);
@@ -189,7 +188,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
             mCharArrayBufferCity = new CharArrayBuffer(20);
         }
 
-        public void populateView(final Cursor c) {
+        public void populateView(Cursor c) {
             c.copyStringToBuffer(PersonDao.CONTENT_FIRST_NAME_COLUMN, mCharArrayBufferFirstName);
             mTextViewFirstName.setText(mCharArrayBufferFirstName.data, 0,
                     mCharArrayBufferFirstName.sizeCopied);
@@ -214,17 +213,17 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
 
     class PersonListAdapter extends CursorAdapter {
 
-        public PersonListAdapter(final Context context, final Cursor c) {
+        public PersonListAdapter(Context context, Cursor c) {
             super(context, c, 0);
         }
 
         @Override
-        public void bindView(final View view, final Context context, final Cursor cursor) {
+        public void bindView(View view, Context context, Cursor cursor) {
             ((ViewHolder) view.getTag()).populateView(cursor);
         }
 
         @Override
-        public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
             View view = mInflater.inflate(R.layout.person_list_item, null);
             view.setTag(new ViewHolder(view));
             return view;

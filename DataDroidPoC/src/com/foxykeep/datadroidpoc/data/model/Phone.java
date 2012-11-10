@@ -24,7 +24,7 @@ public final class Phone implements Parcelable {
     }
 
     // Parcelable management
-    private Phone(final Parcel in) {
+    private Phone(Parcel in) {
         serverId = in.readLong();
         name = in.readString();
         manufacturer = in.readString();
@@ -37,7 +37,7 @@ public final class Phone implements Parcelable {
         return 0;
     }
 
-    public void writeToParcel(final Parcel dest, final int flags) {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(serverId);
         dest.writeString(name);
         dest.writeString(manufacturer);
@@ -48,11 +48,11 @@ public final class Phone implements Parcelable {
     }
 
     public static final Parcelable.Creator<Phone> CREATOR = new Parcelable.Creator<Phone>() {
-        public Phone createFromParcel(final Parcel in) {
+        public Phone createFromParcel(Parcel in) {
             return new Phone(in);
         }
 
-        public Phone[] newArray(final int size) {
+        public Phone[] newArray(int size) {
             return new Phone[size];
         }
     };

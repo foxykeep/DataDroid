@@ -21,8 +21,8 @@ public final class UserManager {
         // No public constructor
     }
 
-    public static String getUserId(final Context context) {
-        final SharedPreferences sharedPrefs = context.getSharedPreferences(
+    public static String getUserId(Context context) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(
                 SharedPrefsConfig.SHARED_PREFS_FILENAME,
                 Context.MODE_PRIVATE);
         String userId = sharedPrefs.getString(SharedPrefsConfig.SHARED_PREFS_USER_ID, null);

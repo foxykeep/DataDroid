@@ -32,7 +32,7 @@ public final class PersonListXmlFactory {
         // No public constructor
     }
 
-    public static ArrayList<Person> parseResult(final String wsContent) throws DataException {
+    public static ArrayList<Person> parseResult(String wsContent) throws DataException {
         PersonHandler parser = new PersonHandler();
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();

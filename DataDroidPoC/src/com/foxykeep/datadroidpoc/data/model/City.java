@@ -22,7 +22,7 @@ public final class City implements Parcelable {
     }
 
     // Parcelable management
-    private City(final Parcel in) {
+    private City(Parcel in) {
         name = in.readString();
         postalCode = in.readInt();
         countyNumber = in.readInt();
@@ -33,7 +33,7 @@ public final class City implements Parcelable {
         return 0;
     }
 
-    public void writeToParcel(final Parcel dest, final int flags) {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeInt(postalCode);
         dest.writeInt(countyNumber);
@@ -42,11 +42,11 @@ public final class City implements Parcelable {
     }
 
     public static final Parcelable.Creator<City> CREATOR = new Parcelable.Creator<City>() {
-        public City createFromParcel(final Parcel in) {
+        public City createFromParcel(Parcel in) {
             return new City(in);
         }
 
-        public City[] newArray(final int size) {
+        public City[] newArray(int size) {
             return new City[size];
         }
     };

@@ -21,12 +21,12 @@ public final class PhoneAddEditFactory {
         // No public constructor
     }
 
-    public static Phone parseResult(final String wsResponse) throws DataException {
-        final Phone phone = new Phone();
+    public static Phone parseResult(String wsResponse) throws DataException {
+        Phone phone = new Phone();
 
         try {
-            final JSONObject parser = new JSONObject(wsResponse);
-            final JSONObject jsonPhone = parser
+            JSONObject parser = new JSONObject(wsResponse);
+            JSONObject jsonPhone = parser
                     .getJSONObject(JSONTag.CRUD_PHONE_ADD_EDIT_ELEM_PHONE);
 
             phone.serverId = jsonPhone.getLong(JSONTag.CRUD_PHONE_ADD_EDIT_ELEM_ID);
