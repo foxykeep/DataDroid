@@ -169,7 +169,7 @@ public abstract class RequestManager {
     }
 
     /**
-     * Call the given listener synchronously with the memory cached data corresponding to the
+     * Call the given listener <b>synchronously</b> with the memory cached data corresponding to the
      * request.
      * <p>
      * The method called in the listener will be
@@ -189,11 +189,13 @@ public abstract class RequestManager {
             return;
         }
 
-        Bundle bundle = mMemoryCache.get(request);
-        if (bundle != null) {
-            listener.onRequestFinished(request, bundle);
-        } else {
-            listener.onRequestConnectionError(request);
+        if (request.isMemoryCacheEnabled()) {
+            Bundle bundle = mMemoryCache.get(request);
+            if (bundle != null) {
+                listener.onRequestFinished(request, bundle);
+            } else {
+                listener.onRequestConnectionError(request);
+            }
         }
     }
 
