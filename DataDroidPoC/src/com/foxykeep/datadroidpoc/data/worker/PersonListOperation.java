@@ -70,9 +70,8 @@ public final class PersonListOperation implements Operation {
                     new ArrayList<ContentProviderOperation>();
 
             for (int i = 0; i < personListSize; i++) {
-                operationList.add(ContentProviderOperation.newInsert(PersonDao.CONTENT_URI)
-                        .withValues(PersonDao.getContentValues(personList.get(i)))
-                        .build());
+                operationList.add(ContentProviderOperation.newInsert(DbPerson.CONTENT_URI)
+                        .withValues(personList.get(i).toContentValues()).build());
             }
 
             try {

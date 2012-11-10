@@ -16,6 +16,9 @@ In order to use DataDroid in your project you have to do the following steps :
 3. Add the library to your project using the Android Library Projects feature in the ADT plugin. More information in the [Android documentation website](http://developer.android.com/guide/developing/projects/projects-eclipse.html#ReferencingLibraryProject)
 4. Copy the skeleton classes from DataDroidPoC and change the code according to your project.
 
+If you want to add a database in your project, you can check the ContentProviderCodeGenerator project to help you create the code for it.
+([More information](https://github.com/foxykeep/ContentProviderCodeGenerator))
+
 
 Software Requirements
 ---------------------

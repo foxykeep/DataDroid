@@ -26,6 +26,8 @@ import android.widget.TextView;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
+import com.foxykeep.datadroidpoc.data.provider.util.ProviderCriteria;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
@@ -56,8 +58,10 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
         mInflater = getLayoutInflater();
 
-        mQueryHandler.startQuery(PersonDao.CONTENT_URI, PersonDao.CONTENT_PROJECTION,
-                PersonDao.LAST_NAME_ORDER_BY);
+        ProviderCriteria criteria = new ProviderCriteria();
+        criteria.addSortOrder(DbPerson.Columns.LAST_NAME, true);
+        mQueryHandler.startQuery(DbPerson.CONTENT_URI, DbPerson.PROJECTION,
+                criteria.getOrderClause());
     }
 
     @Override
@@ -118,7 +122,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         if (view == mButtonLoad) {
             callPersonListWS();
         } else if (view == mButtonClearDb) {
-            mQueryHandler.startDelete(PersonDao.CONTENT_URI);
+            mQueryHandler.startDelete(DbPerson.CONTENT_URI);
         }
     }
 
@@ -189,24 +193,25 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         }
 
         public void populateView(Cursor c) {
-            c.copyStringToBuffer(PersonDao.CONTENT_FIRST_NAME_COLUMN, mCharArrayBufferFirstName);
+            c.copyStringToBuffer(DbPerson.Columns.FIRST_NAME.getIndex(),
+                    mCharArrayBufferFirstName);
             mTextViewFirstName.setText(mCharArrayBufferFirstName.data, 0,
                     mCharArrayBufferFirstName.sizeCopied);
 
-            c.copyStringToBuffer(PersonDao.CONTENT_LAST_NAME_COLUMN, mCharArrayBufferLastName);
+            c.copyStringToBuffer(DbPerson.Columns.LAST_NAME.getIndex(), mCharArrayBufferLastName);
             mTextViewLastName.setText(mCharArrayBufferLastName.data, 0,
                     mCharArrayBufferLastName.sizeCopied);
 
             mTextViewAge.setText(getString(R.string.person_list_item_tv_age_format,
-                    c.getInt(PersonDao.CONTENT_AGE_COLUMN)));
+                    c.getInt(DbPerson.Columns.AGE.getIndex())));
 
-            c.copyStringToBuffer(PersonDao.CONTENT_EMAIL_COLUMN, mCharArrayBufferEmail);
+            c.copyStringToBuffer(DbPerson.Columns.EMAIL.getIndex(), mCharArrayBufferEmail);
             mTextViewEmail.setText(mCharArrayBufferEmail.data, 0, mCharArrayBufferEmail.sizeCopied);
 
-            mTextViewPostalCode.setText(String.valueOf(c
-                    .getInt(PersonDao.CONTENT_POSTAL_CODE_COLUMN)));
+            mTextViewPostalCode.setText(String.valueOf(c.getInt(DbPerson.Columns.POSTAL_CODE
+                    .getIndex())));
 
-            c.copyStringToBuffer(PersonDao.CONTENT_CITY_COLUMN, mCharArrayBufferCity);
+            c.copyStringToBuffer(DbPerson.Columns.CITY.getIndex(), mCharArrayBufferCity);
             mTextViewCity.setText(mCharArrayBufferCity.data, 0, mCharArrayBufferCity.sizeCopied);
         }
     }
@@ -214,7 +219,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     class PersonListAdapter extends CursorAdapter {
 
         public PersonListAdapter(Context context, Cursor c) {
-            super(context, c, 0);
+            super(context, c, false);
         }
 
         @Override
