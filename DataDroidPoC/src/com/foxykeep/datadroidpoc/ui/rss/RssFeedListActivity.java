@@ -8,11 +8,7 @@
 
 package com.foxykeep.datadroidpoc.ui.rss;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,75 +22,54 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.foxykeep.datadroid.model.RssFeed;
 import com.foxykeep.datadroid.model.RssItem;
-import com.foxykeep.datadroid.requestmanager.RequestManager.OnRequestFinishedListener;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.config.DialogConfig;
-import com.foxykeep.datadroidpoc.data.memprovider.MemoryProvider;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
-import java.util.ArrayList;
-
-public final class RssFeedListActivity extends DataDroidActivity implements
-        OnRequestFinishedListener, OnClickListener, OnItemClickListener {
-
-    private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
-    private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
-    private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
+public final class RssFeedListActivity extends DataDroidActivity implements RequestListener,
+        OnClickListener, OnItemClickListener {
 
     private Spinner mSpinnerFeedUrl;
     private Button mButtonLoad;
     private Button mButtonClearMemory;
+    private ListView mListView;
+    private RssItemListAdapter mListAdapter;
 
     private String[] mFeedUrlArray;
 
-    private PoCRequestManager mRequestManager;
-    private int mRequestId = -1;
-
-    private MemoryProvider mMemoryProvider = MemoryProvider.getInstance();
-
     private LayoutInflater mInflater;
 
-    private String mErrorDialogTitle;
-    private String mErrorDialogMessage;
-
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setContentView(R.layout.rss_feed_list);
         bindViews();
-        setListAdapter(new RssItemListAdapter(this));
 
         mFeedUrlArray = getResources().getStringArray(R.array.rss_feed_url);
 
-        if (savedInstanceState != null) {
-            mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
-            mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
-            mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
-        }
-
-        mRequestManager = PoCRequestManager.from(this);
         mInflater = getLayoutInflater();
 
-        final Object data = getLastNonConfigurationInstance();
+        Object data = getLastNonConfigurationInstance();
         if (data != null) {
             RetainData retainData = (RetainData) data;
 
             if (retainData.rssItemArray != null & retainData.rssItemArray.length > 0) {
-                final RssItemListAdapter adapter = (RssItemListAdapter) getListAdapter();
-                adapter.setNotifyOnChange(false);
+                mListAdapter.setNotifyOnChange(false);
                 for (RssItem rssItem : retainData.rssItemArray) {
-                    adapter.add(rssItem);
+                    mListAdapter.add(rssItem);
                 }
-                adapter.notifyDataSetChanged();
+                mListAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -102,25 +77,14 @@ public final class RssFeedListActivity extends DataDroidActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (mRequestId != -1) {
-            if (mRequestManager.isRequestInProgress(mRequestId)) {
-                mRequestManager.addOnRequestFinishedListener(this);
+        for (int i = 0, length = mRequestList.size(); i < length; i++) {
+            Request request = mRequestList.get(i);
+
+            if (mRequestManager.isRequestInProgress(request)) {
+                mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
-                mRequestId = -1;
-
-                if (mMemoryProvider.rssFeed == null) {
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                } else {
-                    final ArrayList<RssItem> rssItemList = mMemoryProvider.rssFeed.rssItemList;
-
-                    final RssItemListAdapter adapter = (RssItemListAdapter) getListAdapter();
-                    adapter.setNotifyOnChange(false);
-                    for (RssItem rssItem : rssItemList) {
-                        adapter.add(rssItem);
-                    }
-                    adapter.notifyDataSetChanged();
-                }
+                mRequestManager.callListenerWithCachedData(this, request);
             }
         }
     }
@@ -128,18 +92,9 @@ public final class RssFeedListActivity extends DataDroidActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (mRequestId != -1) {
-            mRequestManager.removeOnRequestFinishedListener(this);
+        if (!mRequestList.isEmpty()) {
+            mRequestManager.removeRequestListener(this);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
-        outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
-        outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
     }
 
     class RetainData {
@@ -148,14 +103,13 @@ public final class RssFeedListActivity extends DataDroidActivity implements
 
     @Override
     public Object onRetainNonConfigurationInstance() {
-        final RssItemListAdapter adapter = (RssItemListAdapter) getListAdapter();
-        final int count = adapter.getCount();
+        int count = mListAdapter.getCount();
 
-        final RetainData retainData = new RetainData();
+        RetainData retainData = new RetainData();
         retainData.rssItemArray = new RssItem[count];
 
         for (int i = 0; i < count; i++) {
-            retainData.rssItemArray[i] = adapter.getItem(i);
+            retainData.rssItemArray[i] = mListAdapter.getItem(i);
         }
 
         return retainData;
@@ -170,111 +124,73 @@ public final class RssFeedListActivity extends DataDroidActivity implements
         mButtonClearMemory = (Button) findViewById(R.id.b_clear_memory);
         mButtonClearMemory.setOnClickListener(this);
 
-        getListView().setOnItemClickListener(this);
-    }
-
-    @Override
-    protected Dialog onCreateDialog(final int id) {
-        Builder b;
-        switch (id) {
-            case DialogConfig.DIALOG_ERROR:
-                b = new Builder(this);
-                b.setTitle(mErrorDialogTitle);
-                b.setMessage(mErrorDialogMessage);
-                b.setCancelable(true);
-                b.setNeutralButton(android.R.string.ok, null);
-                return b.create();
-            case DialogConfig.DIALOG_CONNEXION_ERROR:
-                b = new Builder(this);
-                b.setCancelable(true);
-                b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int which) {
-                                callRssFeedWS();
-                            }
-                        });
-                b.setTitle(R.string.dialog_error_connexion_error_title);
-                b.setMessage(R.string.dialog_error_connexion_error_message);
-                return b.create();
-            default:
-                return super.onCreateDialog(id);
-        }
-    }
-
-    @Override
-    protected void onPrepareDialog(final int id, final Dialog dialog) {
-        switch (id) {
-            case DialogConfig.DIALOG_ERROR:
-                dialog.setTitle(mErrorDialogTitle);
-                ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
-                break;
-            default:
-                super.onPrepareDialog(id, dialog);
-                break;
-        }
+        mListView = (ListView) findViewById(android.R.id.list);
+        mListView.setAdapter(new RssItemListAdapter(this));
+        mListView.setOnItemClickListener(this);
     }
 
     private void callRssFeedWS() {
-        ((RssItemListAdapter) getListAdapter()).clear();
-
+        (mListAdapter).clear();
         setProgressBarIndeterminateVisibility(true);
-        mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getRssFeed(mFeedUrlArray[mSpinnerFeedUrl
-                .getSelectedItemPosition()]);
+
+        Request request = PoCRequestFactory.createGetRssFeedRequest(
+                mFeedUrlArray[mSpinnerFeedUrl.getSelectedItemPosition()]);
+        mRequestManager.execute(request, this);
+        mRequestList.add(request);
     }
 
     @Override
-    public void onClick(final View view) {
+    public void onClick(View view) {
         if (view == mButtonLoad) {
             callRssFeedWS();
         } else if (view == mButtonClearMemory) {
-            mMemoryProvider.rssFeed = null;
-            ((RssItemListAdapter) getListAdapter()).clear();
+            (mListAdapter).clear();
         }
     }
 
     @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
-            final long id) {
-
-        final RssItem rssItem = ((RssItemListAdapter) parent.getAdapter()).getItem(position);
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        RssItem rssItem = ((RssItemListAdapter) parent.getAdapter()).getItem(position);
         if (rssItem != null) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rssItem.link)));
         }
     }
 
     @Override
-    public void onRequestFinished(final int requestId, final int resultCode, final Bundle payload) {
-        if (requestId == mRequestId) {
+    public void onRequestFinished(Request request, Bundle resultData) {
+        if (mRequestList.contains(request)) {
             setProgressBarIndeterminateVisibility(false);
-            mRequestId = -1;
-            mRequestManager.removeOnRequestFinishedListener(this);
-            if (resultCode == PoCService.ERROR_CODE) {
-                if (payload != null) {
-                    final int errorType = payload.getInt(
-                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
-                    if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
-                        mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
-                        mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
-                        showDialog(DialogConfig.DIALOG_ERROR);
-                    } else {
-                        showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                    }
-                } else {
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                }
-            } else {
-                final RssFeed rssFeed = payload
-                        .getParcelable(PoCRequestManager.RECEIVER_EXTRA_RSS_FEED_DATA);
+            mRequestList.remove(request);
 
-                final RssItemListAdapter adapter = (RssItemListAdapter) getListAdapter();
-                adapter.setNotifyOnChange(false);
-                for (RssItem rssItem : rssFeed.rssItemList) {
-                    adapter.add(rssItem);
-                }
-                adapter.notifyDataSetChanged();
+            RssFeed rssFeed = resultData
+                    .getParcelable(PoCRequestFactory.BUNDLE_EXTRA_RSS_FEED_DATA);
+
+            mListAdapter.setNotifyOnChange(false);
+            for (RssItem rssItem : rssFeed.rssItemList) {
+                mListAdapter.add(rssItem);
             }
+            mListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onRequestConnectionError(Request request) {
+        if (mRequestList.contains(request)) {
+            setProgressBarIndeterminateVisibility(false);
+            mRequestList.remove(request);
+
+            ConnexionErrorDialogFragment.show(this, request, this);
+        }
+    }
+
+    @Override
+    public void onRequestDataError(Request request) {
+        if (mRequestList.contains(request)) {
+            setProgressBarIndeterminateVisibility(false);
+            mRequestList.remove(request);
+
+            showBadDataErrorDialog();
         }
     }
 
@@ -282,12 +198,12 @@ public final class RssFeedListActivity extends DataDroidActivity implements
         private TextView mTextViewTitle;
         private TextView mTextViewDescription;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(View view) {
             mTextViewTitle = (TextView) view.findViewById(R.id.tv_title);
             mTextViewDescription = (TextView) view.findViewById(R.id.tv_description);
         }
 
-        public void populateViews(final RssItem rssItem) {
+        public void populateViews(RssItem rssItem) {
             mTextViewTitle.setText(rssItem.title);
             mTextViewDescription.setText(Html.fromHtml(rssItem.description));
         }
@@ -295,12 +211,12 @@ public final class RssFeedListActivity extends DataDroidActivity implements
 
     class RssItemListAdapter extends ArrayAdapter<RssItem> {
 
-        public RssItemListAdapter(final Context context) {
+        public RssItemListAdapter(Context context) {
             super(context, 0);
         }
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
 
             if (convertView == null) {

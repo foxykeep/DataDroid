@@ -8,11 +8,7 @@
 
 package com.foxykeep.datadroidpoc.ui.ws;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -23,39 +19,32 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.foxykeep.datadroid.requestmanager.RequestManager.OnRequestFinishedListener;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.config.DialogConfig;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.PersonDao;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public final class PersonListActivity extends DataDroidActivity implements
-        OnRequestFinishedListener, AsyncQueryListener, OnClickListener {
-
-    private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
-    private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
-    private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
+public final class PersonListActivity extends DataDroidActivity implements RequestListener,
+        AsyncQueryListener, OnClickListener {
 
     private Spinner mSpinnerReturnFormat;
     private Button mButtonLoad;
     private Button mButtonClearDb;
-
-    private PoCRequestManager mRequestManager;
-    private int mRequestId = -1;
+    private ListView mListView;
+    private PersonListAdapter mListAdapter;
 
     private NotifyingAsyncQueryHandler mQueryHandler;
 
     private LayoutInflater mInflater;
-
-    private String mErrorDialogTitle;
-    private String mErrorDialogMessage;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -65,13 +54,6 @@ public final class PersonListActivity extends DataDroidActivity implements
         setContentView(R.layout.person_list);
         bindViews();
 
-        if (savedInstanceState != null) {
-            mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
-            mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
-            mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
-        }
-
-        mRequestManager = PoCRequestManager.from(this);
         mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
         mInflater = getLayoutInflater();
 
@@ -82,25 +64,24 @@ public final class PersonListActivity extends DataDroidActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (mRequestId != -1) {
-            if (mRequestManager.isRequestInProgress(mRequestId)) {
-                mRequestManager.addOnRequestFinishedListener(this);
+        for (int i = 0; i < mRequestList.size(); i++) {
+            Request request = mRequestList.get(i);
+
+            if (mRequestManager.isRequestInProgress(request)) {
+                mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
-                mRequestId = -1;
-
                 // Get the number of persons in the database
-                int number = ((PersonListAdapter) getListAdapter()).getCursor().getCount();
+                int number = mListAdapter.getCursor().getCount();
 
                 if (number < 1) {
-                    // In this case, we don't have a way to know if the request
-                    // was correctly executed with 0 result or if an error
-                    // occurred. Here I choose to display an error but it's up
-                    // to you
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
+                    // In this case, we don't have a way to know if the request was correctly
+                    // executed with 0 result or if an error occurred. Here I choose to display an
+                    // error but it's up to you
+                    ConnexionErrorDialogFragment.show(this, request, this);
                 }
-                // Nothing to do if it works as the cursor is automatically
-                // updated
+
+                // Nothing to do if it works as the cursor is automatically updated
             }
         }
     }
@@ -108,18 +89,9 @@ public final class PersonListActivity extends DataDroidActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (mRequestId != -1) {
-            mRequestManager.removeOnRequestFinishedListener(this);
+        if (!mRequestList.isEmpty()) {
+            mRequestManager.removeRequestListener(this);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
-        outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
-        outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
     }
 
     private void bindViews() {
@@ -130,54 +102,16 @@ public final class PersonListActivity extends DataDroidActivity implements
 
         mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
         mButtonClearDb.setOnClickListener(this);
-    }
 
-    @Override
-    protected Dialog onCreateDialog(final int id) {
-        Builder b;
-        switch (id) {
-            case DialogConfig.DIALOG_ERROR:
-                b = new Builder(this);
-                b.setTitle(mErrorDialogTitle);
-                b.setMessage(mErrorDialogMessage);
-                b.setCancelable(true);
-                b.setNeutralButton(android.R.string.ok, null);
-                return b.create();
-            case DialogConfig.DIALOG_CONNEXION_ERROR:
-                b = new Builder(this);
-                b.setCancelable(true);
-                b.setNeutralButton(getString(android.R.string.ok), null);
-                b.setPositiveButton(getString(R.string.dialog_button_retry),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int which) {
-                                callPersonListWS();
-                            }
-                        });
-                b.setTitle(R.string.dialog_error_connexion_error_title);
-                b.setMessage(R.string.dialog_error_connexion_error_message);
-                return b.create();
-            default:
-                return super.onCreateDialog(id);
-        }
-    }
-
-    @Override
-    protected void onPrepareDialog(final int id, final Dialog dialog) {
-        switch (id) {
-            case DialogConfig.DIALOG_ERROR:
-                dialog.setTitle(mErrorDialogTitle);
-                ((AlertDialog) dialog).setMessage(mErrorDialogMessage);
-                break;
-            default:
-                super.onPrepareDialog(id, dialog);
-                break;
-        }
+        mListView = (ListView) findViewById(android.R.id.list);
     }
 
     private void callPersonListWS() {
         setProgressBarIndeterminateVisibility(true);
-        mRequestManager.addOnRequestFinishedListener(this);
-        mRequestId = mRequestManager.getPersonList(mSpinnerReturnFormat.getSelectedItemPosition());
+        Request request = PoCRequestFactory.createGetPersonListRequest(mSpinnerReturnFormat
+                .getSelectedItemPosition());
+        mRequestManager.execute(request, this);
+        mRequestList.add(request);
     }
 
     @Override
@@ -190,38 +124,42 @@ public final class PersonListActivity extends DataDroidActivity implements
     }
 
     @Override
-    public void onRequestFinished(final int requestId, final int resultCode, final Bundle payload) {
-        if (requestId == mRequestId) {
+    public void onRequestFinished(Request request, Bundle resultData) {
+        if (mRequestList.contains(request)) {
             setProgressBarIndeterminateVisibility(false);
-            mRequestId = -1;
-            mRequestManager.removeOnRequestFinishedListener(this);
-            if (resultCode == PoCService.ERROR_CODE) {
-                if (payload != null) {
-                    final int errorType = payload.getInt(
-                            PoCRequestManager.RECEIVER_EXTRA_ERROR_TYPE, -1);
-                    if (errorType == PoCRequestManager.RECEIVER_EXTRA_VALUE_ERROR_TYPE_DATA) {
-                        mErrorDialogTitle = getString(R.string.dialog_error_data_error_title);
-                        mErrorDialogMessage = getString(R.string.dialog_error_data_error_message);
-                        showDialog(DialogConfig.DIALOG_ERROR);
-                    } else {
-                        showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                    }
-                } else {
-                    showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
-                }
-            }
+            mRequestList.remove(request);
+
             // Nothing to do if it works as the cursor is automatically updated
         }
     }
 
     @Override
+    public void onRequestConnectionError(Request request) {
+        if (mRequestList.contains(request)) {
+            setProgressBarIndeterminateVisibility(false);
+            mRequestList.remove(request);
+
+            ConnexionErrorDialogFragment.show(this, request, this);
+        }
+    }
+
+    @Override
+    public void onRequestDataError(Request request) {
+        if (mRequestList.contains(request)) {
+            setProgressBarIndeterminateVisibility(false);
+            mRequestList.remove(request);
+
+            showBadDataErrorDialog();
+        }
+    }
+
+    @Override
     public void onQueryComplete(final int token, final Object cookie, final Cursor cursor) {
-        PersonListAdapter adapter = (PersonListAdapter) getListAdapter();
-        if (adapter == null) {
-            adapter = new PersonListAdapter(this, cursor);
-            setListAdapter(adapter);
+        if (mListAdapter == null) {
+            mListAdapter = new PersonListAdapter(this, cursor);
+            mListView.setAdapter(mListAdapter);
         } else {
-            adapter.changeCursor(cursor);
+            mListAdapter.changeCursor(cursor);
         }
     }
 
@@ -277,7 +215,7 @@ public final class PersonListActivity extends DataDroidActivity implements
     class PersonListAdapter extends CursorAdapter {
 
         public PersonListAdapter(final Context context, final Cursor c) {
-            super(context, c);
+            super(context, c, 0);
         }
 
         @Override
