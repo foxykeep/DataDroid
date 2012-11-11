@@ -33,6 +33,8 @@ import java.util.ArrayList;
 public final class CityListActivity extends DataDroidActivity implements RequestListener,
         OnClickListener {
 
+    private static final String SAVED_STATE_CITY_LIST = "savedStateCityList";
+
     private Button mButtonLoad;
     private Button mButtonClearMemory;
     private ListView mListView;
@@ -49,19 +51,6 @@ public final class CityListActivity extends DataDroidActivity implements Request
         bindViews();
 
         mInflater = getLayoutInflater();
-
-        Object data = getLastNonConfigurationInstance();
-        if (data != null) {
-            RetainData retainData = (RetainData) data;
-
-            if (retainData.cityArray != null & retainData.cityArray.length > 0) {
-                mListAdapter.setNotifyOnChange(false);
-                for (City city : retainData.cityArray) {
-                    mListAdapter.add(city);
-                }
-                mListAdapter.notifyDataSetChanged();
-            }
-        }
     }
 
     @Override
@@ -87,22 +76,29 @@ public final class CityListActivity extends DataDroidActivity implements Request
         }
     }
 
-    class RetainData {
-        public City[] cityArray;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        ArrayList<City> cityList = new ArrayList<City>();
+        for (int i = 0, n = mListAdapter.getCount(); i < n; i++) {
+            cityList.add(mListAdapter.getItem(i));
+        }
+
+        outState.putParcelableArrayList(SAVED_STATE_CITY_LIST, cityList);
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
-        int count = mListAdapter.getCount();
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
-        RetainData retainData = new RetainData();
-        retainData.cityArray = new City[count];
-
-        for (int i = 0; i < count; i++) {
-            retainData.cityArray[i] = mListAdapter.getItem(i);
+        ArrayList<City> rssItemList = savedInstanceState
+                .getParcelableArrayList(SAVED_STATE_CITY_LIST);
+        mListAdapter.setNotifyOnChange(false);
+        for (int i = 0, length = rssItemList.size(); i < length; i++) {
+            mListAdapter.add(rssItemList.get(i));
         }
-
-        return retainData;
+        mListAdapter.notifyDataSetChanged();
     }
 
     private void bindViews() {

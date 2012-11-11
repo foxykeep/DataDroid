@@ -11,20 +11,22 @@
 
     <!-- Dialog texts -->
     <string name="dialog_error_connection_error_title">Connexion error</string>
-    <string name="dialog_error_connection_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>
+    <string name="dialog_error_connection_error_message">A connexion error occured. Please verify
+        that you are connected to an Edge, 3G or Wifi network.</string>
     <string name="dialog_error_data_error_title">Incorrect data</string>
     <string name="dialog_error_data_error_message">Received data are invalid.</string>
     <string name="dialog_error_title">Error</string>
     <string name="dialog_button_retry">Retry</string>
     <string name="progress_dialog_title">Loading</string>
-    <string name="progress_dialog_message">Loading in progress...</string>
+    <string name="progress_dialog_message">Loading in progress…</string>
 
     <!-- HomeActivity texts -->
     <string name="home_b_person_list">Person List (DB)</string>
     <string name="home_b_city_list">City List (Memory)</string>
     <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
     <string name="home_b_rss_feed">Rss Feed</string>
-    <string name="home_tv_source_code">The source code of the DataDroid library as well as this example app is available on Github :\nhttps://github.com/foxykeep/datadroid</string>
+    <string name="home_tv_source_code">The source code of the DataDroid library as well as this
+        example app is available on Github :\nhttps://github.com/foxykeep/datadroid</string>
 
     <!-- PersonListActivity texts -->
     <string name="person_list_title">DataDroid PoC > Person List (DB)</string>
@@ -41,14 +43,15 @@
     <string name="city_list_tv_empty">0 city found</string>
 
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
-    <string name="crud_phone_list_tv_empty_loading">Loading ...</string>
+    <string name="crud_phone_list_tv_empty_loading">Loading …</string>
     <string name="crud_phone_list_tv_empty_no_results">0 phone found</string>
     <string name="crud_phone_list_menu_add">Add</string>
     <string name="crud_phone_list_menu_delete_all">Delete all</string>
     <string name="crud_phone_list_context_menu_edit">Edit</string>
     <string name="crud_phone_list_context_menu_delete">Delete</string>
     <string name="crud_phone_list_dialog_delete_all_confirm_title">Delete all</string>
-    <string name="crud_phone_list_dialog_delete_all_confirm_message">All the phones will be deleted.</string>
+    <string name="crud_phone_list_dialog_delete_all_confirm_message">All the phones will be
+        deleted.</string>
     <string name="crud_phone_list_dialog_delete_confirm_title">Delete</string>
     <string name="crud_phone_list_dialog_delete_confirm_message">%1$s will be deleted.</string>
 

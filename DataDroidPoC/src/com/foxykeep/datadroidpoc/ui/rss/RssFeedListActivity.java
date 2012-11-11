@@ -35,8 +35,12 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
+import java.util.ArrayList;
+
 public final class RssFeedListActivity extends DataDroidActivity implements RequestListener,
         OnClickListener, OnItemClickListener {
+
+    private static final String SAVED_STATE_RSS_ITEM_LIST = "savedStateRssItemList";
 
     private Spinner mSpinnerFeedUrl;
     private Button mButtonLoad;
@@ -59,19 +63,6 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
         mFeedUrlArray = getResources().getStringArray(R.array.rss_feed_url);
 
         mInflater = getLayoutInflater();
-
-        Object data = getLastNonConfigurationInstance();
-        if (data != null) {
-            RetainData retainData = (RetainData) data;
-
-            if (retainData.rssItemArray != null & retainData.rssItemArray.length > 0) {
-                mListAdapter.setNotifyOnChange(false);
-                for (RssItem rssItem : retainData.rssItemArray) {
-                    mListAdapter.add(rssItem);
-                }
-                mListAdapter.notifyDataSetChanged();
-            }
-        }
     }
 
     @Override
@@ -97,22 +88,29 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
         }
     }
 
-    class RetainData {
-        public RssItem[] rssItemArray;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        ArrayList<RssItem> rssItemList = new ArrayList<RssItem>();
+        for (int i = 0, n = mListAdapter.getCount(); i < n; i++) {
+            rssItemList.add(mListAdapter.getItem(i));
+        }
+
+        outState.putParcelableArrayList(SAVED_STATE_RSS_ITEM_LIST, rssItemList);
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
-        int count = mListAdapter.getCount();
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
-        RetainData retainData = new RetainData();
-        retainData.rssItemArray = new RssItem[count];
-
-        for (int i = 0; i < count; i++) {
-            retainData.rssItemArray[i] = mListAdapter.getItem(i);
+        ArrayList<RssItem> rssItemList = savedInstanceState
+                .getParcelableArrayList(SAVED_STATE_RSS_ITEM_LIST);
+        mListAdapter.setNotifyOnChange(false);
+        for (int i = 0, length = rssItemList.size(); i < length; i++) {
+            mListAdapter.add(rssItemList.get(i));
         }
-
-        return retainData;
+        mListAdapter.notifyDataSetChanged();
     }
 
     private void bindViews() {
