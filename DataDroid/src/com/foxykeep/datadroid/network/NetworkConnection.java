@@ -1,5 +1,5 @@
 /**
- * 2011 Foxykeep (http://datadroid.foxykeep.com)
+ * 2012 Foxykeep (http://datadroid.foxykeep.com)
  * <p>
  * Licensed under the Beerware License : <br />
  * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
@@ -8,10 +8,10 @@
 
 package com.foxykeep.datadroid.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.foxykeep.datadroid.config.LogConfig;
-import com.foxykeep.datadroid.exception.CompulsoryParameterException;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
 
@@ -25,7 +25,7 @@ import java.util.HashMap;
  * This class gives the user an API to easily call a webservice and return the received response.
  * <p>
  * Use the {@link Builder} to prepare your webservice call.
- * 
+ *
  * @author Foxykeep
  */
 public final class NetworkConnection {
@@ -65,6 +65,7 @@ public final class NetworkConnection {
      * @author Foxykeep
      */
     public static final class Builder {
+        private final Context mContext;
         private final String mUrl;
         private Method mMethod = Method.GET;
         private HashMap<String, String> mParameterMap = null;
@@ -75,14 +76,21 @@ public final class NetworkConnection {
         private UsernamePasswordCredentials mCredentials = null;
         private boolean mIsSslValidationEnabled = true;
 
-        public Builder(final String url) {
+        /**
+         * Get a {@link Builder} to create a {@link NetworkConnection}
+         *
+         * @param context The context used by the {@link NetworkConnection}. Used to create the
+         *            User-Agent.
+         * @param url The URL to call.
+         */
+        public Builder(Context context, String url) {
             if (url == null) {
                 if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                    Log.e(LOG_TAG,
-                            "NetworkConnectionBuilder - Compulsory Parameter : request URL has not been set.");
+                    Log.e(LOG_TAG, "NetworkConnectionBuilder - request URL cannot be null.");
                 }
-                throw new CompulsoryParameterException("Request URL has not been set.");
+                throw new NullPointerException("Request URL has not been set.");
             }
+            mContext = context;
             mUrl = url;
         }
 
@@ -92,7 +100,7 @@ public final class NetworkConnection {
          * @param method The method to use.
          * @return The builder.
          */
-        public Builder setMethod(final Method method) {
+        public Builder setMethod(Method method) {
             mMethod = method;
             if (method != Method.POST) {
                 mPostText = null;
@@ -106,7 +114,7 @@ public final class NetworkConnection {
          * @param parameterMap The parameters to add to the request.
          * @return The builder.
          */
-        public Builder setParameters(final HashMap<String, String> parameterMap) {
+        public Builder setParameters(HashMap<String, String> parameterMap) {
             mParameterMap = parameterMap;
             return this;
         }
@@ -117,7 +125,7 @@ public final class NetworkConnection {
          * @param headerList The headers to add to the request.
          * @return The builder.
          */
-        public Builder setHeaderList(final ArrayList<Header> headerList) {
+        public Builder setHeaderList(ArrayList<Header> headerList) {
             mHeaderList = headerList;
             return this;
         }
@@ -130,7 +138,7 @@ public final class NetworkConnection {
          *            server.
          * @return The builder.
          */
-        public Builder setGzipEnabled(final boolean isGzipEnabled) {
+        public Builder setGzipEnabled(boolean isGzipEnabled) {
             mIsGzipEnabled = isGzipEnabled;
             return this;
         }
@@ -144,7 +152,7 @@ public final class NetworkConnection {
          * @param userAgent The user agent.
          * @return The builder.
          */
-        public Builder setUserAgent(final String userAgent) {
+        public Builder setUserAgent(String userAgent) {
             mUserAgent = userAgent;
             return this;
         }
@@ -156,7 +164,7 @@ public final class NetworkConnection {
          * @param postText The POSTDATA text that will be added in the request.
          * @return The builder.
          */
-        public Builder setPostText(final String postText) {
+        public Builder setPostText(String postText) {
             mPostText = postText;
             mMethod = Method.POST;
             return this;
@@ -193,9 +201,9 @@ public final class NetworkConnection {
          * @return The result of the webservice call.
          */
         public ConnectionResult execute() throws ConnectionException {
-            return NetworkConnectionImpl.execute(mUrl, mMethod, mParameterMap, mHeaderList,
-                        mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
-                        mIsSslValidationEnabled);
+            return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterMap,
+                    mHeaderList, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
+                    mIsSslValidationEnabled);
         }
     }
 }

@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.worker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -35,10 +36,9 @@ public final class CrudSyncPhoneAddEditOperation implements Operation {
     public static final String PARAM_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.screenSize";
     public static final String PARAM_PRICE = "com.foxykeep.datadroidpoc.extras.price";
 
-    public CrudSyncPhoneAddEditOperation() {}
-
     @Override
-    public Bundle execute(Request request) throws ConnectionException, DataException {
+    public Bundle execute(Context context, Request request) throws ConnectionException,
+            DataException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_USER_UDID,
                 String.valueOf(request.getLong(PARAM_USER_ID)));
@@ -53,7 +53,7 @@ public final class CrudSyncPhoneAddEditOperation implements Operation {
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_PRICE,
                 String.valueOf(request.getInt(PARAM_PRICE)));
 
-        Builder builder = new Builder(WSConfig.WS_CRUD_PHONE_ADD_EDIT_URL);
+        Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_ADD_EDIT_URL);
         builder.setParameters(params);
 
         ConnectionResult result = builder.execute();

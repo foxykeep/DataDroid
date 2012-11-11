@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.worker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -24,8 +25,9 @@ public final class CityListOperation implements Operation {
     public CityListOperation() {}
 
     @Override
-    public Bundle execute(Request request) throws ConnectionException, DataException {
-        ConnectionResult result = new Builder(WSConfig.WS_CITY_LIST_URL).execute();
+    public Bundle execute(Context context, Request request) throws ConnectionException,
+            DataException {
+        ConnectionResult result = new Builder(context, WSConfig.WS_CITY_LIST_URL).execute();
 
         return CityListJsonFactory.parseResult(result.body);
     }

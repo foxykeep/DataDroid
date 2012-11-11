@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.worker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -22,14 +23,13 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 public final class RssFeedOperation implements Operation {
 
-    public RssFeedOperation() {
-    }
-
     public static final String PARAM_FEED_URL = "com.foxykeep.datadroidpoc.extras.feedUrl";
 
     @Override
-    public Bundle execute(Request request) throws ConnectionException, DataException {
-        ConnectionResult result = new Builder(request.getString(PARAM_FEED_URL)).execute();
+    public Bundle execute(Context context, Request request) throws ConnectionException,
+            DataException {
+        ConnectionResult result = new Builder(context, request.getString(PARAM_FEED_URL))
+                .execute();
 
         Bundle bundle = new Bundle();
         RssFeed rssFeed = RssFactory.parseResult(result.body);

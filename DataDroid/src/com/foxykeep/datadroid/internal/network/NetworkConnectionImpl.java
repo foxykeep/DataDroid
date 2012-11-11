@@ -34,6 +34,8 @@ public final class NetworkConnectionImpl {
      * Call the webservice using the given parameters to construct the request and return the
      * result.
      *
+     * @param context The context to use for this operation. Used to generate the user agent if
+     *            needed.
      * @param url The webservice URL.
      * @param method The request method to use.
      * @param parameterMap The parameters to add to the request.
@@ -47,7 +49,7 @@ public final class NetworkConnectionImpl {
      * @param isSslValidationEnabled Whether the request will validate the SSL certificates.
      * @return The result of the webservice call.
      */
-    public static ConnectionResult execute(String url, Method method,
+    public static ConnectionResult execute(Context context, String url, Method method,
             HashMap<String, String> parameterMap, ArrayList<Header> headerList,
             boolean isGzipEnabled, String userAgent, String postText,
             UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) {

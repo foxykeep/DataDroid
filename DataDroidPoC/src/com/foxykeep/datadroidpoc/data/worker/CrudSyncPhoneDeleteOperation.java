@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.worker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -28,10 +29,9 @@ public final class CrudSyncPhoneDeleteOperation implements Operation {
     public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extras.userId";
     public static final String PARAM_PHONE_ID_LIST = "com.foxykeep.datadroidpoc.extras.phoneIdList";
 
-    public CrudSyncPhoneDeleteOperation() {}
-
     @Override
-    public Bundle execute(Request request) throws ConnectionException, DataException,
+    public Bundle execute(Context context, Request request) throws ConnectionException,
+            DataException,
             CustomException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_USER_UDID,
@@ -39,7 +39,7 @@ public final class CrudSyncPhoneDeleteOperation implements Operation {
         params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_IDS,
                 request.getString(PARAM_PHONE_ID_LIST));
 
-        Builder builder = new Builder(WSConfig.WS_CRUD_PHONE_DELETE_URL);
+        Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_DELETE_URL);
         builder.setParameters(params);
 
         ConnectionResult result = builder.execute();

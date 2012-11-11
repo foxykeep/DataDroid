@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroid.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
@@ -36,6 +37,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
         /**
          * Execute the request and returns a {@link Bundle} containing the data to return.
          *
+         * @param context The context to use for your operation.
          * @param request The request to execute.
          * @return A {@link Bundle} containing the data to return. If no data to return, null.
          * @throws ConnectionException Thrown when a connection error occurs. It will be propagated
@@ -48,8 +50,8 @@ public abstract class RequestService extends MultiThreadedIntentService {
          *             {@link RequestService#onCustomError(Exception)} will be made with the
          *             Exception thrown.
          */
-        public Bundle execute(Request request) throws ConnectionException, DataException,
-                CustomException;
+        public Bundle execute(Context context, Request request) throws ConnectionException,
+                DataException, CustomException;
     }
 
     public static final String LOG_TAG = RequestService.class.getSimpleName();
@@ -133,7 +135,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
 
         Operation operation = getOperationForType(request.getRequestType());
         try {
-            sendSuccess(receiver, operation.execute(request));
+            sendSuccess(receiver, operation.execute(this, request));
         } catch (ConnectionException e) {
             if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                 Log.e(LOG_TAG, "ConnectionException", e);

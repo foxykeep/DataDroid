@@ -8,6 +8,7 @@
 
 package com.foxykeep.datadroidpoc.data.worker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -28,15 +29,14 @@ public final class CrudSyncPhoneListOperation implements Operation {
 
     public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extras.userId";
 
-    public CrudSyncPhoneListOperation() {}
-
     @Override
-    public Bundle execute(Request request) throws ConnectionException, DataException {
+    public Bundle execute(Context context, Request request) throws ConnectionException,
+            DataException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_UDID,
                 request.getString(PARAM_USER_ID));
 
-        Builder builder = new Builder(WSConfig.WS_CRUD_PHONE_LIST_URL);
+        Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_LIST_URL);
         builder.setParameters(params);
 
         ConnectionResult result = builder.execute();

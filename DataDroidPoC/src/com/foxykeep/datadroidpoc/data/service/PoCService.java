@@ -38,7 +38,7 @@ public final class PoCService extends RequestService {
     public Operation getOperationForType(int requestType) {
         switch (requestType) {
             case PoCRequestFactory.REQUEST_TYPE_PERSON_LIST:
-                return new PersonListOperation(this /* Context */);
+                return new PersonListOperation();
             case PoCRequestFactory.REQUEST_TYPE_CITY_LIST:
                 return new CityListOperation();
             case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST:

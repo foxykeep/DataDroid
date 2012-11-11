@@ -37,20 +37,14 @@ public final class PersonListOperation implements Operation {
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
 
-    private Context mContext;
-
-    public PersonListOperation(Context context) {
-        mContext = context;
-    }
-
     @Override
-    public Bundle execute(Request request) throws ConnectionException, DataException,
-            CustomException {
+    public Bundle execute(Context context, Request request) throws ConnectionException,
+            DataException, CustomException {
         int returnFormat = request.getInt(PARAM_RETURN_FORMAT);
 
-        Builder builder = new Builder(
-                returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML
-                        : WSConfig.WS_PERSON_LIST_URL_JSON);
+        String url = returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML
+                : WSConfig.WS_PERSON_LIST_URL_JSON;
+        Builder builder = new Builder(context, url);
         ConnectionResult result = builder.execute();
 
         ArrayList<Person> personList = null;
@@ -61,7 +55,7 @@ public final class PersonListOperation implements Operation {
         }
 
         // Clear the table
-        mContext.getContentResolver().delete(DbPerson.CONTENT_URI, null, null);
+        context.getContentResolver().delete(DbPerson.CONTENT_URI, null, null);
 
         // Adds the persons in the database
         int personListSize = personList.size();
@@ -75,7 +69,7 @@ public final class PersonListOperation implements Operation {
             }
 
             try {
-                mContext.getContentResolver().applyBatch(PoCProvider.AUTHORITY, operationList);
+                context.getContentResolver().applyBatch(PoCProvider.AUTHORITY, operationList);
             } catch (RemoteException e) {
                 throw new DataException(e);
             } catch (OperationApplicationException e) {
