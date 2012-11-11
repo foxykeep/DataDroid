@@ -465,7 +465,7 @@ public class Request implements Parcelable {
         for (int i = 0, length = mTypeList.size(); i < length; i++) {
             dest.writeInt(mTypeList.get(i));
         }
-        dest.writeParcelable(mBundle, flags);
+        dest.writeBundle(mBundle);
     }
 
     public static final Creator<Request> CREATOR = new Creator<Request>() {

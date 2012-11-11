@@ -33,6 +33,12 @@ public class DataDroidActivity extends FragmentActivity implements ConnexionErro
         super.onCreate(savedInstanceState);
 
         mRequestManager = PoCRequestManager.from(this);
+
+        if (savedInstanceState != null) {
+            mRequestList = savedInstanceState.getParcelableArrayList(SAVED_STATE_REQUEST_LIST);
+        } else {
+            mRequestList = new ArrayList<Request>();
+        }
     }
 
     @Override
@@ -40,13 +46,6 @@ public class DataDroidActivity extends FragmentActivity implements ConnexionErro
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(SAVED_STATE_REQUEST_LIST, mRequestList);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mRequestList = savedInstanceState.getParcelableArrayList(SAVED_STATE_REQUEST_LIST);
     }
 
     @Override
