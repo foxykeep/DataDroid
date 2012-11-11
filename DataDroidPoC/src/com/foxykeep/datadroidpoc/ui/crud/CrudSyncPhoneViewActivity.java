@@ -8,8 +8,6 @@
 
 package com.foxykeep.datadroidpoc.ui.crud;
 
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +19,12 @@ import android.widget.TextView;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.config.DialogConfig;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
+import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
@@ -108,30 +106,6 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
                 mPhone.price));
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        Builder b;
-        switch (id) {
-            case DialogConfig.DIALOG_DELETE_CONFIRM:
-                b = new Builder(this);
-                b.setIcon(android.R.drawable.ic_dialog_alert);
-                b.setTitle(R.string.crud_phone_view_dialog_delete_confirm_title);
-                b.setMessage(getString(R.string.crud_phone_view_dialog_delete_confirm_message,
-                        mPhone.name));
-                b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        callSyncPhoneDeleteWS();
-                    }
-                });
-                b.setNegativeButton(android.R.string.cancel, null);
-                b.setCancelable(true);
-                return b.create();
-            default:
-                return super.onCreateDialog(id);
-        }
-    }
-
     private void callSyncPhoneDeleteWS() {
         new ProgressDialogFragmentBuilder(this)
                 .setMessage(R.string.progress_dialog_message)
@@ -181,14 +155,27 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
-            case R.id.menu_edit:
+            case R.id.menu_edit: {
                 Intent intent = new Intent(this, CrudSyncPhoneAddEditActivity.class);
                 intent.putExtra(CrudSyncPhoneAddEditActivity.INTENT_EXTRA_PHONE, mPhone);
                 startActivityForResult(intent, ACTIVITY_FOR_RESULT_EDIT);
                 return true;
-            case R.id.menu_delete:
-                showDialog(DialogConfig.DIALOG_DELETE_CONFIRM);
+            }
+            case R.id.menu_delete: {
+                QuestionDialogFragmentBuilder b = new QuestionDialogFragmentBuilder(this);
+                b.setTitle(R.string.crud_phone_view_dialog_delete_confirm_title);
+                b.setMessage(getString(R.string.crud_phone_view_dialog_delete_confirm_message,
+                        mPhone.name));
+                b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        callSyncPhoneDeleteWS();
+                    }
+                });
+                b.setNegativeButton(android.R.string.cancel, null);
+                b.show();
                 return true;
+            }
             default:
                 return super.onContextItemSelected(item);
         }
