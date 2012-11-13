@@ -18,7 +18,6 @@ import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
 import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -69,7 +68,7 @@ public final class NetworkConnection {
         private final String mUrl;
         private Method mMethod = Method.GET;
         private HashMap<String, String> mParameterMap = null;
-        private ArrayList<Header> mHeaderList = null;
+        private HashMap<String, String> mHeaderMap = null;
         private boolean mIsGzipEnabled = true;
         private String mUserAgent = null;
         private String mPostText = null;
@@ -96,6 +95,9 @@ public final class NetworkConnection {
 
         /**
          * Set the method to use. Default is {@link Method#GET}.
+         * <p>
+         * If set to another value than {@link Method#POST}, the POSTDATA text will be reset as it
+         * can only be used with a POST request.
          *
          * @param method The method to use.
          * @return The builder.
@@ -110,12 +112,16 @@ public final class NetworkConnection {
 
         /**
          * Set the parameters to add to the request. This is meant to be a "key" => "value" Map.
+         * <p>
+         * The POSTDATA text will be reset as they cannot be used at the same time.
          *
+         * @see #setPostText(String)
          * @param parameterMap The parameters to add to the request.
          * @return The builder.
          */
         public Builder setParameters(HashMap<String, String> parameterMap) {
             mParameterMap = parameterMap;
+            mPostText = null;
             return this;
         }
 
@@ -125,8 +131,8 @@ public final class NetworkConnection {
          * @param headerList The headers to add to the request.
          * @return The builder.
          */
-        public Builder setHeaderList(ArrayList<Header> headerList) {
-            mHeaderList = headerList;
+        public Builder setHeaderList(HashMap<String, String> headerMap) {
+            mHeaderMap = headerMap;
             return this;
         }
 
@@ -143,11 +149,8 @@ public final class NetworkConnection {
             return this;
         }
 
-        // STOPSHIP add the name of the method to create the default one used
         /**
          * Set the user agent to set in the request. Otherwise a default Android one will be used.
-         * <p>
-         * For more information about the default one used, check the method XXX
          *
          * @param userAgent The user agent.
          * @return The builder.
@@ -160,13 +163,17 @@ public final class NetworkConnection {
         /**
          * Set the POSTDATA text that will be added in the request. Also automatically set the
          * {@link Method} to {@link Method#POST} to be able to use it.
+         * <p>
+         * The parameters will be reset as they cannot be used at the same time.
          *
+         * @see #setParameters(HashMap)
          * @param postText The POSTDATA text that will be added in the request.
          * @return The builder.
          */
         public Builder setPostText(String postText) {
             mPostText = postText;
             mMethod = Method.POST;
+            mParameterMap = null;
             return this;
         }
 
@@ -202,7 +209,7 @@ public final class NetworkConnection {
          */
         public ConnectionResult execute() throws ConnectionException {
             return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterMap,
-                    mHeaderList, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
+                    mHeaderMap, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
                     mIsSslValidationEnabled);
         }
     }
