@@ -50,8 +50,6 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     private static final String SAVED_STATE_ARE_PHONES_LOADED = "savedStateIsResultLoaded";
     private static final String SAVED_STATE_PHONE_ARRAY_LIST = "savedStatePhoneArrayList";
 
-    private static final int REQUEST_TYPE_LIST = 1;
-
     private static final int ACTIVITY_FOR_RESULT_ADD = 1;
     private static final int ACTIVITY_FOR_RESULT_EDIT = 2;
     private static final int ACTIVITY_FOR_RESULT_VIEW = 3;
@@ -150,7 +148,9 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
 
     private void bindViews() {
         mListView = (ListView) findViewById(android.R.id.list);
-        mListView.setAdapter(new PhoneListAdapter(this));
+        mListAdapter = new PhoneListAdapter(this);
+        mListView.setAdapter(mListAdapter);
+        mListView.setEmptyView(findViewById(android.R.id.empty));
 
         mTextViewEmpty = (TextView) findViewById(android.R.id.empty);
 
@@ -364,16 +364,18 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
 
     @Override
     public void onRequestFinished(Request request, Bundle resultData) {
+        for (int i = 0, length = mRequestList.size(); i < length; i++) {
+        }
         if (mRequestList.contains(request)) {
             int requestType = request.getRequestType();
-            if (requestType == REQUEST_TYPE_LIST) {
+            if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
             } else {
                 ProgressDialogFragment.dismiss(this);
             }
             mRequestList.remove(request);
 
-            switch (request.getRequestType()) {
+            switch (requestType) {
                 case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST: {
                     mArePhonesLoaded = true;
 
@@ -415,7 +417,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     public void onRequestConnectionError(Request request) {
         if (mRequestList.contains(request)) {
             int requestType = request.getRequestType();
-            if (requestType == REQUEST_TYPE_LIST) {
+            if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
             } else {
                 ProgressDialogFragment.dismiss(this);
@@ -430,7 +432,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     public void onRequestDataError(Request request) {
         if (mRequestList.contains(request)) {
             int requestType = request.getRequestType();
-            if (requestType == REQUEST_TYPE_LIST) {
+            if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST) {
                 setProgressBarIndeterminateVisibility(false);
             } else {
                 ProgressDialogFragment.dismiss(this);

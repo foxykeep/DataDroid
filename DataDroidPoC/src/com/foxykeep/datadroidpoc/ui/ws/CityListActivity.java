@@ -109,11 +109,12 @@ public final class CityListActivity extends DataDroidActivity implements Request
         mButtonClearMemory.setOnClickListener(this);
 
         mListView = (ListView) findViewById(android.R.id.list);
-        mListView.setAdapter(new CityListAdapter(this));
+        mListAdapter = new CityListAdapter(this);
+        mListView.setAdapter(mListAdapter);
     }
 
     private void callCityListWS() {
-        (mListAdapter).clear();
+        mListAdapter.clear();
         setProgressBarIndeterminateVisibility(true);
         Request request = PoCRequestFactory.createGetCityListRequest();
         mRequestManager.execute(request, this);

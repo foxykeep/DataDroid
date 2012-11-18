@@ -107,6 +107,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         mButtonClearDb.setOnClickListener(this);
 
         mListView = (ListView) findViewById(android.R.id.list);
+        mListView.setEmptyView(findViewById(android.R.id.empty));
     }
 
     private void callPersonListWS() {
@@ -219,7 +220,8 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     class PersonListAdapter extends CursorAdapter {
 
         public PersonListAdapter(Context context, Cursor c) {
-            super(context, c, false);
+            // TODO change to cursorloader
+            super(context, c, true);
         }
 
         @Override

@@ -411,13 +411,13 @@ public class Request implements Parcelable {
                         }
                         break;
                     case TYPE_STRING:
-                        if (ObjectUtils.safeEquals(mBundle.getString(param),
+                        if (!ObjectUtils.safeEquals(mBundle.getString(param),
                                 oParams.mBundle.getString(param))) {
                             return false;
                         }
                         break;
                     case TYPE_CHARSEQUENCE:
-                        if (ObjectUtils.safeEquals(mBundle.getCharSequence(param),
+                        if (!ObjectUtils.safeEquals(mBundle.getCharSequence(param),
                                 oParams.mBundle.getCharSequence(param))) {
                             return false;
                         }
@@ -428,6 +428,7 @@ public class Request implements Parcelable {
                                 "The type of the field is not a valid one");
                 }
             }
+            return true;
         }
         return false;
     }

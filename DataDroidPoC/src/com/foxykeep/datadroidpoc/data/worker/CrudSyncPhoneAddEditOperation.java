@@ -41,7 +41,7 @@ public final class CrudSyncPhoneAddEditOperation implements Operation {
             DataException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_USER_UDID,
-                String.valueOf(request.getLong(PARAM_USER_ID)));
+                request.getString(PARAM_USER_ID));
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_ID, request.getString(PARAM_PHONE_ID));
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_NAME, request.getString(PARAM_NAME));
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_MANUFACTURER,
