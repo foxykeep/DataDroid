@@ -9,6 +9,8 @@
 package com.foxykeep.datadroid.internal.network;
 
 import android.content.Context;
+import android.support.util.Base64Compat;
+import android.util.Base64;
 import android.util.Log;
 
 import com.foxykeep.datadroid.config.LogConfig;
@@ -25,8 +27,19 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Implementation of {@link NetworkConnection}.
@@ -40,6 +53,7 @@ public final class NetworkConnectionImpl {
 
     private static final String ACCEPT_CHARSET_HEADER = "Accept-Charset";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String USER_AGENT_HEADER = "User-Agent";
 
@@ -68,15 +82,16 @@ public final class NetworkConnectionImpl {
      *            created.
      * @param postText The POSTDATA text to add in the request.
      * @param credentials The credentials to use for authentication.
-     * @param isSslValidationEnabled Whether the request will validate the SSL certificates.
+     * @param isSslValidationDisabled Whether the request will validate the SSL certificates.
      * @return The result of the webservice call.
      */
     public static ConnectionResult execute(Context context, String urlValue, Method method,
             HashMap<String, String> parameterMap, HashMap<String, String> headerMap,
             boolean isGzipEnabled, String userAgent, String postText,
-            UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) throws
+            UsernamePasswordCredentials credentials, boolean isSslValidationDisabled) throws
             ConnectionException {
         ConnectionResult result = null;
+        HttpURLConnection connection = null;
         // TODO add implementation based on HttpURLConnection.
         // TODO add the http response cache for ICS+
         try {
@@ -92,6 +107,9 @@ public final class NetworkConnectionImpl {
                 headerMap.put(ACCEPT_ENCODING_HEADER, "gzip");
             }
             headerMap.put(ACCEPT_CHARSET_HEADER, UTF8_CHARSET);
+            if (credentials != null) {
+                headerMap.put(AUTHORIZATION_HEADER, createAuthenticationHeader(credentials));
+            }
 
             StringBuilder paramBuilder = new StringBuilder();
             for (Entry<String, String> parameter : parameterMap.entrySet()) {
@@ -126,16 +144,17 @@ public final class NetworkConnectionImpl {
             }
 
             // Create the connection object
-            HttpURLConnection connection = null;
+            URL url = null;
             switch (method) {
                 case GET:
                 case DELETE:
                 case PUT:
-                    URL url = new URL(urlValue + "?" + paramBuilder.toString());
+                    url = new URL(urlValue + "?" + paramBuilder.toString());
                     connection = (HttpURLConnection) url.openConnection();
                     break;
                 case POST:
-                    connection = (HttpURLConnection) new URL(urlValue).openConnection();
+                    url = new URL(urlValue);
+                    connection = (HttpURLConnection) url.openConnection();
                     connection.setDoOutput(true);
 
                     String outputText = null;
@@ -157,7 +176,7 @@ public final class NetworkConnectionImpl {
                             try {
                                 output.close();
                             } catch (IOException e) {
-                                // Already catching the first exception so nothing to do here.
+                                // Already catching the first IOException so nothing to do here.
                             }
                         }
                     }
@@ -167,9 +186,19 @@ public final class NetworkConnectionImpl {
             // Set the request method
             connection.setRequestMethod(method.toString());
 
+            // If it's an HTTPS request and the SSL Validation is disabled
+            if (url.getProtocol().equals("https")
+                    && isSslValidationDisabled) {
+                HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
+                httpsConnection.setSSLSocketFactory(getAllHostsValidSocketFactory());
+                httpsConnection.setHostnameVerifier(getAllHostsValidVerifier());
+            }
+
             // Add the headers
-            for (Entry<String, String> header : headerMap.entrySet()) {
-                connection.addRequestProperty(header.getKey(), header.getValue());
+            if (!headerMap.isEmpty()) {
+                for (Entry<String, String> header : headerMap.entrySet()) {
+                    connection.addRequestProperty(header.getKey(), header.getValue());
+                }
             }
 
             // Set the connection and read timeout
@@ -179,8 +208,61 @@ public final class NetworkConnectionImpl {
             // TODO manage the response
         } catch (IOException e) {
             throw new ConnectionException(e);
+        } catch (KeyManagementException e) {
+            throw new ConnectionException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ConnectionException(e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
 
         return result;
+    }
+
+    private static String createAuthenticationHeader(UsernamePasswordCredentials credentials) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(credentials.getUserName()).append(":").append(credentials.getPassword());
+        return "Basic" + Base64Compat.encodeToString(sb.toString().getBytes(), Base64.NO_WRAP);
+    }
+
+    private static SSLSocketFactory sAllHostsValidSocketFactory;
+
+    private static SSLSocketFactory getAllHostsValidSocketFactory()
+            throws NoSuchAlgorithmException, KeyManagementException {
+        if (sAllHostsValidSocketFactory == null) {
+            TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+                }
+            };
+
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            sAllHostsValidSocketFactory = sc.getSocketFactory();
+        }
+
+        return sAllHostsValidSocketFactory;
+    }
+
+    private static HostnameVerifier sAllHostsValidVerifier;
+
+    private static HostnameVerifier getAllHostsValidVerifier() {
+        if (sAllHostsValidVerifier == null) {
+            sAllHostsValidVerifier = new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+        }
+
+        return sAllHostsValidVerifier;
     }
 }

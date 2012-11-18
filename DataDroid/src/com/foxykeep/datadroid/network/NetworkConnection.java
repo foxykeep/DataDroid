@@ -73,7 +73,7 @@ public final class NetworkConnection {
         private String mUserAgent = null;
         private String mPostText = null;
         private UsernamePasswordCredentials mCredentials = null;
-        private boolean mIsSslValidationEnabled = true;
+        private boolean mIsSslValidationDisabled = false;
 
         /**
          * Get a {@link Builder} to create a {@link NetworkConnection}
@@ -191,13 +191,13 @@ public final class NetworkConnection {
 
         // TODO check http://bit.ly/XgZpYg for implementation code.
         /**
-         * Set whether the request will validate the SSL certificates. Default is true.
+         * Set whether the SSL certificates validation are disabled. Default is false.
          *
-         * @param enabled Whether the request will validate the SSL certificates.
+         * @param enabled Whether the SSL certificates validation are disabled.
          * @return The Builder.
          */
-        public Builder setSslValidationEnabled(boolean enabled) {
-            mIsSslValidationEnabled = enabled;
+        public Builder setSslValidationDisabled(boolean disabled) {
+            mIsSslValidationDisabled = disabled;
             return this;
         }
 
@@ -210,7 +210,7 @@ public final class NetworkConnection {
         public ConnectionResult execute() throws ConnectionException {
             return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterMap,
                     mHeaderMap, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
-                    mIsSslValidationEnabled);
+                    mIsSslValidationDisabled);
         }
     }
 }
