@@ -15,10 +15,11 @@ import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
 
-import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class gives the user an API to easily call a webservice and return the received response.
@@ -42,18 +43,17 @@ public final class NetworkConnection {
     /**
      * The result of a webservice call.
      * <p>
-     * Contains the {@link Header}s of the response and the body of the response as an unparsed
-     * <code>String</code>.
+     * Contains the headers and the body of the response as an unparsed <code>String</code>.
      *
      * @author Foxykeep
      */
     public static final class ConnectionResult {
 
-        public Header[] headerArray;
+        public Map<String, List<String>> headerMap;
         public String body;
 
-        public ConnectionResult(final Header[] headerArray, final String body) {
-            this.headerArray = headerArray;
+        public ConnectionResult(Map<String, List<String>> headerMap, String body) {
+            this.headerMap = headerMap;
             this.body = body;
         }
     }

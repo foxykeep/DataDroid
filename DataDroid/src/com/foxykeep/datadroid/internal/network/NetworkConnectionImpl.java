@@ -20,9 +20,13 @@ import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,6 +36,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -54,7 +59,9 @@ public final class NetworkConnectionImpl {
     private static final String ACCEPT_CHARSET_HEADER = "Accept-Charset";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String CONTENT_ENCODING_HEADER = "Content-Encoding";
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
+    private static final String LOCATION_HEADER = "Location";
     private static final String USER_AGENT_HEADER = "User-Agent";
 
     private static final String UTF8_CHARSET = "UTF-8";
@@ -90,10 +97,7 @@ public final class NetworkConnectionImpl {
             boolean isGzipEnabled, String userAgent, String postText,
             UsernamePasswordCredentials credentials, boolean isSslValidationDisabled) throws
             ConnectionException {
-        ConnectionResult result = null;
         HttpURLConnection connection = null;
-        // TODO add implementation based on HttpURLConnection.
-        // TODO add the http response cache for ICS+
         try {
             // Prepare the request information
             if (userAgent == null) {
@@ -112,31 +116,33 @@ public final class NetworkConnectionImpl {
             }
 
             StringBuilder paramBuilder = new StringBuilder();
-            for (Entry<String, String> parameter : parameterMap.entrySet()) {
-                paramBuilder.append(URLEncoder.encode(parameter.getKey(), UTF8_CHARSET));
-                paramBuilder.append("=");
-                paramBuilder.append(URLEncoder.encode(parameter.getValue(), UTF8_CHARSET));
-                paramBuilder.append("&");
+            if (parameterMap != null && !parameterMap.isEmpty()) {
+                for (Entry<String, String> parameter : parameterMap.entrySet()) {
+                    paramBuilder.append(URLEncoder.encode(parameter.getKey(), UTF8_CHARSET));
+                    paramBuilder.append("=");
+                    paramBuilder.append(URLEncoder.encode(parameter.getValue(), UTF8_CHARSET));
+                    paramBuilder.append("&");
+                }
             }
 
             // Log the request
             if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
-                Log.d(TAG, "Request url : " + urlValue);
-                Log.d(TAG, "Method : " + method.toString());
+                Log.d(TAG, "Request url: " + urlValue);
+                Log.d(TAG, "Method: " + method.toString());
 
                 if (parameterMap != null && !parameterMap.isEmpty()) {
-                    Log.d(TAG, "Parameters :");
+                    Log.d(TAG, "Parameters:");
                     for (Entry<String, String> parameter : parameterMap.entrySet()) {
                         Log.d(TAG, "- " + parameter.getKey() + " = " + parameter.getValue());
                     }
                 }
 
                 if (postText != null) {
-                    Log.d(TAG, "Post body : " + postText);
+                    Log.d(TAG, "Post body: " + postText);
                 }
 
                 if (headerMap != null && !headerMap.isEmpty()) {
-                    Log.d(TAG, "Headers :");
+                    Log.d(TAG, "Headers:");
                     for (Entry<String, String> header : headerMap.entrySet()) {
                         Log.d(TAG, "- " + header.getKey() + " = " + header.getValue());
                     }
@@ -205,7 +211,37 @@ public final class NetworkConnectionImpl {
             connection.setConnectTimeout(OPERATION_TIMEOUT);
             connection.setReadTimeout(OPERATION_TIMEOUT);
 
-            // TODO manage the response
+            int responseCode = connection.getResponseCode();
+            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+                Log.d(TAG, "Response code: " + responseCode);
+            }
+            if (responseCode != HttpStatus.SC_OK) {
+                if (responseCode == HttpStatus.SC_MOVED_PERMANENTLY) {
+                    String redirectionUrl = connection.getHeaderField(LOCATION_HEADER);
+                    throw new ConnectionException("New location : " + redirectionUrl,
+                            redirectionUrl);
+                } else {
+                    throw new ConnectionException("Invalid response from server.", responseCode);
+                }
+            }
+
+            String contentEncoding = connection.getHeaderField(CONTENT_ENCODING_HEADER);
+            String body = convertStreamToString(connection.getInputStream(),
+                    contentEncoding != null
+                    && contentEncoding.equalsIgnoreCase("gzip"));
+
+            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+                Log.d(TAG, "Response body: ");
+
+                int pos = 0;
+                int bodyLength = body.length();
+                while (pos < bodyLength) {
+                    Log.d(TAG, body.substring(pos, Math.min(bodyLength - 1, pos + 120)));
+                    pos = pos + 120;
+                }
+            }
+
+            return new ConnectionResult(connection.getHeaderFields(), body);
         } catch (IOException e) {
             throw new ConnectionException(e);
         } catch (KeyManagementException e) {
@@ -217,8 +253,6 @@ public final class NetworkConnectionImpl {
                 connection.disconnect();
             }
         }
-
-        return result;
     }
 
     private static String createAuthenticationHeader(UsernamePasswordCredentials credentials) {
@@ -264,5 +298,35 @@ public final class NetworkConnectionImpl {
         }
 
         return sAllHostsValidVerifier;
+    }
+
+    private static String convertStreamToString(InputStream is, boolean isGzipEnabled)
+            throws IOException {
+        InputStream cleanedIs = is;
+        if (isGzipEnabled) {
+            cleanedIs = new GZIPInputStream(is);
+        }
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(cleanedIs, UTF8_CHARSET));
+            StringBuilder sb = new StringBuilder();
+            for (String line; (line = reader.readLine()) != null;) {
+                sb.append(line);
+                sb.append("\n");
+            }
+
+            return sb.toString();
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+
+            cleanedIs.close();
+
+            if (isGzipEnabled) {
+                is.close();
+            }
+        }
     }
 }
