@@ -1,5 +1,5 @@
 <?php 
-header ("content-type: text/json");
+header ("content-type: application/json");
 echo "{
     persons:{
         person:[
@@ -9,8 +9,8 @@ echo "{
                 email:'arcu@loremegetmollis.edu',
                 city:'Nacogdoches',
                 postalCode:94082,
-				age:15,
-				isWorking:1
+                age:15,
+                isWorking:1
             },
             {
                 firstName:'Ciaran',
@@ -18,8 +18,8 @@ echo "{
                 email:'dui@ut.com',
                 city:'Lomita',
                 postalCode:23818,
-				age:18,
-				isWorking:0
+                age:18,
+                isWorking:0
             },
             {
                 firstName:'Kadeem',
@@ -27,8 +27,8 @@ echo "{
                 email:'varius@Duismi.com',
                 city:'Chino',
                 postalCode:47742,
-				age:20,
-				isWorking:1
+                age:20,
+                isWorking:1
             },
             {
                 firstName:'Ross',
@@ -36,8 +36,8 @@ echo "{
                 email:'purus.sapien@nequeMorbi.ca',
                 city:'Rapid City',
                 postalCode:1501,
-				age:5,
-				isWorking:1
+                age:5,
+                isWorking:1
             },
             {
                 firstName:'Maxine',
@@ -45,8 +45,8 @@ echo "{
                 email:'Duis.gravida@lectusrutrumurna.org',
                 city:'Glendora',
                 postalCode:95042,
-				age:16,
-				isWorking:0
+                age:16,
+                isWorking:0
             },
             {
                 firstName:'Priscilla',
@@ -54,8 +54,8 @@ echo "{
                 email:'pretium.et@elit.org',
                 city:'Pittsburgh',
                 postalCode:34846,
-				age:15,
-				isWorking:1
+                age:15,
+                isWorking:1
             },
             {
                 firstName:'Lucian',
@@ -63,8 +63,8 @@ echo "{
                 email:'ad@congue.com',
                 city:'Corona',
                 postalCode:2560,
-				age:35,
-				isWorking:0
+                age:35,
+                isWorking:0
             },
             {
                 firstName:'Anthony',
@@ -72,8 +72,8 @@ echo "{
                 email:'ipsum@imperdieterat.com',
                 city:'Poughkeepsie',
                 postalCode:94438,
-				age:45,
-				isWorking:1
+                age:45,
+                isWorking:1
             },
             {
                 firstName:'Erin',
@@ -81,8 +81,8 @@ echo "{
                 email:'nunc.Quisque@vulputatevelit.edu',
                 city:'Sun Valley',
                 postalCode:60866,
-				age:58,
-				isWorking:1
+                age:58,
+                isWorking:1
             },
             {
                 firstName:'Sierra',
@@ -90,8 +90,8 @@ echo "{
                 email:'Quisque.ornare@diam.org',
                 city:'Midland',
                 postalCode:12517,
-				age:29,
-				isWorking:0
+                age:29,
+                isWorking:0
             },
             {
                 firstName:'Amena',
@@ -99,8 +99,8 @@ echo "{
                 email:'Aliquam.rutrum@eget.com',
                 city:'Tonawanda',
                 postalCode:47408,
-				age:63,
-				isWorking:1
+                age:63,
+                isWorking:1
             },
             {
                 firstName:'Erasmus',
@@ -108,8 +108,8 @@ echo "{
                 email:'vitae.purus@orci.edu',
                 city:'Irving',
                 postalCode:89892,
-				age:28,
-				isWorking:0
+                age:28,
+                isWorking:0
             },
             {
                 firstName:'Germane',
@@ -117,8 +117,8 @@ echo "{
                 email:'Proin.velit.Sed@neceleifend.org',
                 city:'Sonoma',
                 postalCode:3941,
-				age:24,
-				isWorking:0
+                age:24,
+                isWorking:0
             },
             {
                 firstName:'Avye',
@@ -126,8 +126,8 @@ echo "{
                 email:'placerat.velit@in.org',
                 city:'Kokomo',
                 postalCode:68948,
-				age:18,
-				isWorking:0
+                age:18,
+                isWorking:0
             },
             {
                 firstName:'Oprah',
@@ -135,8 +135,8 @@ echo "{
                 email:'aliquam@nibhQuisque.com',
                 city:'Winooski',
                 postalCode:28225,
-				age:64,
-				isWorking:1
+                age:64,
+                isWorking:1
             }
         ]
     }
