@@ -123,12 +123,14 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
         mButtonClearMemory.setOnClickListener(this);
 
         mListView = (ListView) findViewById(android.R.id.list);
-        mListView.setAdapter(new RssItemListAdapter(this));
+        mListAdapter = new RssItemListAdapter(this);
+        mListView.setAdapter(mListAdapter);
         mListView.setOnItemClickListener(this);
+        mListView.setEmptyView(findViewById(android.R.id.empty));
     }
 
     private void callRssFeedWS() {
-        (mListAdapter).clear();
+        mListAdapter.clear();
         setProgressBarIndeterminateVisibility(true);
 
         Request request = PoCRequestFactory.createGetRssFeedRequest(

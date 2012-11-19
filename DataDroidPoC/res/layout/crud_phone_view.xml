@@ -46,8 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.3"
-            android:text="@string/crud_phone_view_tv_android_version"
-            android:textColor="@android:color/white" />
+            android:text="@string/crud_phone_view_tv_android_version" />
 
         <TextView
             android:id="@+id/tv_android_version"
@@ -65,8 +64,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.3"
-            android:text="@string/crud_phone_view_tv_screen_size"
-            android:textColor="@android:color/white" />
+            android:text="@string/crud_phone_view_tv_screen_size" />
 
         <TextView
             android:id="@+id/tv_screen_size"
@@ -84,8 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.3"
-            android:text="@string/crud_phone_view_tv_price"
-            android:textColor="@android:color/white" />
+            android:text="@string/crud_phone_view_tv_price" />
 
         <TextView
             android:id="@+id/tv_price"
