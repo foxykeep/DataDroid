@@ -2,24 +2,21 @@
  * 2011 Foxykeep (http://datadroid.foxykeep.com)
  *
  * Licensed under the Beerware License :
- * 
+ *
  *   As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think
  *   this stuff is worth it, you can buy me a beer in return
  */
 
 package com.foxykeep.datadroid.network;
 
-import com.foxykeep.datadroid.config.LogConfig;
-import com.foxykeep.datadroid.exception.CompulsoryParameterException;
-import com.foxykeep.datadroid.exception.RestClientException;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.http.AndroidHttpClient;
-import android.os.Looper;
 import android.util.Log;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+
+import com.foxykeep.datadroid.config.LogConfig;
+import com.foxykeep.datadroid.exception.CompulsoryParameterException;
+import com.foxykeep.datadroid.exception.RestClientException;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
@@ -44,7 +41,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -56,7 +52,7 @@ import java.util.zip.GZIPInputStream;
 /**
  * This class gives the user methods to easily call a webservice and return the
  * received string
- * 
+ *
  * @author Foxykeep
  */
 @SuppressLint("NewApi")
@@ -75,47 +71,24 @@ public class NetworkConnection {
      * By default the user agent is empty. If you want to use the standard
      * Android user agent, call this method before using the
      * <code>retrieveResponseFromService</code> methods
-     * 
+     *
      * @param context The context
      */
     public static void generateDefaultUserAgent(final Context context) {
         if (sDefaultUserAgent != null) {
             return;
         }
-
-        try {
-            Constructor<WebSettings> constructor = WebSettings.class.getDeclaredConstructor(
-                    Context.class, WebView.class);
-            constructor.setAccessible(true);
-            try {
-                WebSettings settings = constructor.newInstance(context, null);
-                sDefaultUserAgent = settings.getUserAgentString();
-            } finally {
-                constructor.setAccessible(false);
-            }
-        } catch (Exception e) {
-            if (Thread.currentThread().getName().equalsIgnoreCase("main")) {
-                WebView webview = new WebView(context);
-                sDefaultUserAgent = webview.getSettings().getUserAgentString();
-            } else {
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        WebView webview = new WebView(context);
-                        sDefaultUserAgent = webview.getSettings().getUserAgentString();
-                        Looper.loop();
-                    }
-                };
-                thread.start();
-            }
+        if (context == null) {
+            throw new NullPointerException("Context cannot be null");
         }
+
+        sDefaultUserAgent = UserAgentUtils.get(context);
     }
 
     /**
      * The result of a webservice call. Contain the Header of the response and
      * the body of the response as an unparsed String
-     * 
+     *
      * @author Foxykeep
      */
     public static class NetworkConnectionResult {
@@ -125,7 +98,7 @@ public class NetworkConnection {
 
         /**
          * Http response result container.
-         * 
+         *
          * @param resultHeader
          * @param result
          */
@@ -137,7 +110,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @return A NetworkConnectionResult containing the response
      * @throws IllegalStateException
@@ -153,7 +126,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @param method The method to use (must be one of the following :
      *            {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT}
@@ -172,7 +145,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @param method The method to use (must be one of the following :
      *            {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT}
@@ -193,7 +166,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @param method The method to use (must be one of the following :
      *            {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT}
@@ -216,7 +189,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @param method The method to use (must be one of the following :
      *            {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT}
@@ -241,7 +214,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @param method The method to use (must be one of the following :
      *            {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT}
@@ -270,7 +243,7 @@ public class NetworkConnection {
 
     /**
      * Call a webservice and return the response
-     * 
+     *
      * @param url The url of the webservice
      * @param method The method to use (must be one of the following :
      *            {@link #METHOD_GET}, {@link #METHOD_POST}, {@link #METHOD_PUT}
@@ -549,7 +522,7 @@ public class NetworkConnection {
 
     /**
      * Transform an InputStream into a String
-     * 
+     *
      * @param is InputStream
      * @return String from the InputStream
      * @throws IOException If a problem occurs while reading the InputStream
