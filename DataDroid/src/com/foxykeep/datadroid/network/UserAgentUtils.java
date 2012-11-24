@@ -40,6 +40,9 @@ public class UserAgentUtils {
      * @return The User-Agent.
      */
     public static String get(Context context) {
+        if (context == null) {
+            throw new NullPointerException("Context cannot be null");
+        }
         if (sUserAgent == null) {
             sUserAgent = generate(context);
         }
