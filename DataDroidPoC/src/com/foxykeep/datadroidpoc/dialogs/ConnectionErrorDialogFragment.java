@@ -15,23 +15,23 @@ import android.support.v4.app.FragmentTransaction;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.R;
 
-public final class ConnexionErrorDialogFragment extends DialogFragment {
+public final class ConnectionErrorDialogFragment extends DialogFragment {
 
-    public interface ConnexionErrorDialogListener {
-        public void onConnexionErrorDialogCancel();
+    public interface ConnectionErrorDialogListener {
+        public void connectionErrorDialogCancel(Request request);
 
-        public void onConnexionErrorDialogRetry(Request request);
+        public void connectionErrorDialogRetry(Request request);
     }
 
     private static final String FRAGMENT_TAG =
-            "com.foxykeep.datadroidpoc.dialogs.connexionErrorDialog";
+            "com.foxykeep.datadroidpoc.dialogs.connectionErrorDialog";
 
-    private ConnexionErrorDialogListener mConnexionErrorDialogListener;
+    private ConnectionErrorDialogListener mConnexionErrorDialogListener;
     private Request mRequest;
 
-    private static ConnexionErrorDialogFragment newInstance(Request request,
-            ConnexionErrorDialogListener connexionErrorDialogListener) {
-        ConnexionErrorDialogFragment dialogFragment = new ConnexionErrorDialogFragment();
+    private static ConnectionErrorDialogFragment newInstance(Request request,
+            ConnectionErrorDialogListener connexionErrorDialogListener) {
+        ConnectionErrorDialogFragment dialogFragment = new ConnectionErrorDialogFragment();
         dialogFragment.mConnexionErrorDialogListener = connexionErrorDialogListener;
         dialogFragment.mRequest = request;
         return dialogFragment;
@@ -48,21 +48,21 @@ public final class ConnexionErrorDialogFragment extends DialogFragment {
             @Override
             public void onCancel(DialogInterface dialog) {
                 if (mConnexionErrorDialogListener != null) {
-                    mConnexionErrorDialogListener.onConnexionErrorDialogCancel();
+                    mConnexionErrorDialogListener.connectionErrorDialogCancel(mRequest);
                 }
             }
         });
         b.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mConnexionErrorDialogListener != null) {
-                    mConnexionErrorDialogListener.onConnexionErrorDialogCancel();
+                    mConnexionErrorDialogListener.connectionErrorDialogCancel(mRequest);
                 }
             }
         });
         b.setPositiveButton(R.string.dialog_button_retry, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mConnexionErrorDialogListener != null) {
-                    mConnexionErrorDialogListener.onConnexionErrorDialogRetry(mRequest);
+                    mConnexionErrorDialogListener.connectionErrorDialogRetry(mRequest);
                 }
             }
         });
@@ -70,7 +70,7 @@ public final class ConnexionErrorDialogFragment extends DialogFragment {
     }
 
     public static void show(FragmentActivity activity, Request request,
-            ConnexionErrorDialogListener connexionErrrorDialogListener) {
+            ConnectionErrorDialogListener connexionErrrorDialogListener) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -80,7 +80,7 @@ public final class ConnexionErrorDialogFragment extends DialogFragment {
         }
         fragmentTransaction.addToBackStack(null);
 
-        ConnexionErrorDialogFragment.newInstance(request, connexionErrrorDialogListener)
+        ConnectionErrorDialogFragment.newInstance(request, connexionErrrorDialogListener)
                 .show(fragmentManager, FRAGMENT_TAG);
     }
 

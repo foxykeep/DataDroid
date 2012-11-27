@@ -5,12 +5,10 @@ package com.foxykeep.datadroidpoc.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment.ConnexionErrorDialogListener;
 import com.foxykeep.datadroidpoc.dialogs.ErrorDialogFragment.ErrorDialogFragmentBuilder;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
  * @author Foxykeep
  *
  */
-public class DataDroidActivity extends FragmentActivity implements ConnexionErrorDialogListener {
+public class DataDroidActivity extends FragmentActivity {
 
     private static final String TAG = DataDroidActivity.class.getSimpleName();
 
@@ -46,14 +44,6 @@ public class DataDroidActivity extends FragmentActivity implements ConnexionErro
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(SAVED_STATE_REQUEST_LIST, mRequestList);
-    }
-
-    @Override
-    public void onConnexionErrorDialogCancel() {}
-
-    @Override
-    public void onConnexionErrorDialogRetry(Request request) {
-        Log.i(TAG, "onConnexionErrorDialogRetry | Nothing happens by default. Override the method");
     }
 
     protected void showBadDataErrorDialog() {

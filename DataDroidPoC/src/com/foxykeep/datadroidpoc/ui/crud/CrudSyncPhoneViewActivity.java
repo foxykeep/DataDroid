@@ -21,14 +21,16 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
-public final class CrudSyncPhoneViewActivity extends DataDroidActivity implements RequestListener {
+public final class CrudSyncPhoneViewActivity extends DataDroidActivity implements RequestListener,
+        ConnectionErrorDialogListener {
 
     private static final String SAVED_STATE_PHONE = "savedStatePhone";
     private static final String SAVED_STATE_IS_PHONE_EDITED = "savedStateIsPhoneEdited";
@@ -204,7 +206,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
             ProgressDialogFragment.dismiss(this);
             mRequestList.remove(request);
 
-            ConnexionErrorDialogFragment.show(this, request, this);
+            ConnectionErrorDialogFragment.show(this, request, this);
         }
     }
 
@@ -216,5 +218,13 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
 
             showBadDataErrorDialog();
         }
+    }
+
+    @Override
+    public void connectionErrorDialogCancel(Request request) {}
+
+    @Override
+    public void connectionErrorDialogRetry(Request request) {
+        callSyncPhoneDeleteWS();
     }
 }

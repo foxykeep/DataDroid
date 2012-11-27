@@ -23,14 +23,15 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.UserManager;
 
 public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implements
-        RequestListener, OnClickListener, TextWatcher {
+        RequestListener, OnClickListener, TextWatcher, ConnectionErrorDialogListener {
 
     public static final String INTENT_EXTRA_PHONE = "com.foxykeep.datadroidpoc.ui.extras.phone";
 
@@ -207,7 +208,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
             ProgressDialogFragment.dismiss(this);
             mRequestList.remove(request);
 
-            ConnexionErrorDialogFragment.show(this, request, this);
+            ConnectionErrorDialogFragment.show(this, request, this);
         }
     }
 
@@ -222,7 +223,10 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     }
 
     @Override
-    public void onConnexionErrorDialogRetry(Request request) {
+    public void connectionErrorDialogCancel(Request request) {}
+
+    @Override
+    public void connectionErrorDialogRetry(Request request) {
         int requestType = request.getRequestType();
         if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_ADD) {
             callSyncPhoneAddWS();

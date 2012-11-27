@@ -33,7 +33,8 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
@@ -44,7 +45,7 @@ import com.foxykeep.datadroidpoc.util.UserManager;
 import java.util.ArrayList;
 
 public final class CrudSyncPhoneListActivity extends DataDroidActivity implements RequestListener,
-        OnItemClickListener {
+        OnItemClickListener, ConnectionErrorDialogListener {
 
     private static final String SAVED_STATE_POSITION_TO_DELETE = "savedStatePositionToDelete";
     private static final String SAVED_STATE_ARE_PHONES_LOADED = "savedStateIsResultLoaded";
@@ -294,11 +295,15 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     private void callSyncPhoneDeleteWS(String phoneIdList) {
+        Request request = PoCRequestFactory.createDeleteSyncPhonesRequest(mUserId, phoneIdList);
+        callSyncPhoneDeleteWS(request);
+    }
+
+    private void callSyncPhoneDeleteWS(Request request) {
         new ProgressDialogFragmentBuilder(this)
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = PoCRequestFactory.createDeleteSyncPhonesRequest(mUserId, phoneIdList);
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
@@ -424,7 +429,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
             }
             mRequestList.remove(request);
 
-            ConnexionErrorDialogFragment.show(this, request, this);
+            ConnectionErrorDialogFragment.show(this, request, this);
         }
     }
 
@@ -440,6 +445,25 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
             mRequestList.remove(request);
 
             showBadDataErrorDialog();
+        }
+    }
+
+    @Override
+    public void connectionErrorDialogCancel(Request request) {
+        if (request.getRequestType() == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST) {
+            finish();
+        }
+    }
+
+    @Override
+    public void connectionErrorDialogRetry(Request request) {
+        switch (request.getRequestType()) {
+            case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST:
+                callSyncPhoneListWS();
+                break;
+            case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE:
+                callSyncPhoneDeleteWS(request);
+                break;
         }
     }
 

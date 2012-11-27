@@ -25,13 +25,14 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.model.City;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
 import java.util.ArrayList;
 
 public final class CityListActivity extends DataDroidActivity implements RequestListener,
-        OnClickListener {
+        OnClickListener, ConnectionErrorDialogListener {
 
     private static final String SAVED_STATE_CITY_LIST = "savedStateCityList";
 
@@ -154,7 +155,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);
 
-            ConnexionErrorDialogFragment.show(this, request, this);
+            ConnectionErrorDialogFragment.show(this, request, this);
         }
     }
 
@@ -211,5 +212,14 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
             return convertView;
         }
+    }
+
+    @Override
+    public void connectionErrorDialogCancel(Request request) {
+    }
+
+    @Override
+    public void connectionErrorDialogRetry(Request request) {
+        callCityListWS();
     }
 }

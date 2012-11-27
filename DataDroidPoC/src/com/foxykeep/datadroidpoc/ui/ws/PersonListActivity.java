@@ -29,13 +29,14 @@ import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
 import com.foxykeep.datadroidpoc.data.provider.util.ProviderCriteria;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnexionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
 import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
 public final class PersonListActivity extends DataDroidActivity implements RequestListener,
-        AsyncQueryListener, OnClickListener {
+        AsyncQueryListener, OnClickListener, ConnectionErrorDialogListener {
 
     private Spinner mSpinnerReturnFormat;
     private Button mButtonLoad;
@@ -81,7 +82,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
                     // In this case, we don't have a way to know if the request was correctly
                     // executed with 0 result or if an error occurred. Here I choose to display an
                     // error but it's up to you
-                    ConnexionErrorDialogFragment.show(this, request, this);
+                    ConnectionErrorDialogFragment.show(this, request, this);
                 }
 
                 // Nothing to do if it works as the cursor is automatically updated
@@ -143,7 +144,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);
 
-            ConnexionErrorDialogFragment.show(this, request, this);
+            ConnectionErrorDialogFragment.show(this, request, this);
         }
     }
 
@@ -155,6 +156,15 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
 
             showBadDataErrorDialog();
         }
+    }
+
+    @Override
+    public void connectionErrorDialogCancel(Request request) {
+    }
+
+    @Override
+    public void connectionErrorDialogRetry(Request request) {
+        callPersonListWS();
     }
 
     @Override
