@@ -111,6 +111,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
         mListView = (ListView) findViewById(android.R.id.list);
         mListAdapter = new CityListAdapter(this);
         mListView.setAdapter(mListAdapter);
+        mListView.setEmptyView(findViewById(android.R.id.empty));
     }
 
     private void callCityListWS() {
