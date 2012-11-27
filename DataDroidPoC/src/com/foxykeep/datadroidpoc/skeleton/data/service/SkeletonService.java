@@ -24,9 +24,6 @@ public final class SkeletonService extends RequestService {
     // Max number of parallel threads used.
     private static final int MAX_THREADS = 3;
 
-    // TODO : Set a numeric constant for each worker (to distinguish them). These constants will be
-    // sent in the Intent in order to see which worker to call
-
     public SkeletonService() {
         super(MAX_THREADS);
     }
