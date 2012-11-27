@@ -44,7 +44,7 @@ public final class ProgressDialogFragment extends DialogFragment {
         dialog.setTitle(R.string.progress_dialog_title);
         dialog.setMessage(args.getString(BUNDLE_MESSAGE));
         dialog.setIndeterminate(true);
-        dialog.setCancelable(args.getBoolean(BUNDLE_IS_CANCELABLE));
+        setCancelable(args.getBoolean(BUNDLE_IS_CANCELABLE));
         return dialog;
     }
 

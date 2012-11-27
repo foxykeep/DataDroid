@@ -47,7 +47,7 @@ public final class QuestionDialogFragment extends DialogFragment {
         b.setTitle(args.getString(BUNDLE_TITLE));
         b.setMessage(args.getString(BUNDLE_MESSAGE));
         b.setIcon(android.R.drawable.ic_dialog_alert);
-        b.setCancelable(true);
+        setCancelable(true);
         b.setPositiveButton(args.getString(BUNDLE_POSITIVE_BUTTON_TEXT), mPositiveOnClickListener);
         b.setNegativeButton(args.getString(BUNDLE_NEGATIVE_BUTTON_TEXT), mNegativeOnClickListener);
         return b.create();

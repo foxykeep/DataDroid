@@ -4,7 +4,6 @@ package com.foxykeep.datadroidpoc.dialogs;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -43,15 +42,7 @@ public final class ConnectionErrorDialogFragment extends DialogFragment {
         b.setTitle(R.string.dialog_error_connection_error_title);
         b.setMessage(R.string.dialog_error_connection_error_message);
         b.setIcon(android.R.drawable.ic_dialog_alert);
-        b.setCancelable(true);
-        b.setOnCancelListener(new OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (mConnexionErrorDialogListener != null) {
-                    mConnexionErrorDialogListener.connectionErrorDialogCancel(mRequest);
-                }
-            }
-        });
+        setCancelable(true);
         b.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mConnexionErrorDialogListener != null) {
@@ -67,6 +58,14 @@ public final class ConnectionErrorDialogFragment extends DialogFragment {
             }
         });
         return b.create();
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        if (mConnexionErrorDialogListener != null) {
+            mConnexionErrorDialogListener.connectionErrorDialogCancel(mRequest);
+        }
     }
 
     public static void show(FragmentActivity activity, Request request,

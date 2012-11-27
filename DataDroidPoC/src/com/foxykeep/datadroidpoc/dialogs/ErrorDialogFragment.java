@@ -3,7 +3,7 @@ package com.foxykeep.datadroidpoc.dialogs;
 
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -15,6 +15,10 @@ import android.support.v4.app.FragmentTransaction;
 import com.foxykeep.datadroidpoc.R;
 
 public class ErrorDialogFragment extends DialogFragment {
+
+    public interface OnCancelListener {
+        public void onCancel();
+    }
 
     private static final String FRAGMENT_TAG = "com.foxykeep.datadroidpoc.dialogs.errorDialog";
 
@@ -44,10 +48,16 @@ public class ErrorDialogFragment extends DialogFragment {
         b.setTitle(args.getString(BUNDLE_TITLE));
         b.setMessage(args.getString(BUNDLE_MESSAGE));
         b.setIcon(android.R.drawable.ic_dialog_alert);
-        b.setCancelable(true);
-        b.setOnCancelListener(mOnCancelListener);
+        setCancelable(true);
         b.setNeutralButton(getActivity().getString(android.R.string.ok), mOnClickListener);
         return b.create();
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        if (mOnCancelListener != null) {
+            mOnCancelListener.onCancel();
+        }
     }
 
     public static class ErrorDialogFragmentBuilder {
