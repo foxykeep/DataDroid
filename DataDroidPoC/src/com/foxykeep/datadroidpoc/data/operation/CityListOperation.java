@@ -20,14 +20,26 @@ import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.factory.CityListJsonFactory;
 
+import java.util.HashMap;
+
 public final class CityListOperation implements Operation {
+
+    public static final String PARAM_DATASET =
+            "com.foxykeep.datadroidpoc.extras.dataset";
 
     public CityListOperation() {}
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {
-        ConnectionResult result = new Builder(context, WSConfig.WS_CITY_LIST_URL).execute();
+        String dataset = String.valueOf(request.getInt(PARAM_DATASET));
+
+        HashMap<String, String> parameterMap = new HashMap<String, String>();
+        parameterMap.put(WSConfig.WS_CITY_LIST_PROPERTY_DATASET, dataset);
+
+        Builder builder = new Builder(context, WSConfig.WS_CITY_LIST_URL);
+        builder.setParameters(parameterMap);
+        ConnectionResult result = builder.execute();
 
         return CityListJsonFactory.parseResult(result.body);
     }

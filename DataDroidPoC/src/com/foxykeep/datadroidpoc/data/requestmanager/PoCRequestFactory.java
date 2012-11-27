@@ -9,6 +9,7 @@
 package com.foxykeep.datadroidpoc.data.requestmanager;
 
 import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroidpoc.data.operation.CityListOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
@@ -63,11 +64,21 @@ public final class PoCRequestFactory {
 
     /**
      * Create the request to get the list of cities and save it in the memory provider.
-     *
+     * 
      * @return The request.
      */
     public static Request createGetCityListRequest() {
+        return createGetCityListRequest(1);
+    }
+
+    /**
+     * Create the request to get the list of cities and save it in the memory provider.
+     *
+     * @return The request.
+     */
+    public static Request createGetCityListRequest(int dataset) {
         Request request = new Request(REQUEST_TYPE_CITY_LIST);
+        request.put(CityListOperation.PARAM_DATASET, dataset);
         request.setMemoryCacheEnabled(true);
         return request;
     }

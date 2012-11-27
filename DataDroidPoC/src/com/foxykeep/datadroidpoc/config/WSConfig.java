@@ -22,6 +22,7 @@ public final class WSConfig {
 
     // CityList WS
     public static final String WS_CITY_LIST_URL = ROOT_URL + "cityListJson.php";
+    public static final String WS_CITY_LIST_PROPERTY_DATASET = "dataset";
 
     // CrudPhoneList WS
     public static final String WS_CRUD_PHONE_LIST_URL = ROOT_URL + "crud/list.php";
