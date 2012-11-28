@@ -23,12 +23,6 @@ import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
 
 public final class HomeActivity extends Activity implements OnClickListener {
 
-    private Button mButtonPersonList;
-    private Button mButtonCityList;
-    private Button mButtonPhonesCrudSync;
-
-    private Button mButtonRssFeed;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,30 +32,30 @@ public final class HomeActivity extends Activity implements OnClickListener {
     }
 
     private void bindViews() {
-        mButtonPersonList = (Button) findViewById(R.id.b_person_list);
-        mButtonPersonList.setOnClickListener(this);
+        ((Button) findViewById(R.id.b_person_list)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_city_list)).setOnClickListener(this);
 
-        mButtonCityList = (Button) findViewById(R.id.b_city_list);
-        mButtonCityList.setOnClickListener(this);
+        ((Button) findViewById(R.id.b_phones_crud_sync)).setOnClickListener(this);
 
-        mButtonPhonesCrudSync = (Button) findViewById(R.id.b_phones_crud_sync);
-        mButtonPhonesCrudSync.setOnClickListener(this);
-
-        mButtonRssFeed = (Button) findViewById(R.id.b_rss_feed);
-        mButtonRssFeed.setOnClickListener(this);
+        ((Button) findViewById(R.id.b_rss_feed)).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         Intent intent = null;
-        if (view == mButtonPersonList) {
-            intent = new Intent(this, PersonListActivity.class);
-        } else if (view == mButtonCityList) {
-            intent = new Intent(this, CityListActivity.class);
-        } else if (view == mButtonPhonesCrudSync) {
-            intent = new Intent(this, CrudSyncPhoneListActivity.class);
-        } else if (view == mButtonRssFeed) {
-            intent = new Intent(this, RssFeedListActivity.class);
+        switch (view.getId()) {
+            case R.id.b_person_list:
+                intent = new Intent(this, PersonListActivity.class);
+                break;
+            case R.id.b_city_list:
+                intent = new Intent(this, CityListActivity.class);
+                break;
+            case R.id.b_phones_crud_sync:
+                intent = new Intent(this, CrudSyncPhoneListActivity.class);
+                break;
+            case R.id.b_rss_feed:
+                intent = new Intent(this, RssFeedListActivity.class);
+                break;
         }
 
         if (intent != null) {

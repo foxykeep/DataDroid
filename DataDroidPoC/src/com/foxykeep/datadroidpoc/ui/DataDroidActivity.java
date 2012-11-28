@@ -19,8 +19,6 @@ import java.util.ArrayList;
  */
 public class DataDroidActivity extends FragmentActivity {
 
-    private static final String TAG = DataDroidActivity.class.getSimpleName();
-
     private static final String SAVED_STATE_REQUEST_LIST = "savedStateRequestList";
 
     protected PoCRequestManager mRequestManager;

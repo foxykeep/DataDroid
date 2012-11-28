@@ -44,8 +44,6 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
     private static final String SAVED_STATE_RSS_ITEM_LIST = "savedStateRssItemList";
 
     private Spinner mSpinnerFeedUrl;
-    private Button mButtonLoad;
-    private Button mButtonClearMemory;
     private ListView mListView;
     private RssItemListAdapter mListAdapter;
 
@@ -117,11 +115,8 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
     private void bindViews() {
         mSpinnerFeedUrl = (Spinner) findViewById(R.id.sp_url);
 
-        mButtonLoad = (Button) findViewById(R.id.b_load);
-        mButtonLoad.setOnClickListener(this);
-
-        mButtonClearMemory = (Button) findViewById(R.id.b_clear_memory);
-        mButtonClearMemory.setOnClickListener(this);
+        ((Button) findViewById(R.id.b_load)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_clear_memory)).setOnClickListener(this);
 
         mListView = (ListView) findViewById(android.R.id.list);
         mListAdapter = new RssItemListAdapter(this);
@@ -142,10 +137,13 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
 
     @Override
     public void onClick(View view) {
-        if (view == mButtonLoad) {
-            callRssFeedWS();
-        } else if (view == mButtonClearMemory) {
-            (mListAdapter).clear();
+        switch (view.getId()) {
+            case R.id.b_load:
+                callRssFeedWS();
+                break;
+            case R.id.b_clear_memory:
+                mListAdapter.clear();
+                break;
         }
     }
 

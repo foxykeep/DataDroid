@@ -278,7 +278,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     private void callSyncPhoneDeleteMonoWS() {
-        callSyncPhoneDeleteWS(String.valueOf((mListAdapter)
+        callSyncPhoneDeleteWS(String.valueOf(mListAdapter
                 .getItem(mPositionToDelete).serverId));
     }
 
@@ -314,7 +314,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
         if (parent == mListView) {
             Intent intent = new Intent(this, CrudSyncPhoneViewActivity.class);
             intent.putExtra(CrudSyncPhoneViewActivity.INTENT_EXTRA_PHONE,
-                    (mListAdapter).getItem(position));
+                    mListAdapter.getItem(position));
             startActivityForResult(intent, ACTIVITY_FOR_RESULT_VIEW);
         }
     }
@@ -326,7 +326,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.crud_phone_list_context, menu);
 
-        menu.setHeaderTitle((mListAdapter)
+        menu.setHeaderTitle(mListAdapter
                 .getItem(((AdapterContextMenuInfo) menuInfo).position).name);
     }
 
@@ -338,7 +338,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
 
         switch (itemId) {
             case R.id.menu_edit: {
-                Phone phone = (mListAdapter).getItem(position);
+                Phone phone = mListAdapter.getItem(position);
                 Intent intent = new Intent(this, CrudSyncPhoneAddEditActivity.class);
                 intent.putExtra(CrudSyncPhoneAddEditActivity.INTENT_EXTRA_PHONE, phone);
                 startActivityForResult(intent, ACTIVITY_FOR_RESULT_EDIT);
@@ -346,7 +346,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
             }
             case R.id.menu_delete: {
                 mPositionToDelete = position;
-                Phone phone = (mListAdapter).getItem(mPositionToDelete);
+                Phone phone = mListAdapter.getItem(mPositionToDelete);
 
                 QuestionDialogFragmentBuilder b = new QuestionDialogFragmentBuilder(this);
                 b.setTitle(R.string.crud_phone_list_dialog_delete_confirm_title);

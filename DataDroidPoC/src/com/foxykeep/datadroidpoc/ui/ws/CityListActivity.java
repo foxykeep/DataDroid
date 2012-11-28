@@ -36,8 +36,6 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
     private static final String SAVED_STATE_CITY_LIST = "savedStateCityList";
 
-    private Button mButtonLoad;
-    private Button mButtonClearMemory;
     private ListView mListView;
     private CityListAdapter mListAdapter;
 
@@ -93,21 +91,18 @@ public final class CityListActivity extends DataDroidActivity implements Request
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        ArrayList<City> rssItemList = savedInstanceState
+        ArrayList<City> cityItemList = savedInstanceState
                 .getParcelableArrayList(SAVED_STATE_CITY_LIST);
         mListAdapter.setNotifyOnChange(false);
-        for (int i = 0, length = rssItemList.size(); i < length; i++) {
-            mListAdapter.add(rssItemList.get(i));
+        for (int i = 0, length = cityItemList.size(); i < length; i++) {
+            mListAdapter.add(cityItemList.get(i));
         }
         mListAdapter.notifyDataSetChanged();
     }
 
     private void bindViews() {
-        mButtonLoad = (Button) findViewById(R.id.b_load);
-        mButtonLoad.setOnClickListener(this);
-
-        mButtonClearMemory = (Button) findViewById(R.id.b_clear_memory);
-        mButtonClearMemory.setOnClickListener(this);
+        ((Button) findViewById(R.id.b_load)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_clear_memory)).setOnClickListener(this);
 
         mListView = (ListView) findViewById(android.R.id.list);
         mListAdapter = new CityListAdapter(this);
@@ -125,10 +120,13 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
     @Override
     public void onClick(View view) {
-        if (view == mButtonLoad) {
-            callCityListWS();
-        } else if (view == mButtonClearMemory) {
-            (mListAdapter).clear();
+        switch (view.getId()) {
+            case R.id.b_load:
+                callCityListWS();
+                break;
+            case R.id.b_clear_memory:
+                mListAdapter.clear();
+                break;
         }
     }
 
@@ -167,6 +165,15 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
             showBadDataErrorDialog();
         }
+    }
+
+    @Override
+    public void connectionErrorDialogCancel(Request request) {
+    }
+
+    @Override
+    public void connectionErrorDialogRetry(Request request) {
+        callCityListWS();
     }
 
     class ViewHolder {
@@ -212,14 +219,5 @@ public final class CityListActivity extends DataDroidActivity implements Request
 
             return convertView;
         }
-    }
-
-    @Override
-    public void connectionErrorDialogCancel(Request request) {
-    }
-
-    @Override
-    public void connectionErrorDialogRetry(Request request) {
-        callCityListWS();
     }
 }

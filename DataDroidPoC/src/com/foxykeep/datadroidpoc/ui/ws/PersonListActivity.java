@@ -39,8 +39,6 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         AsyncQueryListener, OnClickListener, ConnectionErrorDialogListener {
 
     private Spinner mSpinnerReturnFormat;
-    private Button mButtonLoad;
-    private Button mButtonClearDb;
     private ListView mListView;
     private PersonListAdapter mListAdapter;
 
@@ -101,11 +99,8 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     private void bindViews() {
         mSpinnerReturnFormat = (Spinner) findViewById(R.id.sp_return_format);
 
-        mButtonLoad = (Button) findViewById(R.id.b_load);
-        mButtonLoad.setOnClickListener(this);
-
-        mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
-        mButtonClearDb.setOnClickListener(this);
+        ((Button) findViewById(R.id.b_load)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_clear_db)).setOnClickListener(this);
 
         mListView = (ListView) findViewById(android.R.id.list);
         mListView.setEmptyView(findViewById(android.R.id.empty));
@@ -121,10 +116,13 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
 
     @Override
     public void onClick(View view) {
-        if (view == mButtonLoad) {
-            callPersonListWS();
-        } else if (view == mButtonClearDb) {
-            mQueryHandler.startDelete(DbPerson.CONTENT_URI);
+        switch (view.getId()) {
+            case R.id.b_load:
+                callPersonListWS();
+                break;
+            case R.id.b_clear_db:
+                mQueryHandler.startDelete(DbPerson.CONTENT_URI);
+                break;
         }
     }
 
