@@ -19,6 +19,7 @@ import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
 import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
 
 public final class HomeActivity extends Activity implements OnClickListener {
@@ -34,6 +35,7 @@ public final class HomeActivity extends Activity implements OnClickListener {
     private void bindViews() {
         ((Button) findViewById(R.id.b_person_list)).setOnClickListener(this);
         ((Button) findViewById(R.id.b_city_list)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_double_list)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.b_phones_crud_sync)).setOnClickListener(this);
 
@@ -49,6 +51,9 @@ public final class HomeActivity extends Activity implements OnClickListener {
                 break;
             case R.id.b_city_list:
                 intent = new Intent(this, CityListActivity.class);
+                break;
+            case R.id.b_double_list:
+                intent = new Intent(this, DoubleListActivity.class);
                 break;
             case R.id.b_phones_crud_sync:
                 intent = new Intent(this, CrudSyncPhoneListActivity.class);

@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -35,6 +36,9 @@
         <activity
             android:name=".ui.ws.CityListActivity"
             android:label="@string/city_list_title" />
+        <activity
+            android:name=".ui.ws.DoubleListActivity"
+            android:label="@string/double_list_title" />
         <activity
             android:name=".ui.crud.CrudSyncPhoneListActivity"
             android:label="@string/crud_sync_phone_list_title" />

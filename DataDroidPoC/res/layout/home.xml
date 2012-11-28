@@ -24,9 +24,16 @@
         android:text="@string/home_b_city_list" />
 
     <Button
+        android:id="@+id/b_double_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_b_double_list" />
+
+    <Button
         android:id="@+id/b_phones_crud_sync"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/home_b_crud_phone_list_sync" />
 
     <Button

@@ -23,6 +23,7 @@
     <!-- HomeActivity texts -->
     <string name="home_b_person_list">Person List (DB)</string>
     <string name="home_b_city_list">City List (Memory)</string>
+    <string name="home_b_double_list">Double List</string>
     <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
     <string name="home_b_rss_feed">Rss Feed</string>
     <string name="home_tv_source_code">The source code of the DataDroid library as well as this
@@ -41,6 +42,12 @@
     <string name="city_list_b_load">Load</string>
     <string name="city_list_b_clear_memory">Clear memory</string>
     <string name="city_list_tv_empty">0 city found</string>
+
+    <!-- DoubleListActivity texts -->
+    <string name="double_list_title">Double List</string>
+    <string name="double_list_b_load">Load</string>
+    <string name="double_list_b_clear_memory">Clear memory</string>
+    <string name="double_list_tv_empty">0 city found</string>
 
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
     <string name="crud_phone_list_tv_empty_loading">Loading …</string>

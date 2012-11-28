@@ -25,6 +25,7 @@ public final class PoCRequestFactory {
     // Request types
     public static final int REQUEST_TYPE_PERSON_LIST = 0;
     public static final int REQUEST_TYPE_CITY_LIST = 1;
+    public static final int REQUEST_TYPE_CITY_LIST_2 = 2;
 
     public static final int REQUEST_TYPE_CRUD_SYNC_PHONE_LIST = 10;
     public static final int REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE = 11;
@@ -68,6 +69,17 @@ public final class PoCRequestFactory {
      */
     public static Request createGetCityListRequest() {
         Request request = new Request(REQUEST_TYPE_CITY_LIST);
+        request.setMemoryCacheEnabled(true);
+        return request;
+    }
+
+    /**
+     * Create the request to get the list of cities and save it in the memory provider.
+     *
+     * @return The request.
+     */
+    public static Request createGetCityList2Request() {
+        Request request = new Request(REQUEST_TYPE_CITY_LIST_2);
         request.setMemoryCacheEnabled(true);
         return request;
     }
