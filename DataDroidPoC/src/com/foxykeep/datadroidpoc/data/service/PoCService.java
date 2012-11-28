@@ -11,6 +11,7 @@ package com.foxykeep.datadroidpoc.data.service;
 import android.content.Intent;
 
 import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroidpoc.data.operation.CityList2Operation;
 import com.foxykeep.datadroidpoc.data.operation.CityListOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
@@ -41,6 +42,8 @@ public final class PoCService extends RequestService {
                 return new PersonListOperation();
             case PoCRequestFactory.REQUEST_TYPE_CITY_LIST:
                 return new CityListOperation();
+            case PoCRequestFactory.REQUEST_TYPE_CITY_LIST_2:
+                return new CityList2Operation();
             case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST:
                 return new CrudSyncPhoneListOperation();
             case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE:

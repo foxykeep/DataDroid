@@ -25,6 +25,9 @@ public final class WSConfig {
 
     public static final String WS_CITY_PROPERTY_VERSION = "version";
 
+    // CityList2 WS
+    public static final String WS_CITY_LIST_2_URL = ROOT_URL + "cityList2Json.php";
+
     // CrudPhoneList WS
     public static final String WS_CRUD_PHONE_LIST_URL = ROOT_URL + "crud/list.php";
 
