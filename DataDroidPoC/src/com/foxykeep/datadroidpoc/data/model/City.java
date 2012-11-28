@@ -14,9 +14,9 @@ import android.os.Parcelable;
 public final class City implements Parcelable {
 
     public String name;
-    public int postalCode;
-    public int countyNumber;
-    public String countyName;
+    public String postalCode;
+    public String state;
+    public String country;
 
     public City() {
     }
@@ -24,9 +24,9 @@ public final class City implements Parcelable {
     // Parcelable management
     private City(Parcel in) {
         name = in.readString();
-        postalCode = in.readInt();
-        countyNumber = in.readInt();
-        countyName = in.readString();
+        postalCode = in.readString();
+        state = in.readString();
+        country = in.readString();
     }
 
     public int describeContents() {
@@ -35,10 +35,9 @@ public final class City implements Parcelable {
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeInt(postalCode);
-        dest.writeInt(countyNumber);
-        dest.writeString(countyName);
-
+        dest.writeString(postalCode);
+        dest.writeString(state);
+        dest.writeString(country);
     }
 
     public static final Parcelable.Creator<City> CREATOR = new Parcelable.Creator<City>() {

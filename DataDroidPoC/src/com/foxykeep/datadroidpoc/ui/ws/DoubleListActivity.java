@@ -265,21 +265,21 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     class ViewHolder {
         private TextView mTextViewName;
         private TextView mTextViewPostalCode;
-        private TextView mTextViewCountyNumber;
-        private TextView mTextViewCountyName;
+        private TextView mTextViewState;
+        private TextView mTextViewCountry;
 
         public ViewHolder(View view) {
             mTextViewName = (TextView) view.findViewById(R.id.tv_name);
             mTextViewPostalCode = (TextView) view.findViewById(R.id.tv_postal_code);
-            mTextViewCountyNumber = (TextView) view.findViewById(R.id.tv_county_number);
-            mTextViewCountyName = (TextView) view.findViewById(R.id.tv_county_name);
+            mTextViewState = (TextView) view.findViewById(R.id.tv_state);
+            mTextViewCountry = (TextView) view.findViewById(R.id.tv_country);
         }
 
         public void populateViews(City city) {
             mTextViewName.setText(city.name);
-            mTextViewPostalCode.setText(String.valueOf(city.postalCode));
-            mTextViewCountyNumber.setText(String.valueOf(city.countyNumber));
-            mTextViewCountyName.setText(city.countyName);
+            mTextViewPostalCode.setText(city.postalCode);
+            mTextViewState.setText(city.state);
+            mTextViewCountry.setText(city.country);
         }
     }
 

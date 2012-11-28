@@ -30,8 +30,8 @@ public final class JSONTag {
     public static final String CITY_LIST_ELEM_CITY = "city";
     public static final String CITY_LIST_ELEM_CITY_NAME = "name";
     public static final String CITY_LIST_ELEM_CITY_POSTAL_CODE = "postalCode";
-    public static final String CITY_LIST_ELEM_CITY_COUNTY_NUMBER = "countyNumber";
-    public static final String CITY_LIST_ELEM_CITY_COUNTY_NAME = "countyName";
+    public static final String CITY_LIST_ELEM_CITY_STATE = "state";
+    public static final String CITY_LIST_ELEM_CITY_COUNTRY = "country";
 
     // CrudPhoneList WS tags
     public static final String CRUD_PHONE_LIST_ELEM_PHONES = "phones";
