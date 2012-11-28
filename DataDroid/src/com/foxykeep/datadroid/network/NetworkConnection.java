@@ -76,7 +76,9 @@ public final class NetworkConnection {
         private boolean mIsSslValidationDisabled = false;
 
         /**
-         * Get a {@link Builder} to create a {@link NetworkConnection}
+         * Get a {@link Builder} to create a {@link NetworkConnection}.
+         * <p>
+         * The Method to use is {@link Method#GET} by default.
          *
          * @param context The context used by the {@link NetworkConnection}. Used to create the
          *            User-Agent.

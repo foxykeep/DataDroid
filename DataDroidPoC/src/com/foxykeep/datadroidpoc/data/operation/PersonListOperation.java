@@ -6,7 +6,7 @@
  * day, and you think this stuff is worth it, you can buy me a beer in return
  */
 
-package com.foxykeep.datadroidpoc.data.worker;
+package com.foxykeep.datadroidpoc.data.operation;
 
 import android.content.ContentProviderOperation;
 import android.content.Context;

@@ -11,14 +11,14 @@ package com.foxykeep.datadroidpoc.data.service;
 import android.content.Intent;
 
 import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroidpoc.data.operation.CityListOperation;
+import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
+import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
+import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
+import com.foxykeep.datadroidpoc.data.operation.PersonListOperation;
+import com.foxykeep.datadroidpoc.data.operation.RssFeedOperation;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
-import com.foxykeep.datadroidpoc.data.worker.CityListOperation;
-import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneAddEditOperation;
-import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneDeleteOperation;
-import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneListOperation;
-import com.foxykeep.datadroidpoc.data.worker.PersonListOperation;
-import com.foxykeep.datadroidpoc.data.worker.RssFeedOperation;
 
 /**
  * This class is called by the {@link PoCRequestManager} through the {@link Intent} system.

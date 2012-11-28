@@ -9,11 +9,11 @@
 package com.foxykeep.datadroidpoc.data.requestmanager;
 
 import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneAddEditOperation;
-import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneDeleteOperation;
-import com.foxykeep.datadroidpoc.data.worker.CrudSyncPhoneListOperation;
-import com.foxykeep.datadroidpoc.data.worker.PersonListOperation;
-import com.foxykeep.datadroidpoc.data.worker.RssFeedOperation;
+import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
+import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
+import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
+import com.foxykeep.datadroidpoc.data.operation.PersonListOperation;
+import com.foxykeep.datadroidpoc.data.operation.RssFeedOperation;
 
 /**
  * Class used to create the {@link Request}s.
