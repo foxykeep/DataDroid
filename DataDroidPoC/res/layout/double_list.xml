@@ -18,18 +18,25 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/b_load"
+            android:id="@+id/b_load_top"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/double_list_b_load" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.32"
+            android:text="@string/double_list_b_load_top" />
 
         <Button
-            android:id="@+id/b_clear_memory"
+            android:id="@+id/b_load_bottom"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/double_list_b_clear_memory" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.36"
+            android:text="@string/double_list_b_load_bottom" />
+
+        <Button
+            android:id="@+id/b_load_both"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.32"
+            android:text="@string/double_list_b_load_both" />
     </LinearLayout>
 
     <View

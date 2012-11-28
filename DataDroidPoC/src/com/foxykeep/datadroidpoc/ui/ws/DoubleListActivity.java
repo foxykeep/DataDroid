@@ -129,8 +129,9 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     }
 
     private void bindViews() {
-        ((Button) findViewById(R.id.b_load)).setOnClickListener(this);
-        ((Button) findViewById(R.id.b_clear_memory)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_load_top)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_load_bottom)).setOnClickListener(this);
+        ((Button) findViewById(R.id.b_load_both)).setOnClickListener(this);
 
         mListViewTop = (ListView) findViewById(R.id.lv_top);
         mListAdapterTop = new CityListAdapter(this);
@@ -165,13 +166,15 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.b_load:
+            case R.id.b_load_top:
                 callCityListWS();
+                break;
+            case R.id.b_load_bottom:
                 callCityList2WS();
                 break;
-            case R.id.b_clear_memory:
-                mListAdapterTop.clear();
-                mListAdapterBottom.clear();
+            case R.id.b_load_both:
+                callCityListWS();
+                callCityList2WS();
                 break;
         }
     }

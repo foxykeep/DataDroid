@@ -45,8 +45,9 @@
 
     <!-- DoubleListActivity texts -->
     <string name="double_list_title">Double List</string>
-    <string name="double_list_b_load">Load</string>
-    <string name="double_list_b_clear_memory">Clear memory</string>
+    <string name="double_list_b_load_top">Load Top</string>
+    <string name="double_list_b_load_bottom">Load Bottom</string>
+    <string name="double_list_b_load_both">Load Both</string>
     <string name="double_list_tv_empty">0 city found</string>
 
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
