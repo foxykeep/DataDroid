@@ -1,5 +1,5 @@
 <?php 
-header ("content-type: application/json");
+header ("content-type: application/json; charset=utf-8");
 echo "{
     persons:{
         person:[

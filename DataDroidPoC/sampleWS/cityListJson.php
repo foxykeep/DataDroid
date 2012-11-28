@@ -1,5 +1,5 @@
 <?php 
-header ("content-type: application/json");
+header ("content-type: application/json; charset=utf-8");
 
 if (array_key_exists('version', $_GET)) {
     $version = $_GET['version'];
@@ -26,7 +26,8 @@ if ($version == 1) {
             ]
         }
     }";
-} elseif ($version == 2) { {
+} elseif ($version == 2) {
+    usleep(rand(250,3000));
     echo "{
         cities:{
             city:[
@@ -77,12 +78,6 @@ if ($version == 1) {
                     \"postalCode\":\"28000\",
                     \"state\":\"Community of Madrid\",
                     \"country\":\"Spain\"
-                },
-                {
-                    \"name\":\"Düsseldorf\",
-                    \"postalCode\":\"40593\",
-                    \"state\":\"North Rhine-Westphalia\",
-                    \"country\":\"Germany\"
                 }
             ]
         }

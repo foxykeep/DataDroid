@@ -94,7 +94,7 @@
 			'price' => $price
 		));
 
-		header('Content-type: application/json');
+		header('Content-type: application/json;charset=utf-8');
 		echo json_encode($phone);
 
 	} catch (Exception $e) {

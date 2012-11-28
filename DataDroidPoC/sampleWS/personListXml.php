@@ -1,5 +1,5 @@
 <?php 
-header ("content-type: text/xml");
+header ("content-type: text/xml;charset=utf-8");
 echo "
 <persons>
 

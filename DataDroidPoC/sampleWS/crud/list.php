@@ -47,7 +47,7 @@
 			array_push($phones['phones']['phone'], $phone);
 		}
 
-		header('Content-type: application/json');
+		header('Content-type: application/json;charset=utf-8');
 		echo json_encode($phones);
 
 	} catch (Exception $e) {
