@@ -11,7 +11,7 @@
 
     <!-- Dialog texts -->
     <string name="dialog_error_connection_error_title">Connexion error</string>
-    <string name="dialog_error_connection_error_message">A connexion error occured. Please verify
+    <string name="dialog_error_connection_error_message">A connexion error occurred. Please verify
         that you are connected to an Edge, 3G or Wifi network.</string>
     <string name="dialog_error_data_error_title">Incorrect data</string>
     <string name="dialog_error_data_error_message">Received data are invalid.</string>
