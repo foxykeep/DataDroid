@@ -36,13 +36,13 @@ import java.util.ArrayList;
 public final class DoubleListActivity extends DataDroidActivity implements RequestListener,
         OnClickListener, ConnectionErrorDialogListener {
 
-    private static final String SAVED_STATE_CITY_LIST_LEFT = "savedStateCityListLeft";
-    private static final String SAVED_STATE_CITY_LIST_RIGHT = "savedStateCityListRight";
+    private static final String SAVED_STATE_CITY_LIST_TOP = "savedStateCityListTop";
+    private static final String SAVED_STATE_CITY_LIST_BOTTOM = "savedStateCityListBottom";
 
-    private ListView mListViewLeft;
-    private CityListAdapter mListAdapterLeft;
-    private ListView mListViewRight;
-    private CityListAdapter mListAdapterRight;
+    private ListView mListViewTop;
+    private CityListAdapter mListAdapterTop;
+    private ListView mListViewBottom;
+    private CityListAdapter mListAdapterBottom;
 
     private LayoutInflater mInflater;
 
@@ -90,61 +90,61 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        ArrayList<City> cityListLeft = new ArrayList<City>();
-        for (int i = 0, n = mListAdapterLeft.getCount(); i < n; i++) {
-            cityListLeft.add(mListAdapterLeft.getItem(i));
+        ArrayList<City> cityListTop = new ArrayList<City>();
+        for (int i = 0, n = mListAdapterTop.getCount(); i < n; i++) {
+            cityListTop.add(mListAdapterTop.getItem(i));
         }
 
-        outState.putParcelableArrayList(SAVED_STATE_CITY_LIST_LEFT, cityListLeft);
+        outState.putParcelableArrayList(SAVED_STATE_CITY_LIST_TOP, cityListTop);
 
-        ArrayList<City> cityListRight = new ArrayList<City>();
-        for (int i = 0, n = mListAdapterRight.getCount(); i < n; i++) {
-            cityListRight.add(mListAdapterRight.getItem(i));
+        ArrayList<City> cityListBottom = new ArrayList<City>();
+        for (int i = 0, n = mListAdapterBottom.getCount(); i < n; i++) {
+            cityListBottom.add(mListAdapterBottom.getItem(i));
         }
 
-        outState.putParcelableArrayList(SAVED_STATE_CITY_LIST_RIGHT, cityListRight);
+        outState.putParcelableArrayList(SAVED_STATE_CITY_LIST_BOTTOM, cityListBottom);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mListAdapterLeft.setNotifyOnChange(false);
-        mListAdapterRight.setNotifyOnChange(false);
+        mListAdapterTop.setNotifyOnChange(false);
+        mListAdapterBottom.setNotifyOnChange(false);
 
-        ArrayList<City> cityItemListLeft = savedInstanceState
-                .getParcelableArrayList(SAVED_STATE_CITY_LIST_LEFT);
-        ArrayList<City> cityItemListRight = savedInstanceState
-                .getParcelableArrayList(SAVED_STATE_CITY_LIST_RIGHT);
+        ArrayList<City> cityItemListTop = savedInstanceState
+                .getParcelableArrayList(SAVED_STATE_CITY_LIST_TOP);
+        ArrayList<City> cityItemListBottom = savedInstanceState
+                .getParcelableArrayList(SAVED_STATE_CITY_LIST_BOTTOM);
 
-        for (int i = 0, length = cityItemListLeft.size(); i < length; i++) {
-            mListAdapterLeft.add(cityItemListLeft.get(i));
+        for (int i = 0, length = cityItemListTop.size(); i < length; i++) {
+            mListAdapterTop.add(cityItemListTop.get(i));
         }
-        for (int i = 0, length = cityItemListRight.size(); i < length; i++) {
-            mListAdapterRight.add(cityItemListRight.get(i));
+        for (int i = 0, length = cityItemListBottom.size(); i < length; i++) {
+            mListAdapterBottom.add(cityItemListBottom.get(i));
         }
 
-        mListAdapterLeft.notifyDataSetChanged();
-        mListAdapterRight.notifyDataSetChanged();
+        mListAdapterTop.notifyDataSetChanged();
+        mListAdapterBottom.notifyDataSetChanged();
     }
 
     private void bindViews() {
         ((Button) findViewById(R.id.b_load)).setOnClickListener(this);
         ((Button) findViewById(R.id.b_clear_memory)).setOnClickListener(this);
 
-        mListViewLeft = (ListView) findViewById(R.id.lv_left);
-        mListAdapterLeft = new CityListAdapter(this);
-        mListViewLeft.setAdapter(mListAdapterLeft);
-        mListViewLeft.setEmptyView(findViewById(R.id.tv_empty_left));
+        mListViewTop = (ListView) findViewById(R.id.lv_top);
+        mListAdapterTop = new CityListAdapter(this);
+        mListViewTop.setAdapter(mListAdapterTop);
+        mListViewTop.setEmptyView(findViewById(R.id.tv_empty_top));
 
-        mListViewRight = (ListView) findViewById(R.id.lv_right);
-        mListAdapterRight = new CityListAdapter(this);
-        mListViewRight.setAdapter(mListAdapterRight);
-        mListViewRight.setEmptyView(findViewById(R.id.tv_empty_right));
+        mListViewBottom = (ListView) findViewById(R.id.lv_bottom);
+        mListAdapterBottom = new CityListAdapter(this);
+        mListViewBottom.setAdapter(mListAdapterBottom);
+        mListViewBottom.setEmptyView(findViewById(R.id.tv_empty_bottom));
     }
 
     private void callCityListWS() {
-        mListAdapterLeft.clear();
+        mListAdapterTop.clear();
         setProgressBarIndeterminateVisibility(true);
         Request request = PoCRequestFactory.createGetCityListRequest();
         mRequestManager.execute(request, this);
@@ -152,7 +152,7 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     }
 
     private void callCityList2WS() {
-        mListAdapterRight.clear();
+        mListAdapterBottom.clear();
         new ProgressDialogFragmentBuilder(this)
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
@@ -170,8 +170,8 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
                 callCityList2WS();
                 break;
             case R.id.b_clear_memory:
-                mListAdapterLeft.clear();
-                mListAdapterRight.clear();
+                mListAdapterTop.clear();
+                mListAdapterBottom.clear();
                 break;
         }
     }
@@ -196,18 +196,18 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
 
             switch (requestType) {
                 case PoCRequestFactory.REQUEST_TYPE_CITY_LIST:
-                    mListAdapterLeft.setNotifyOnChange(false);
+                    mListAdapterTop.setNotifyOnChange(false);
                     for (int i = 0, length = cityList.size(); i < length; i++) {
-                        mListAdapterLeft.add(cityList.get(i));
+                        mListAdapterTop.add(cityList.get(i));
                     }
-                    mListAdapterLeft.notifyDataSetChanged();
+                    mListAdapterTop.notifyDataSetChanged();
                     break;
                 case PoCRequestFactory.REQUEST_TYPE_CITY_LIST_2:
-                    mListAdapterLeft.setNotifyOnChange(false);
+                    mListAdapterBottom.setNotifyOnChange(false);
                     for (int i = 0, length = cityList.size(); i < length; i++) {
-                        mListAdapterLeft.add(cityList.get(i));
+                        mListAdapterBottom.add(cityList.get(i));
                     }
-                    mListAdapterLeft.notifyDataSetChanged();
+                    mListAdapterBottom.notifyDataSetChanged();
             }
         }
     }

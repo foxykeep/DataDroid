@@ -37,58 +37,51 @@
         android:layout_height="2dp"
         android:background="?android:attr/listDivider" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
+        android:layout_weight="0.5"
+        tools:ignore="NestedWeights" >
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            tools:ignore="NestedWeights" >
+        <ListView
+            android:id="@+id/lv_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            <ListView
-                android:id="@+id/lv_left"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_empty_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="30dp"
+            android:text="@string/double_list_tv_empty" />
+    </FrameLayout>
 
-            <TextView
-                android:id="@+id/tv_empty_left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="30dp"
-                android:text="@string/double_list_tv_empty" />
-        </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="?android:attr/listDivider" />
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:background="?android:attr/listDivider" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        tools:ignore="NestedWeights" >
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            tools:ignore="NestedWeights" >
+        <ListView
+            android:id="@+id/lv_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            <ListView
-                android:id="@+id/lv_right"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/tv_empty_right"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="30dp"
-                android:text="@string/double_list_tv_empty" />
-        </FrameLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_empty_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="30dp"
+            android:text="@string/double_list_tv_empty" />
+    </FrameLayout>
 
 </LinearLayout>
