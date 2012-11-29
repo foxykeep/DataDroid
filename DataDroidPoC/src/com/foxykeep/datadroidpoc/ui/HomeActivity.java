@@ -9,62 +9,129 @@
 package com.foxykeep.datadroidpoc.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.dialogs.SampleDescriptionDialogFragment;
 import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
 import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
 
-public final class HomeActivity extends Activity implements OnClickListener {
+public final class HomeActivity extends FragmentActivity implements OnItemClickListener,
+        OnItemLongClickListener {
+
+    private static final int SECTION_PADDING_TOP = 20;
+
+    private LayoutInflater mInflater;
+    private int mSectionPaddingTopPixels;
+
+    private SampleListAdapter mListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home);
-        bindViews();
+
+        mInflater = getLayoutInflater();
+        mSectionPaddingTopPixels = (int) (getResources().getDisplayMetrics().density
+                * SECTION_PADDING_TOP);
+
+        populateViews();
     }
 
-    private void bindViews() {
-        ((Button) findViewById(R.id.b_person_list)).setOnClickListener(this);
-        ((Button) findViewById(R.id.b_city_list)).setOnClickListener(this);
-        ((Button) findViewById(R.id.b_double_list)).setOnClickListener(this);
+    private void populateViews() {
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
 
-        ((Button) findViewById(R.id.b_phones_crud_sync)).setOnClickListener(this);
+        mListAdapter = new SampleListAdapter(this);
+        listView.setAdapter(mListAdapter);
 
-        ((Button) findViewById(R.id.b_rss_feed)).setOnClickListener(this);
+        populateAdapter();
+    }
+
+    private void populateAdapter() {
+        mListAdapter.setNotifyOnChange(false);
+
+        mListAdapter.add(new Sample(R.string.home_person_list_title,
+                R.string.home_city_list_description, PersonListActivity.class));
+        mListAdapter.add(new Sample(R.string.home_city_list_title,
+                R.string.home_city_list_description, CityListActivity.class));
+        mListAdapter.add(new Sample(R.string.home_double_list_title,
+                R.string.home_double_list_description, DoubleListActivity.class));
+
+        mListAdapter.add(new Sample(R.string.home_crud_phone_list_sync_title,
+                R.string.home_crud_phone_list_sync_description, CrudSyncPhoneListActivity.class));
+
+        mListAdapter.add(new Sample(R.string.home_rss_feed_title,
+                R.string.home_rss_feed_description, RssFeedListActivity.class));
+
+        mListAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onClick(View view) {
-        Intent intent = null;
-        switch (view.getId()) {
-            case R.id.b_person_list:
-                intent = new Intent(this, PersonListActivity.class);
-                break;
-            case R.id.b_city_list:
-                intent = new Intent(this, CityListActivity.class);
-                break;
-            case R.id.b_double_list:
-                intent = new Intent(this, DoubleListActivity.class);
-                break;
-            case R.id.b_phones_crud_sync:
-                intent = new Intent(this, CrudSyncPhoneListActivity.class);
-                break;
-            case R.id.b_rss_feed:
-                intent = new Intent(this, RssFeedListActivity.class);
-                break;
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Sample sample = mListAdapter.getItem(position);
+
+        Intent intent = new Intent(this, sample.activityKlass);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Sample sample = mListAdapter.getItem(position);
+
+        SampleDescriptionDialogFragment.show(this, sample.descriptionResId);
+        return true;
+    }
+
+    private final class SampleListAdapter extends ArrayAdapter<Sample> {
+
+        public SampleListAdapter(Context context) {
+            super(context, 0);
         }
 
-        if (intent != null) {
-            startActivity(intent);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView textView;
+            if (convertView == null) {
+                textView = (TextView) mInflater.inflate(android.R.layout.simple_list_item_1, null);
+            } else {
+                textView = (TextView) convertView;
+            }
+
+            Sample sample = getItem(position);
+            textView.setText(sample.titleResId);
+
+            return textView;
+        }
+    }
+
+    private final class Sample {
+        public int titleResId;
+        public int descriptionResId;
+        public Class<? extends Activity> activityKlass;
+
+        public Sample(int titleResId, int descriptionResId,
+                Class<? extends Activity> activityKlass) {
+            this.titleResId = titleResId;
+            this.descriptionResId = descriptionResId;
+            this.activityKlass = activityKlass;
         }
     }
 }

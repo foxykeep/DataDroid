@@ -6,46 +6,20 @@
     day, and you think this stuff is worth it, you can buy me a beer in return
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="5dp" >
 
-    <Button
-        android:id="@+id/b_person_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_b_person_list" />
-
-    <Button
-        android:id="@+id/b_city_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_b_city_list" />
-
-    <Button
-        android:id="@+id/b_double_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_b_double_list" />
-
-    <Button
-        android:id="@+id/b_phones_crud_sync"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/home_b_crud_phone_list_sync" />
-
-    <Button
-        android:id="@+id/b_rss_feed"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/home_b_rss_feed" />
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/tv_source_code"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:autoLink="web"

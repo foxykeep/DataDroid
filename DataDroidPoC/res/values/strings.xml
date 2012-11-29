@@ -21,11 +21,16 @@
     <string name="progress_dialog_message">Loading in progress…</string>
 
     <!-- HomeActivity texts -->
-    <string name="home_b_person_list">Person List (DB)</string>
-    <string name="home_b_city_list">City List (Memory)</string>
-    <string name="home_b_double_list">Double List</string>
-    <string name="home_b_crud_phone_list_sync">Phones (CRUD) (Sync)</string>
-    <string name="home_b_rss_feed">Rss Feed</string>
+    <string name="home_person_list_title">Person List (DB)</string>
+    <string name="home_person_list_description"></string>
+    <string name="home_city_list_title">City List (Memory)</string>
+    <string name="home_city_list_description"></string>
+    <string name="home_double_list_title">Double List</string>
+    <string name="home_double_list_description"></string>
+    <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
+    <string name="home_crud_phone_list_sync_description"></string>
+    <string name="home_rss_feed_title">Rss Feed</string>
+    <string name="home_rss_feed_description"></string>
     <string name="home_tv_source_code">The source code of the DataDroid library as well as this
         example app is available on Github :\nhttps://github.com/foxykeep/datadroid</string>
 
