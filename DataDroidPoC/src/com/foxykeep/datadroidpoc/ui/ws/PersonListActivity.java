@@ -12,6 +12,9 @@ import android.content.Context;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,17 +35,13 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
-import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler;
-import com.foxykeep.datadroidpoc.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
 public final class PersonListActivity extends DataDroidActivity implements RequestListener,
-        AsyncQueryListener, OnClickListener, ConnectionErrorDialogListener {
+        OnClickListener, ConnectionErrorDialogListener, LoaderCallbacks<Cursor> {
 
     private Spinner mSpinnerReturnFormat;
     private ListView mListView;
     private PersonListAdapter mListAdapter;
-
-    private NotifyingAsyncQueryHandler mQueryHandler;
 
     private LayoutInflater mInflater;
 
@@ -54,13 +53,8 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
         setContentView(R.layout.person_list);
         bindViews();
 
-        mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
+        getSupportLoaderManager().initLoader(0, null, this);
         mInflater = getLayoutInflater();
-
-        ProviderCriteria criteria = new ProviderCriteria();
-        criteria.addSortOrder(DbPerson.Columns.LAST_NAME, true);
-        mQueryHandler.startQuery(DbPerson.CONTENT_URI, DbPerson.PROJECTION,
-                criteria.getOrderClause());
     }
 
     @Override
@@ -104,6 +98,8 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
 
         mListView = (ListView) findViewById(android.R.id.list);
         mListView.setEmptyView(findViewById(android.R.id.empty));
+        mListAdapter = new PersonListAdapter(this);
+        mListView.setAdapter(mListAdapter);
     }
 
     private void callPersonListWS() {
@@ -121,7 +117,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
                 callPersonListWS();
                 break;
             case R.id.b_clear_db:
-                mQueryHandler.startDelete(DbPerson.CONTENT_URI);
+                getContentResolver().delete(DbPerson.CONTENT_URI, null, null);
                 break;
         }
     }
@@ -166,13 +162,21 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     }
 
     @Override
-    public void onQueryComplete(int token, Object cookie, Cursor cursor) {
-        if (mListAdapter == null) {
-            mListAdapter = new PersonListAdapter(this, cursor);
-            mListView.setAdapter(mListAdapter);
-        } else {
-            mListAdapter.changeCursor(cursor);
-        }
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        ProviderCriteria criteria = new ProviderCriteria();
+        criteria.addSortOrder(DbPerson.Columns.LAST_NAME, true);
+        return new CursorLoader(this, DbPerson.CONTENT_URI, DbPerson.PROJECTION, null, null,
+                criteria.getOrderClause());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mListAdapter.changeCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mListAdapter.changeCursor(null);
     }
 
     class ViewHolder {
@@ -227,9 +231,8 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
 
     class PersonListAdapter extends CursorAdapter {
 
-        public PersonListAdapter(Context context, Cursor c) {
-            // TODO change to cursorloader
-            super(context, c, true);
+        public PersonListAdapter(Context context) {
+            super(context, null, false);
         }
 
         @Override
