@@ -34,10 +34,7 @@ import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
 public final class HomeActivity extends FragmentActivity implements OnItemClickListener,
         OnItemLongClickListener {
 
-    private static final int SECTION_PADDING_TOP = 20;
-
     private LayoutInflater mInflater;
-    private int mSectionPaddingTopPixels;
 
     private SampleListAdapter mListAdapter;
 
@@ -48,8 +45,6 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
         setContentView(R.layout.home);
 
         mInflater = getLayoutInflater();
-        mSectionPaddingTopPixels = (int) (getResources().getDisplayMetrics().density
-                * SECTION_PADDING_TOP);
 
         populateViews();
     }

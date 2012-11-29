@@ -22,15 +22,25 @@
 
     <!-- HomeActivity texts -->
     <string name="home_person_list_title">Person List (DB)</string>
-    <string name="home_person_list_description"></string>
+    <string name="home_person_list_description">This sample shows you the difference
+        between XML and JSON webservices calls.\n\nThe data is stored in a SQLite database through
+        a ContentProvider.</string>
     <string name="home_city_list_title">City List (Memory)</string>
-    <string name="home_city_list_description"></string>
+    <string name="home_city_list_description">This sample shows you how to make a webservice
+        without a database by saving the data in memory.</string>
     <string name="home_double_list_title">Double List</string>
-    <string name="home_double_list_description"></string>
+    <string name="home_double_list_description">This sample shows you how to manage 2 webservices
+        either just in the same Activity or called at the same time.\n\nAlso one of them uses
+        a ProgressDialog while the other uses a ProgressBar in the ActionBar.</string>
     <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
-    <string name="home_crud_phone_list_sync_description"></string>
+    <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
+        (Create / Read / Update / Delete) model. The data is only managed on the server.\n\n
+        The data set you have in the application is only for you so you can modify it as you
+        want.</string>
     <string name="home_rss_feed_title">Rss Feed</string>
-    <string name="home_rss_feed_description"></string>
+    <string name="home_rss_feed_description">This sample shows you how to use the RSS Feed parser
+        provided with the DataDroid library if you want to display a RSS Feed in your
+        application.</string>
     <string name="home_tv_source_code">The source code of the DataDroid library as well as this
         example app is available on Github :\nhttps://github.com/foxykeep/datadroid</string>
 
