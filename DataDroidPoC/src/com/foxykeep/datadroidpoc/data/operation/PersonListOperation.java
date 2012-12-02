@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.exception.CustomException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.network.NetworkConnection.Builder;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
@@ -39,7 +38,7 @@ public final class PersonListOperation implements Operation {
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
-            DataException, CustomException {
+            DataException {
         int returnFormat = request.getInt(PARAM_RETURN_FORMAT);
 
         String url = returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML

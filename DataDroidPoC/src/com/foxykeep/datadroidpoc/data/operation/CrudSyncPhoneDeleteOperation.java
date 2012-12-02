@@ -12,7 +12,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.exception.CustomException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.network.NetworkConnection.Builder;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
@@ -31,8 +30,7 @@ public final class CrudSyncPhoneDeleteOperation implements Operation {
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
-            DataException,
-            CustomException {
+            DataException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_USER_UDID,
                 request.getString(PARAM_USER_ID));

@@ -16,7 +16,7 @@ import android.util.Log;
 
 import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.exception.CustomException;
+import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
@@ -46,12 +46,12 @@ public abstract class RequestService extends MultiThreadedIntentService {
          * @throws DataException Thrown when a problem occurs while managing the data of the
          *             webservice. It will be propagated to the {@link RequestManager} as a
          *             {@link RequestManager#ERROR_TYPE_DATA}.
-         * @throws CustomException Any other exception you may have to throw. A call to
+         * @throws CustomRequestException Any other exception you may have to throw. A call to
          *             {@link RequestService#onCustomError(Exception)} will be made with the
          *             Exception thrown.
          */
         public Bundle execute(Context context, Request request) throws ConnectionException,
-                DataException, CustomException;
+                DataException, CustomRequestException;
     }
 
     public static final String LOG_TAG = RequestService.class.getSimpleName();
@@ -146,7 +146,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
                 Log.e(LOG_TAG, "DataException", e);
             }
             sendDataFailure(receiver, null);
-        } catch (CustomException e) {
+        } catch (CustomRequestException e) {
             if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                 Log.e(LOG_TAG, "Custom Exception", e);
             }
@@ -169,7 +169,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
     public abstract Operation getOperationForType(int requestType);
 
     /**
-     * Call if a {@link CustomException} is thrown by an {@link Operation}. You may return a Bundle
+     * Call if a {@link CustomRequestException} is thrown by an {@link Operation}. You may return a Bundle
      * containing data to return to the {@link RequestManager}.
      * <p>
      * Default implementation return null. You may want to override this method in your
@@ -177,11 +177,11 @@ public abstract class RequestService extends MultiThreadedIntentService {
      * data.
      *
      * @param request The {@link Request} which execution threw the exception.
-     * @param exception The {@link CustomException} thrown.
+     * @param exception The {@link CustomRequestException} thrown.
      * @return A {@link Bundle} containing data to return to the {@link RequestManager}. Default
      *         implementation return null.
      */
-    protected Bundle onCustomError(Request request, CustomException exception) {
+    protected Bundle onCustomError(Request request, CustomRequestException exception) {
         return null;
     }
 
