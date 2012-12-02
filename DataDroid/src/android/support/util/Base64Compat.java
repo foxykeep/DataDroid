@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
  * <p>
  * Implementation copied from the Froyo implementation of {@link Base64}
  */
-public class Base64Compat {
+public final class Base64Compat {
     /**
      * Default values for encoder/decoder flags.
      */

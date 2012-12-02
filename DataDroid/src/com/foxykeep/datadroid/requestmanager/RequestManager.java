@@ -107,7 +107,7 @@ public abstract class RequestManager {
      * @param listener The listener called when the Request is completed.
      * @param request The {@link Request} to listen to.
      */
-    public void addRequestListener(RequestListener listener, Request request) {
+    public final void addRequestListener(RequestListener listener, Request request) {
         if (listener == null) {
             return;
         }
@@ -129,7 +129,7 @@ public abstract class RequestManager {
      *
      * @param listener The listener to remove.
      */
-    public void removeRequestListener(RequestListener listener) {
+    public final void removeRequestListener(RequestListener listener) {
         removeRequestListener(listener, null);
     }
 
@@ -141,7 +141,7 @@ public abstract class RequestManager {
      * @param request The {@link Request} associated with this listener. If null, the listener will
      *            be removed from every request it is currently associated with.
      */
-    public void removeRequestListener(RequestListener listener, Request request) {
+    public final void removeRequestListener(RequestListener listener, Request request) {
         if (listener == null) {
             return;
         }
@@ -164,7 +164,7 @@ public abstract class RequestManager {
      * @param request The request.
      * @return Whether the request is still in progress or not.
      */
-    public boolean isRequestInProgress(Request request) {
+    public final boolean isRequestInProgress(Request request) {
         return mRequestReceiverMap.containsKey(request);
     }
 
@@ -181,7 +181,7 @@ public abstract class RequestManager {
      * @param listener The listener to call with the data if any.
      * @param request The request associated with the memory cached data.
      */
-    public void callListenerWithCachedData(RequestListener listener, Request request) {
+    public final void callListenerWithCachedData(RequestListener listener, Request request) {
         if (request == null) {
             throw new IllegalArgumentException("Request cannot be null.");
         }
@@ -205,7 +205,7 @@ public abstract class RequestManager {
      * @param request The request to execute.
      * @param listener The listener called when the Request is completed.
      */
-    public void execute(Request request, RequestListener listener) {
+    public final void execute(Request request, RequestListener listener) {
         if (request == null) {
             throw new IllegalArgumentException("Request cannot be null.");
         }

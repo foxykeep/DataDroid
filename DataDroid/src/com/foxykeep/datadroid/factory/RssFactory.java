@@ -25,6 +25,7 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -42,7 +43,6 @@ public final class RssFactory {
     }
 
     public static RssFeed parseResult(String wsResponse) throws DataException {
-
         RssHandler parser = new RssHandler();
 
         try {
@@ -69,10 +69,10 @@ public final class RssFactory {
         private static final String DATE_FORMAT_1 = "ccc',' dd MMM yyyy HH:mm:ss Z";
         private static final String DATE_FORMAT_2 = "ccc',' dd MMM yyyy";
 
-        private static final SimpleDateFormat SIMPLE_DATE_FORMAT_1 = new SimpleDateFormat(
-                DATE_FORMAT_1);
-        private static final SimpleDateFormat SIMPLE_DATE_FORMAT_2 = new SimpleDateFormat(
-                DATE_FORMAT_2);
+        private static final SimpleDateFormat SIMPLE_DATE_FORMAT_1 =
+                new SimpleDateFormat(DATE_FORMAT_1, Locale.US);
+        private static final SimpleDateFormat SIMPLE_DATE_FORMAT_2 =
+                new SimpleDateFormat(DATE_FORMAT_2, Locale.US);
 
         private StringBuilder mSb = new StringBuilder();
         public RssFeed mRssFeed = new RssFeed();
@@ -218,8 +218,7 @@ public final class RssFactory {
         }
 
         @Override
-        public void characters(char[] ch, int start, int length)
-                throws SAXException {
+        public void characters(char[] ch, int start, int length) throws SAXException {
             super.characters(ch, start, length);
             mSb.append(ch, start, length);
         }
@@ -229,8 +228,8 @@ public final class RssFactory {
          *
          * @param date The given date.
          * @return The timestamp corresponding to the given date.
-         * @throws SAXException Exception thrown if the given date doesn't follow on the 2 common
-         *             formats.
+         * @throws SAXException Exception thrown if the given date doesn't follow one of the 2
+         *             common formats.
          */
         private long getMillisFromDate(String date) throws SAXException {
             long millis = -1;
