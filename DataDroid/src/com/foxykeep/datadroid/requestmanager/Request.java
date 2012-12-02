@@ -34,6 +34,7 @@ public class Request implements Parcelable {
     private static final int TYPE_DOUBLE = 8;
     private static final int TYPE_STRING = 9;
     private static final int TYPE_CHARSEQUENCE = 10;
+    private static final int TYPE_PARCELABLE = 11;
 
     private int mRequestType = -1;
     private boolean mMemoryCacheDataEnabled = false;
@@ -231,6 +232,21 @@ public class Request implements Parcelable {
         return this;
     }
 
+    /**
+     * Add a Parcelable parameter to the request, replacing any existing value for the given name.
+     *
+     * @param name The parameter name.
+     * @param value The parameter value.
+     * @return This RequestData.
+     */
+    public Request put(String name, Parcelable value) {
+        removeFromRequestData(name);
+        mParamList.add(name);
+        mTypeList.add(TYPE_PARCELABLE);
+        mBundle.putParcelable(name, value);
+        return this;
+    }
+
     private void removeFromRequestData(String name) {
         if (mParamList.contains(name)) {
             final int index = mParamList.indexOf(name);
@@ -252,6 +268,31 @@ public class Request implements Parcelable {
     }
 
     /**
+     * Returns the value associated with the given name transformed as "1" if true or "0" if false.
+     * If no mapping of the desired type exists for the given name, "0" is returned.
+     *
+     * @param name The parameter name.
+     * @return The int String representation of the boolean value.
+     */
+    public String getBooleanAsIntString(String name) {
+        boolean value = getBoolean(name);
+        return value ? "1" : "0";
+    }
+
+    /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(boolean)}), or "false" if no mapping of the desired type exists for the
+     * given name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getBooleanAsString(String name) {
+        boolean value = getBoolean(name);
+        return String.valueOf(value);
+    }
+
+    /**
      * Returns the value associated with the given name, or (byte) 0 if no mapping of the desired
      * type exists for the given name.
      *
@@ -263,14 +304,27 @@ public class Request implements Parcelable {
     }
 
     /**
-     * Returns the value associated with the given name, or false if no mapping of the desired type
-     * exists for the given name.
+     * Returns the value associated with the given name, or (char) 0 if no mapping of the desired
+     * type exists for the given name.
      *
      * @param name The parameter name.
      * @return A char value.
      */
     public char getChar(String name) {
         return mBundle.getChar(name);
+    }
+
+    /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(char)}), or "0" if no mapping of the desired type exists for the given
+     * name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getCharAsString(String name) {
+        char value = getChar(name);
+        return String.valueOf(value);
     }
 
     /**
@@ -285,6 +339,19 @@ public class Request implements Parcelable {
     }
 
     /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(short)}), or "0" if no mapping of the desired type exists for the given
+     * name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getShortAsString(String name) {
+        short value = getShort(name);
+        return String.valueOf(value);
+    }
+
+    /**
      * Returns the value associated with the given name, or 0 if no mapping of the desired type
      * exists for the given name.
      *
@@ -293,6 +360,19 @@ public class Request implements Parcelable {
      */
     public int getInt(String name) {
         return mBundle.getInt(name);
+    }
+
+    /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(int)}), or "0" if no mapping of the desired type exists for the given
+     * name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getIntAsString(String name) {
+        int value = getInt(name);
+        return String.valueOf(value);
     }
 
     /**
@@ -307,6 +387,19 @@ public class Request implements Parcelable {
     }
 
     /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(long)}), or "0" if no mapping of the desired type exists for the given
+     * name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getLongAsString(String name) {
+        long value = getLong(name);
+        return String.valueOf(value);
+    }
+
+    /**
      * Returns the value associated with the given name, or 0.0f if no mapping of the desired type
      * exists for the given name.
      *
@@ -318,6 +411,19 @@ public class Request implements Parcelable {
     }
 
     /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(float)}), or "0" if no mapping of the desired type exists for the given
+     * name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getFloatAsString(String name) {
+        float value = getFloat(name);
+        return String.valueOf(value);
+    }
+
+    /**
      * Returns the value associated with the given name, or 0.0 if no mapping of the desired type
      * exists for the given name.
      *
@@ -326,6 +432,19 @@ public class Request implements Parcelable {
      */
     public double getDouble(String name) {
         return mBundle.getDouble(name);
+    }
+
+    /**
+     * Returns the value associated with the given name transformed as a String (using
+     * {@link String#valueOf(double)}), or "0" if no mapping of the desired type exists for the
+     * given name.
+     *
+     * @param name The parameter name.
+     * @return The String representation of the boolean value.
+     */
+    public String getDoubleAsString(String name) {
+        double value = getDouble(name);
+        return String.valueOf(value);
     }
 
     /**
@@ -348,6 +467,17 @@ public class Request implements Parcelable {
      */
     public CharSequence getCharSequence(String name) {
         return mBundle.getCharSequence(name);
+    }
+
+    /**
+     * Returns the value associated with the given name, or null if no mapping of the desired type
+     * exists for the given name.
+     *
+     * @param name The parameter name.
+     * @return A Parcelable value.
+     */
+    public Parcelable getParcelable(String name) {
+        return mBundle.getParcelable(name);
     }
 
     @Override
@@ -422,6 +552,11 @@ public class Request implements Parcelable {
                             return false;
                         }
                         break;
+                    case TYPE_PARCELABLE:
+                        if (!ObjectUtils.safeEquals(mBundle.getParcelable(param),
+                                oParams.mBundle.getParcelable(param))) {
+                            return false;
+                        }
                     default:
                         // We should never arrive here normally.
                         throw new IllegalArgumentException(
