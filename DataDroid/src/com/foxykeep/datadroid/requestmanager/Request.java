@@ -257,6 +257,16 @@ public class Request implements Parcelable {
     }
 
     /**
+     * Check whether the request has an existing value for the given name.
+     *
+     * @param name The parameter name.
+     * @return Whether the request has an existing value for the given name.
+     */
+    public boolean contains(String name) {
+        return mParamList.contains(name);
+    }
+
+    /**
      * Returns the value associated with the given name, or false if no mapping of the desired type
      * exists for the given name.
      *
