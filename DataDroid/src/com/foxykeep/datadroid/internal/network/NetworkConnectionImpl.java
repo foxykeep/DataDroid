@@ -151,6 +151,7 @@ public final class NetworkConnectionImpl {
 
             // Create the connection object
             URL url = null;
+            String outputText = null;
             switch (method) {
                 case GET:
                 case DELETE:
@@ -163,28 +164,11 @@ public final class NetworkConnectionImpl {
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setDoOutput(true);
 
-                    String outputText = null;
                     if (paramBuilder.length() > 0) {
                         outputText = paramBuilder.toString();
                         headerMap.put(CONTENT_TYPE_HEADER, "application/x-www-form-urlencoded");
                     } else if (postText != null) {
                         outputText = postText;
-                    } else {
-                        break;
-                    }
-
-                    OutputStream output = null;
-                    try {
-                        output = connection.getOutputStream();
-                        output.write(outputText.getBytes());
-                    } finally {
-                        if (output != null) {
-                            try {
-                                output.close();
-                            } catch (IOException e) {
-                                // Already catching the first IOException so nothing to do here.
-                            }
-                        }
                     }
                     break;
             }
@@ -210,6 +194,23 @@ public final class NetworkConnectionImpl {
             // Set the connection and read timeout
             connection.setConnectTimeout(OPERATION_TIMEOUT);
             connection.setReadTimeout(OPERATION_TIMEOUT);
+
+            // Set the outputStream content for POST requests
+            if (method == Method.POST && outputText != null) {
+                OutputStream output = null;
+                try {
+                    output = connection.getOutputStream();
+                    output.write(outputText.getBytes());
+                } finally {
+                    if (output != null) {
+                        try {
+                            output.close();
+                        } catch (IOException e) {
+                            // Already catching the first IOException so nothing to do here.
+                        }
+                    }
+                }
+            }
 
             int responseCode = connection.getResponseCode();
             if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
@@ -243,10 +244,13 @@ public final class NetworkConnectionImpl {
 
             return new ConnectionResult(connection.getHeaderFields(), body);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ConnectionException(e);
         } catch (KeyManagementException e) {
+            e.printStackTrace();
             throw new ConnectionException(e);
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
             throw new ConnectionException(e);
         } finally {
             if (connection != null) {

@@ -56,7 +56,6 @@ public final class CrudSyncPhoneAddEditOperation implements Operation {
 
         Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_ADD_EDIT_URL);
         builder.setParameters(params);
-
         ConnectionResult result = builder.execute();
 
         Phone phone = PhoneAddEditFactory.parseResult(result.body);

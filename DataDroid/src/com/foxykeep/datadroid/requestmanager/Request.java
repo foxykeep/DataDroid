@@ -557,6 +557,7 @@ public class Request implements Parcelable {
                                 oParams.mBundle.getParcelable(param))) {
                             return false;
                         }
+                        break;
                     default:
                         // We should never arrive here normally.
                         throw new IllegalArgumentException(
