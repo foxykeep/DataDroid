@@ -1,8 +1,8 @@
 <?php 
 header ("content-type: application/json; charset=utf-8");
 
-if (array_key_exists('version', $_GET)) {
-    $version = $_GET['version'];
+if (array_key_exists('version', $_POST)) {
+    $version = $_POST['version'];
 } else {
     $version = 1;
 }

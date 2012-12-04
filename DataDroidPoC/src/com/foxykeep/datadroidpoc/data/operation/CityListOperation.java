@@ -15,6 +15,7 @@ import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.network.NetworkConnection.Builder;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
+import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
@@ -34,6 +35,7 @@ public final class CityListOperation implements Operation {
         parameterMap.put(WSConfig.WS_CITY_PROPERTY_VERSION, "2");
 
         Builder builder = new Builder(context, WSConfig.WS_CITY_LIST_URL);
+        builder.setMethod(Method.POST);
         builder.setParameters(parameterMap);
         ConnectionResult result = builder.execute();
 
