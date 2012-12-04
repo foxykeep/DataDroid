@@ -210,6 +210,7 @@ public abstract class RequestManager {
             throw new IllegalArgumentException("Request cannot be null.");
         }
         if (mRequestReceiverMap.containsKey(request)) {
+            Log.d(TAG, "This request is already in progress. Adding the new listener to it.");
             // This exact request is already in progress.
             // Just check if the new request has the memory cache enabled.
             if (request.isMemoryCacheEnabled()) {
@@ -218,6 +219,7 @@ public abstract class RequestManager {
             }
             return;
         }
+        Log.d(TAG, "Creating a new request and adding the listener to it.");
 
         RequestReceiver requestReceiver = new RequestReceiver(request);
         mRequestReceiverMap.put(request, requestReceiver);
