@@ -19,6 +19,7 @@ import android.os.ResultReceiver;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
+import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.service.RequestService;
 
 import java.lang.ref.WeakReference;
@@ -116,7 +117,9 @@ public abstract class RequestManager {
         }
         RequestReceiver requestReceiver = mRequestReceiverMap.get(request);
         if (requestReceiver == null) {
-            Log.w(TAG, "You tried to add a listener to a non-existing request.");
+            if (LogConfig.DD_WARNING_LOGS_ENABLED) {
+                Log.w(TAG, "You tried to add a listener to a non-existing request.");
+            }
             return;
         }
 
@@ -210,7 +213,9 @@ public abstract class RequestManager {
             throw new IllegalArgumentException("Request cannot be null.");
         }
         if (mRequestReceiverMap.containsKey(request)) {
-            Log.d(TAG, "This request is already in progress. Adding the new listener to it.");
+            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+                Log.d(TAG, "This request is already in progress. Adding the new listener to it.");
+            }
             // This exact request is already in progress.
             // Just check if the new request has the memory cache enabled.
             if (request.isMemoryCacheEnabled()) {
@@ -219,7 +224,9 @@ public abstract class RequestManager {
             }
             return;
         }
-        Log.d(TAG, "Creating a new request and adding the listener to it.");
+        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
+            Log.d(TAG, "Creating a new request and adding the listener to it.");
+        }
 
         RequestReceiver requestReceiver = new RequestReceiver(request);
         mRequestReceiverMap.put(request, requestReceiver);

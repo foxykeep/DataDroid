@@ -231,14 +231,14 @@ public final class NetworkConnectionImpl {
                     contentEncoding != null
                     && contentEncoding.equalsIgnoreCase("gzip"));
 
-            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
-                Log.d(TAG, "Response body: ");
+            if (LogConfig.DD_VERBOSE_LOGS_ENABLED) {
+                Log.v(TAG, "Response body: ");
 
                 int pos = 0;
                 int bodyLength = body.length();
                 while (pos < bodyLength) {
-                    Log.d(TAG, body.substring(pos, Math.min(bodyLength - 1, pos + 120)));
-                    pos = pos + 120;
+                    Log.v(TAG, body.substring(pos, Math.min(bodyLength - 1, pos + 200)));
+                    pos = pos + 200;
                 }
             }
 
