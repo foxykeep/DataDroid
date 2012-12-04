@@ -181,7 +181,7 @@ public final class RssFactory {
                 } else if (localName.equals("source")) {
                     mCurrentRssItem.sourceText = mSb.toString();
                 } else if (localName.equals("day")) {
-                    mSkipDayList.add(mSb.toString().toLowerCase());
+                    mSkipDayList.add(mSb.toString().toLowerCase(Locale.US));
                 } else if (localName.equals("skipDays")) {
                     int skipDayListSize = mSkipDayList.size();
                     mRssFeed.skipDayArray = new int[skipDayListSize];
@@ -204,7 +204,7 @@ public final class RssFactory {
                         }
                     }
                 } else if (localName.equals("hour")) {
-                    mSkipHourList.add(mSb.toString().toLowerCase());
+                    mSkipHourList.add(mSb.toString().toLowerCase(Locale.US));
                 } else if (localName.equals("skipHours")) {
                     int skipHourListSize = mSkipHourList.size();
                     mRssFeed.skipHourArray = new int[skipHourListSize];
