@@ -55,13 +55,15 @@ public final class CityListActivity extends DataDroidActivity implements Request
     @Override
     protected void onResume() {
         super.onResume();
-        for (int i = 0, length = mRequestList.size(); i < length; i++) {
+        for (int i = 0; i < mRequestList.size(); i++) {
             Request request = mRequestList.get(i);
 
             if (mRequestManager.isRequestInProgress(request)) {
                 mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
+                mRequestList.remove(request);
+                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
             }
         }

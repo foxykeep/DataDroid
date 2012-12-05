@@ -67,6 +67,9 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
                 mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
+                mRequestList.remove(request);
+                i--;
+
                 // Get the number of persons in the database
                 int number = mListAdapter.getCursor().getCount();
 
