@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    2012 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License : 
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
+    day, and you think this stuff is worth it, you can buy me a beer in return
+-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@android:id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp" />
+
+</ScrollView>

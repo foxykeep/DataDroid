@@ -18,13 +18,20 @@
         android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/tv_source_code"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/home_tv_sample_description_hint"
+        android:textStyle="italic" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:autoLink="web"
         android:gravity="bottom|center"
-        android:padding="20dp"
+        android:padding="10dp"
         android:text="@string/home_tv_source_code" />
 
 </LinearLayout>

@@ -34,13 +34,15 @@
         a ProgressDialog while the other uses a ProgressBar in the ActionBar.</string>
     <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
     <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
-        (Create / Read / Update / Delete) model. The data is only managed on the server.\n\n
-        The data set you have in the application is only for you so you can modify it as you
+        (Create / Read / Update / Delete) model. The data is only managed on the server.
+        \n\nThe data set you have in the application is only for you so you can modify it as you
         want.</string>
     <string name="home_rss_feed_title">Rss Feed</string>
     <string name="home_rss_feed_description">This sample shows you how to use the RSS Feed parser
         provided with the DataDroid library if you want to display a RSS Feed in your
         application.</string>
+    <string name="home_tv_sample_description_hint">Long press on a sample name to show a
+        description</string>
     <string name="home_tv_source_code">The source code of the DataDroid library as well as this
         example app is available on Github :\nhttps://github.com/foxykeep/datadroid</string>
 

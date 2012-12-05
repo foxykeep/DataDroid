@@ -64,7 +64,7 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
         mListAdapter.setNotifyOnChange(false);
 
         mListAdapter.add(new Sample(R.string.home_person_list_title,
-                R.string.home_city_list_description, PersonListActivity.class));
+                R.string.home_person_list_description, PersonListActivity.class));
         mListAdapter.add(new Sample(R.string.home_city_list_title,
                 R.string.home_city_list_description, CityListActivity.class));
         mListAdapter.add(new Sample(R.string.home_double_list_title,
@@ -91,7 +91,7 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         Sample sample = mListAdapter.getItem(position);
 
-        SampleDescriptionDialogFragment.show(this, sample.descriptionResId);
+        SampleDescriptionDialogFragment.show(this, sample.titleResId, sample.descriptionResId);
         return true;
     }
 
