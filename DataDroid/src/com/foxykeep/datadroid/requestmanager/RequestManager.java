@@ -216,7 +216,8 @@ public abstract class RequestManager {
             if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
                 Log.d(TAG, "This request is already in progress. Adding the new listener to it.");
             }
-            // This exact request is already in progress.
+            // This exact request is already in progress. Adding the new listener.
+            addRequestListener(listener, request);
             // Just check if the new request has the memory cache enabled.
             if (request.isMemoryCacheEnabled()) {
                 // If true, enable it in the RequestReceiver (if it's not the case already)

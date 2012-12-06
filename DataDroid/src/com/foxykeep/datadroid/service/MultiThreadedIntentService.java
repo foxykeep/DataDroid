@@ -34,7 +34,7 @@ import java.util.concurrent.Future;
  * All requests are handled on multiple worker threads -- they may take as long as necessary (and
  * will not block the application's main loop). The number of concurrent worker threads is specified
  * in the constructor.
- * 
+ *
  * @author Foxykeep
  */
 public abstract class MultiThreadedIntentService extends Service {
@@ -110,10 +110,16 @@ public abstract class MultiThreadedIntentService extends Service {
         return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mThreadPool.shutdown();
+    }
+
     /**
      * Unless you provide binding for your service, you don't need to implement this method, because
      * the default implementation returns null.
-     * 
+     *
      * @see android.app.Service#onBind
      */
     @Override
@@ -138,7 +144,7 @@ public abstract class MultiThreadedIntentService extends Service {
      * This method is invoked on the worker thread with a request to process. The processing happens
      * on a worker thread that runs independently from other application logic. When all requests
      * have been handled, the IntentService stops itself, so you should not call {@link #stopSelf}.
-     * 
+     *
      * @param intent The value passed to {@link Context#startService(Intent)}.
      */
     abstract protected void onHandleIntent(Intent intent);
