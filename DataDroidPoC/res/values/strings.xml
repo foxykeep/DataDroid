@@ -35,6 +35,12 @@
     <string name="home_authentication_title">Authentication</string>
     <string name="home_authentication_description">This sample shows you how to use the basic HTTP
         authentication in a WS call.\nCheck AuthenticationOperation for more information.</string>
+    <string name="home_refresh_title">Refresh</string>
+    <string name="home_refresh_description">In this sample, we don\'t have a
+        ConnectionErrorDialogFragment when the connection fails but instead there is a refresh
+        action bar/menu element and an message displayed if we don\'t have data.\n\n
+        This allows you to see how to manage if it you don\'t want to show a dialog to the
+        user when you have a connection/data failure.</string>
     <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
     <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
         (Create / Read / Update / Delete) model. The data is only managed on the server.
@@ -74,6 +80,12 @@
     <string name="authentication_title">DataDroid PoC > Authentication</string>
     <string name="authentication_b_load">Without authentication</string>
     <string name="authentication_b_load_with_authentication">With authentication</string>
+
+    <!-- RefreshActivity texts -->
+    <string name="refresh_title">DataDroid PoC > Refresh</string>
+    <string name="refresh_tv_loading">Loading cities ...</string>
+    <string name="refresh_tv_empty">0 city found</string>
+    <string name="refresh_menu_refresh">Refresh</string>
 
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
     <string name="crud_phone_list_tv_empty_loading">Loading …</string>

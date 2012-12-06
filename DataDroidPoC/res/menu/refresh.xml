@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    2012 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License :
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some
+    day, and you think this stuff is worth it, you can buy me a beer in return
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/ic_menu_refresh"
+        android:showAsAction="always"
+        android:title="@string/refresh_menu_refresh"/>
+
+</menu>

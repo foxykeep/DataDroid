@@ -30,6 +30,7 @@ import com.foxykeep.datadroidpoc.ui.ws.AuthenticationActivity;
 import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.RefreshActivity;
 
 public final class HomeActivity extends FragmentActivity implements OnItemClickListener,
         OnItemLongClickListener {
@@ -71,6 +72,8 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
                 R.string.home_double_list_description, DoubleListActivity.class));
         mListAdapter.add(new Sample(R.string.home_authentication_title,
                 R.string.home_authentication_description, AuthenticationActivity.class));
+        mListAdapter.add(new Sample(R.string.home_refresh_title, R.string.home_refresh_description,
+                RefreshActivity.class));
 
         mListAdapter.add(new Sample(R.string.home_crud_phone_list_sync_title,
                 R.string.home_crud_phone_list_sync_description, CrudSyncPhoneListActivity.class));
