@@ -28,6 +28,10 @@ public final class WSConfig {
     // CityList2 WS
     public static final String WS_CITY_LIST_2_URL = ROOT_URL + "cityList2Json.php";
 
+    // Authentication WS
+    public static final String WS_AUTHENTICATION_URL = ROOT_URL +
+            "authentication/authentication.php";
+
     // CrudPhoneList WS
     public static final String WS_CRUD_PHONE_LIST_URL = ROOT_URL + "crud/list.php";
 

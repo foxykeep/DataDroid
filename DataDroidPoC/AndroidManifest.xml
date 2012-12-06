@@ -41,6 +41,9 @@
             android:name=".ui.ws.DoubleListActivity"
             android:label="@string/double_list_title" />
         <activity
+            android:name=".ui.ws.AuthenticationActivity"
+            android:label="@string/authentication_title" />
+        <activity
             android:name=".ui.crud.CrudSyncPhoneListActivity"
             android:label="@string/crud_sync_phone_list_title" />
         <activity

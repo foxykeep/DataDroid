@@ -9,6 +9,7 @@
 package com.foxykeep.datadroidpoc.data.requestmanager;
 
 import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
@@ -26,6 +27,7 @@ public final class PoCRequestFactory {
     public static final int REQUEST_TYPE_PERSON_LIST = 0;
     public static final int REQUEST_TYPE_CITY_LIST = 1;
     public static final int REQUEST_TYPE_CITY_LIST_2 = 2;
+    public static final int REQUEST_TYPE_AUTHENTICATION = 3;
 
     public static final int REQUEST_TYPE_CRUD_SYNC_PHONE_LIST = 10;
     public static final int REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE = 11;
@@ -39,6 +41,8 @@ public final class PoCRequestFactory {
             "com.foxykeep.datadroidpoc.extras.cityList";
     public static final String BUNDLE_EXTRA_PHONE_LIST =
             "com.foxykeep.datadroidpoc.extras.phoneList";
+    public static final String BUNDLE_EXTRA_AUTHENTICATION_RESULT =
+            "com.foxykeep.datadroidpoc.extras.authenticationResult";
     public static final String BUNDLE_EXTRA_PHONE_DELETE_DATA =
             "com.foxykeep.datadroidpoc.extras.phoneDeleteData";
     public static final String BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA =
@@ -80,6 +84,22 @@ public final class PoCRequestFactory {
      */
     public static Request createGetCityList2Request() {
         Request request = new Request(REQUEST_TYPE_CITY_LIST_2);
+        request.setMemoryCacheEnabled(true);
+        return request;
+    }
+
+    /**
+     * Create the request to the authentication webservice.
+     * <p>
+     * The returned message will be either a greeting if the authentication worked or a message
+     * telling you to authenticate otherwise.
+     *
+     * @param withAuthenticate Whether the request will be made with the authentication data or not.
+     * @return The request.
+     */
+    public static Request authenticationRequest(boolean withAuthenticate) {
+        Request request = new Request(REQUEST_TYPE_AUTHENTICATION);
+        request.put(AuthenticationOperation.PARAM_WITH_AUTHENTICATE, withAuthenticate);
         request.setMemoryCacheEnabled(true);
         return request;
     }

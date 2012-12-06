@@ -32,6 +32,9 @@
     <string name="home_double_list_description">This sample shows you how to manage 2 webservices
         either just in the same Activity or called at the same time.\n\nAlso one of them uses
         a ProgressDialog while the other uses a ProgressBar in the ActionBar.</string>
+    <string name="home_authentication_title">Authentication</string>
+    <string name="home_authentication_description">This sample shows you how to use the basic HTTP
+        authentication in a WS call.\nCheck AuthenticationOperation for more information.</string>
     <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
     <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
         (Create / Read / Update / Delete) model. The data is only managed on the server.
@@ -66,6 +69,11 @@
     <string name="double_list_b_load_bottom">Load Bottom</string>
     <string name="double_list_b_load_both">Load Both</string>
     <string name="double_list_tv_empty">0 city found</string>
+
+    <!-- AuthenticationActivity texts -->
+    <string name="authentication_title">DataDroid PoC > Authentication</string>
+    <string name="authentication_b_load">Without authentication</string>
+    <string name="authentication_b_load_with_authentication">With authentication</string>
 
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
     <string name="crud_phone_list_tv_empty_loading">Loading …</string>

@@ -262,7 +262,7 @@ public final class NetworkConnectionImpl {
     private static String createAuthenticationHeader(UsernamePasswordCredentials credentials) {
         StringBuilder sb = new StringBuilder();
         sb.append(credentials.getUserName()).append(":").append(credentials.getPassword());
-        return "Basic" + Base64Compat.encodeToString(sb.toString().getBytes(), Base64.NO_WRAP);
+        return "Basic " + Base64Compat.encodeToString(sb.toString().getBytes(), Base64.NO_WRAP);
     }
 
     private static SSLSocketFactory sAllHostsValidSocketFactory;

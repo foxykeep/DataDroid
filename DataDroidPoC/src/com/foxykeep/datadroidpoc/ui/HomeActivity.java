@@ -5,7 +5,6 @@
  * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
  * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-
 package com.foxykeep.datadroidpoc.ui;
 
 import android.app.Activity;
@@ -27,6 +26,7 @@ import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.dialogs.SampleDescriptionDialogFragment;
 import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
 import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.AuthenticationActivity;
 import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
@@ -69,6 +69,8 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
                 R.string.home_city_list_description, CityListActivity.class));
         mListAdapter.add(new Sample(R.string.home_double_list_title,
                 R.string.home_double_list_description, DoubleListActivity.class));
+        mListAdapter.add(new Sample(R.string.home_authentication_title,
+                R.string.home_authentication_description, AuthenticationActivity.class));
 
         mListAdapter.add(new Sample(R.string.home_crud_phone_list_sync_title,
                 R.string.home_crud_phone_list_sync_description, CrudSyncPhoneListActivity.class));
