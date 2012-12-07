@@ -47,6 +47,9 @@
             android:name=".ui.feature.RefreshActivity"
             android:label="@string/refresh_title" />
         <activity
+            android:name=".ui.feature.CustomRequestExceptionActivity"
+            android:label="@string/refresh_title" />
+        <activity
             android:name=".ui.crud.CrudSyncPhoneListActivity"
             android:label="@string/crud_sync_phone_list_title" />
         <activity

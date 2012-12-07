@@ -9,14 +9,19 @@
 package com.foxykeep.datadroidpoc.data.service;
 
 import android.content.Intent;
+import android.os.Bundle;
 
+import com.foxykeep.datadroid.exception.CustomRequestException;
+import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroidpoc.data.exception.MyCustomRequestException;
 import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
 import com.foxykeep.datadroidpoc.data.operation.CityList2Operation;
 import com.foxykeep.datadroidpoc.data.operation.CityListOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
+import com.foxykeep.datadroidpoc.data.operation.CustomRequestExceptionOperation;
 import com.foxykeep.datadroidpoc.data.operation.PersonListOperation;
 import com.foxykeep.datadroidpoc.data.operation.RssFeedOperation;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
@@ -47,6 +52,8 @@ public final class PoCService extends RequestService {
                 return new CityList2Operation();
             case PoCRequestFactory.REQUEST_TYPE_AUTHENTICATION:
                 return new AuthenticationOperation();
+            case PoCRequestFactory.REQUEST_TYPE_CUSTOM_REQUEST_EXCEPTION:
+                return new CustomRequestExceptionOperation();
             case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST:
                 return new CrudSyncPhoneListOperation();
             case PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE:
@@ -58,5 +65,16 @@ public final class PoCService extends RequestService {
                 return new RssFeedOperation();
         }
         return null;
+    }
+
+    @Override
+    protected Bundle onCustomRequestException(Request request, CustomRequestException exception) {
+        if (exception instanceof MyCustomRequestException) {
+            Bundle bundle = new Bundle();
+            bundle.putString(PoCRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE,
+                    "MyCustomRequestException thrown.");
+            return bundle;
+        }
+        return super.onCustomRequestException(request, exception);
     }
 }

@@ -8,11 +8,13 @@
 
 package com.foxykeep.datadroidpoc.data.requestmanager;
 
+import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
+import com.foxykeep.datadroidpoc.data.operation.CustomRequestExceptionOperation;
 import com.foxykeep.datadroidpoc.data.operation.PersonListOperation;
 import com.foxykeep.datadroidpoc.data.operation.RssFeedOperation;
 
@@ -28,6 +30,7 @@ public final class PoCRequestFactory {
     public static final int REQUEST_TYPE_CITY_LIST = 1;
     public static final int REQUEST_TYPE_CITY_LIST_2 = 2;
     public static final int REQUEST_TYPE_AUTHENTICATION = 3;
+    public static final int REQUEST_TYPE_CUSTOM_REQUEST_EXCEPTION = 4;
 
     public static final int REQUEST_TYPE_CRUD_SYNC_PHONE_LIST = 10;
     public static final int REQUEST_TYPE_CRUD_SYNC_PHONE_DELETE = 11;
@@ -49,6 +52,8 @@ public final class PoCRequestFactory {
             "com.foxykeep.datadroidpoc.extras.phoneAddEditData";
     public static final String BUNDLE_EXTRA_RSS_FEED_DATA =
             "com.foxykeep.datadroidpoc.extras.rssFeed";
+    public static final String BUNDLE_EXTRA_ERROR_MESSAGE =
+            "com.foxykeep.datadroidpoc.extras.errorMessage";
 
     private PoCRequestFactory() {
         // no public constructor
@@ -100,6 +105,22 @@ public final class PoCRequestFactory {
     public static Request authenticationRequest(boolean withAuthenticate) {
         Request request = new Request(REQUEST_TYPE_AUTHENTICATION);
         request.put(AuthenticationOperation.PARAM_WITH_AUTHENTICATE, withAuthenticate);
+        request.setMemoryCacheEnabled(true);
+        return request;
+    }
+
+    /**
+     * Create the request to get the list of cities and save it in the memory provider.
+     * <p>
+     * Depending on the withException parameter, a {@link CustomRequestException} will be triggered
+     * or not.
+     *
+     * @param withException Whether to trigger the {@link CustomRequestException} or not.
+     * @return The request.
+     */
+    public static Request getCityListExceptionRequest(boolean withException) {
+        Request request = new Request(REQUEST_TYPE_CUSTOM_REQUEST_EXCEPTION);
+        request.put(CustomRequestExceptionOperation.PARAM_WITH_EXCEPTION, withException);
         request.setMemoryCacheEnabled(true);
         return request;
     }

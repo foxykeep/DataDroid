@@ -41,6 +41,9 @@
         action bar/menu element and an message displayed if we don\'t have data.\n\n
         This allows you to see how to manage if it you don\'t want to show a dialog to the
         user when you have a connection/data failure.</string>
+    <string name="home_custom_request_exception_title">Custom Exception</string>
+    <string name="home_custom_request_exception_description">This sample shows what you can do and
+        how to use the CustomRequestException.</string>
     <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
     <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
         (Create / Read / Update / Delete) model. The data is only managed on the server.
@@ -83,9 +86,15 @@
 
     <!-- RefreshActivity texts -->
     <string name="refresh_title">DataDroid PoC > Refresh</string>
-    <string name="refresh_tv_loading">Loading cities ...</string>
+    <string name="refresh_tv_loading">Loading cities…</string>
     <string name="refresh_tv_empty">0 city found</string>
     <string name="refresh_menu_refresh">Refresh</string>
+
+    <!-- CustomRequestException texts -->
+    <string name="custom_request_exception_title">DataDroid PoC > CustomRequestException</string>
+    <string name="custom_request_exception_b_without_exception">Without Exception</string>
+    <string name="custom_request_exception_b_with_exception">With Exception</string>
+    <string name="custom_request_exception_tv_empty">0 city found</string>
 
     <!-- CrudSyncPhoneListActivity and CrudAsyncPhoneListActivity texts -->
     <string name="crud_phone_list_tv_empty_loading">Loading …</string>

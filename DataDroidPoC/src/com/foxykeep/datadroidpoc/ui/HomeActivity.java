@@ -26,6 +26,7 @@ import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.dialogs.SampleDescriptionDialogFragment;
 import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
 import com.foxykeep.datadroidpoc.ui.feature.AuthenticationActivity;
+import com.foxykeep.datadroidpoc.ui.feature.CustomRequestExceptionActivity;
 import com.foxykeep.datadroidpoc.ui.feature.RefreshActivity;
 import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
@@ -74,6 +75,9 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
                 R.string.home_authentication_description, AuthenticationActivity.class));
         mListAdapter.add(new Sample(R.string.home_refresh_title, R.string.home_refresh_description,
                 RefreshActivity.class));
+        mListAdapter.add(new Sample(R.string.home_custom_request_exception_title,
+                R.string.home_custom_request_exception_description,
+                CustomRequestExceptionActivity.class));
 
         mListAdapter.add(new Sample(R.string.home_crud_phone_list_sync_title,
                 R.string.home_crud_phone_list_sync_description, CrudSyncPhoneListActivity.class));
