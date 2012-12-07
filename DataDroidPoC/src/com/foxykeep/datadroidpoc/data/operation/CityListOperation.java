@@ -25,8 +25,6 @@ import java.util.HashMap;
 
 public final class CityListOperation implements Operation {
 
-    public CityListOperation() {}
-
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {

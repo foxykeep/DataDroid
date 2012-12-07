@@ -22,8 +22,6 @@ import com.foxykeep.datadroidpoc.data.factory.CityListJsonFactory;
 
 public final class CityList2Operation implements Operation {
 
-    public CityList2Operation() {}
-
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {
