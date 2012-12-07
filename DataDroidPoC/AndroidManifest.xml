@@ -41,10 +41,10 @@
             android:name=".ui.ws.DoubleListActivity"
             android:label="@string/double_list_title" />
         <activity
-            android:name=".ui.ws.AuthenticationActivity"
+            android:name=".ui.feature.AuthenticationActivity"
             android:label="@string/authentication_title" />
         <activity
-            android:name=".ui.ws.RefreshActivity"
+            android:name=".ui.feature.RefreshActivity"
             android:label="@string/refresh_title" />
         <activity
             android:name=".ui.crud.CrudSyncPhoneListActivity"

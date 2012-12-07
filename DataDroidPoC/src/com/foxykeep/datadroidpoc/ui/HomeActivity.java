@@ -25,12 +25,12 @@ import android.widget.TextView;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.dialogs.SampleDescriptionDialogFragment;
 import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
+import com.foxykeep.datadroidpoc.ui.feature.AuthenticationActivity;
+import com.foxykeep.datadroidpoc.ui.feature.RefreshActivity;
 import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
-import com.foxykeep.datadroidpoc.ui.ws.AuthenticationActivity;
 import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
 import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
-import com.foxykeep.datadroidpoc.ui.ws.RefreshActivity;
 
 public final class HomeActivity extends FragmentActivity implements OnItemClickListener,
         OnItemLongClickListener {
