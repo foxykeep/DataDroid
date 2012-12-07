@@ -149,7 +149,7 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     private void callCityListWS() {
         mListAdapterTop.clear();
         setProgressBarIndeterminateVisibility(true);
-        Request request = PoCRequestFactory.createGetCityListRequest();
+        Request request = PoCRequestFactory.getCityListRequest();
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
@@ -160,7 +160,7 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = PoCRequestFactory.createGetCityList2Request();
+        Request request = PoCRequestFactory.getCityList2Request();
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }

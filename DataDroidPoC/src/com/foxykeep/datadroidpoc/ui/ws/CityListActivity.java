@@ -115,7 +115,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
     private void callCityListWS() {
         mListAdapter.clear();
         setProgressBarIndeterminateVisibility(true);
-        Request request = PoCRequestFactory.createGetCityListRequest();
+        Request request = PoCRequestFactory.getCityListRequest();
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }

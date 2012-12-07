@@ -115,7 +115,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = PoCRequestFactory.createDeleteSyncPhonesRequest(mUserId,
+        Request request = PoCRequestFactory.deleteSyncPhonesRequest(mUserId,
                 String.valueOf(mPhone.serverId));
         mRequestManager.execute(request, this);
         mRequestList.add(request);

@@ -131,7 +131,7 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
         mListAdapter.clear();
         setProgressBarIndeterminateVisibility(true);
 
-        Request request = PoCRequestFactory.createGetRssFeedRequest(
+        Request request = PoCRequestFactory.getRssFeedRequest(
                 mFeedUrlArray[mSpinnerFeedUrl.getSelectedItemPosition()]);
         mRequestManager.execute(request, this);
         mRequestList.add(request);

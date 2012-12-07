@@ -274,7 +274,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
 
     private void callSyncPhoneListWS() {
         setProgressBarIndeterminateVisibility(true);
-        Request request = PoCRequestFactory.createGetSyncPhoneListRequest(mUserId);
+        Request request = PoCRequestFactory.getSyncPhoneListRequest(mUserId);
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
@@ -297,7 +297,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     private void callSyncPhoneDeleteWS(String phoneIdList) {
-        Request request = PoCRequestFactory.createDeleteSyncPhonesRequest(mUserId, phoneIdList);
+        Request request = PoCRequestFactory.deleteSyncPhonesRequest(mUserId, phoneIdList);
         callSyncPhoneDeleteWS(request);
     }
 

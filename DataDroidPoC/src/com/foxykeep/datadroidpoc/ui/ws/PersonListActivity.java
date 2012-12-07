@@ -107,7 +107,7 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
 
     private void callPersonListWS() {
         setProgressBarIndeterminateVisibility(true);
-        Request request = PoCRequestFactory.createGetPersonListRequest(mSpinnerReturnFormat
+        Request request = PoCRequestFactory.getPersonListRequest(mSpinnerReturnFormat
                 .getSelectedItemPosition());
         mRequestManager.execute(request, this);
         mRequestList.add(request);

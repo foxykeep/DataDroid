@@ -121,7 +121,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = PoCRequestFactory.createAddSyncPhoneRequest(
+        Request request = PoCRequestFactory.addSyncPhoneRequest(
                 mUserId,
                 mEditTextName.getText().toString(),
                 mEditTextManufacturer.getText().toString(),
@@ -137,7 +137,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 .setMessage(R.string.progress_dialog_message)
                 .setCancelable(true)
                 .show();
-        Request request = PoCRequestFactory.createEditSyncPhoneRequest(
+        Request request = PoCRequestFactory.editSyncPhoneRequest(
                 mUserId,
                 mPhone.serverId,
                 mEditTextName.getText().toString(),

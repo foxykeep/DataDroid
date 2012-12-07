@@ -134,7 +134,7 @@ public class RefreshActivity extends DataDroidActivity implements RequestListene
         mTVEmpty.setText(R.string.refresh_tv_loading);
         mListAdapter.clear();
         setProgressBarIndeterminateVisibility(true);
-        Request request = PoCRequestFactory.createGetCityList2Request();
+        Request request = PoCRequestFactory.getCityList2Request();
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
