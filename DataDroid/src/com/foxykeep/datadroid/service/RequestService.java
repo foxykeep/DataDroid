@@ -150,7 +150,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
             if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                 Log.e(LOG_TAG, "Custom Exception", e);
             }
-            sendDataFailure(receiver, onCustomError(request, e));
+            sendDataFailure(receiver, onCustomRequestException(request, e));
         } catch (RuntimeException e) {
             if (LogConfig.DD_ERROR_LOGS_ENABLED) {
                 Log.e(LOG_TAG, "RuntimeException", e);
@@ -169,8 +169,8 @@ public abstract class RequestService extends MultiThreadedIntentService {
     public abstract Operation getOperationForType(int requestType);
 
     /**
-     * Call if a {@link CustomRequestException} is thrown by an {@link Operation}. You may return a Bundle
-     * containing data to return to the {@link RequestManager}.
+     * Call if a {@link CustomRequestException} is thrown by an {@link Operation}. You may return a
+     * Bundle containing data to return to the {@link RequestManager}.
      * <p>
      * Default implementation return null. You may want to override this method in your
      * implementation of {@link RequestService} to execute specific action and/or return specific
@@ -181,7 +181,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
      * @return A {@link Bundle} containing data to return to the {@link RequestManager}. Default
      *         implementation return null.
      */
-    protected Bundle onCustomError(Request request, CustomRequestException exception) {
+    protected Bundle onCustomRequestException(Request request, CustomRequestException exception) {
         return null;
     }
 
