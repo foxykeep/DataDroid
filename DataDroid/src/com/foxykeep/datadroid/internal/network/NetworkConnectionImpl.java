@@ -89,13 +89,13 @@ public final class NetworkConnectionImpl {
      *            created.
      * @param postText The POSTDATA text to add in the request.
      * @param credentials The credentials to use for authentication.
-     * @param isSslValidationDisabled Whether the request will validate the SSL certificates.
+     * @param isSslValidationEnabled Whether the request will validate the SSL certificates.
      * @return The result of the webservice call.
      */
     public static ConnectionResult execute(Context context, String urlValue, Method method,
             HashMap<String, String> parameterMap, HashMap<String, String> headerMap,
             boolean isGzipEnabled, String userAgent, String postText,
-            UsernamePasswordCredentials credentials, boolean isSslValidationDisabled) throws
+            UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) throws
             ConnectionException {
         HttpURLConnection connection = null;
         try {
@@ -178,7 +178,7 @@ public final class NetworkConnectionImpl {
 
             // If it's an HTTPS request and the SSL Validation is disabled
             if (url.getProtocol().equals("https")
-                    && isSslValidationDisabled) {
+                    && !isSslValidationEnabled) {
                 HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
                 httpsConnection.setSSLSocketFactory(getAllHostsValidSocketFactory());
                 httpsConnection.setHostnameVerifier(getAllHostsValidVerifier());

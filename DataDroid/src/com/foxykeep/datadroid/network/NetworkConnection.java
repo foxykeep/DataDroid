@@ -73,7 +73,7 @@ public final class NetworkConnection {
         private String mUserAgent = null;
         private String mPostText = null;
         private UsernamePasswordCredentials mCredentials = null;
-        private boolean mIsSslValidationDisabled = false;
+        private boolean mIsSslValidationEnabled = true;
 
         /**
          * Get a {@link Builder} to create a {@link NetworkConnection}.
@@ -179,7 +179,6 @@ public final class NetworkConnection {
             return this;
         }
 
-        // TODO check http://bit.ly/T7lZEm for implementation code.
         /**
          * Set the credentials to use for authentication.
          *
@@ -191,19 +190,17 @@ public final class NetworkConnection {
             return this;
         }
 
-        // TODO check http://bit.ly/XgZpYg for implementation code.
         /**
-         * Set whether the SSL certificates validation are disabled. Default is false.
+         * Set whether the SSL certificates validation are enabled. Default is true.
          *
-         * @param enabled Whether the SSL certificates validation are disabled.
+         * @param enabled Whether the SSL certificates validation are enabled.
          * @return The Builder.
          */
-        public Builder setSslValidationDisabled(boolean disabled) {
-            mIsSslValidationDisabled = disabled;
+        public Builder setSslValidationEnabled(boolean enabled) {
+            mIsSslValidationEnabled = enabled;
             return this;
         }
 
-        // TODO add the exceptions
         /**
          * Execute the webservice call and return the {@link ConnectionResult}.
          *
@@ -212,7 +209,7 @@ public final class NetworkConnection {
         public ConnectionResult execute() throws ConnectionException {
             return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterMap,
                     mHeaderMap, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
-                    mIsSslValidationDisabled);
+                    mIsSslValidationEnabled);
         }
     }
 }
