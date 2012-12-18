@@ -34,11 +34,9 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
  */
 public final class PoCService extends RequestService {
 
-    // Max number of parallel threads used
-    private static final int MAX_THREADS = 3;
-
-    public PoCService() {
-        super(MAX_THREADS);
+    @Override
+    protected int getMaximumNumberOfThreads() {
+        return 3;
     }
 
     @Override

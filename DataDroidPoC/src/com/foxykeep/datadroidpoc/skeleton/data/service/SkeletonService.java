@@ -20,13 +20,8 @@ import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestMan
  */
 public final class SkeletonService extends RequestService {
 
-    // TODO : Set the number of thread
-    // Max number of parallel threads used.
-    private static final int MAX_THREADS = 3;
-
-    public SkeletonService() {
-        super(MAX_THREADS);
-    }
+    // TODO by default only one concurrent worker thread will be used. If you want to change that,
+    // override the getMaximumNumberOfThreads() method
 
     @Override
     public Operation getOperationForType(int requestType) {

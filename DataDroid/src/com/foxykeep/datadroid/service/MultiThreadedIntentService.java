@@ -27,29 +27,26 @@ import java.util.concurrent.Future;
  * handles each Intent in turn using a worker thread, and stops itself when it runs out of work.
  * <p>
  * This "work queue processor" pattern is commonly used to offload tasks from an application's main
- * thread. The IntentService class exists to simplify this pattern and take care of the mechanics.
- * To use it, extend IntentService and implement {@link #onHandleIntent(Intent)}. IntentService will
- * receive the Intents, launch a worker thread, and stop the service as appropriate.
+ * thread. The MultiThreadedIntentService class exists to simplify this pattern and take care of the
+ * mechanics. To use it, extend MultiThreadedIntentService and implement
+ * {@link #onHandleIntent(Intent)}. MultiThreadedIntentService will receive the Intents, launch a
+ * worker thread, and stop the service as appropriate.
  * <p>
  * All requests are handled on multiple worker threads -- they may take as long as necessary (and
- * will not block the application's main loop). The number of concurrent worker threads is specified
- * in the constructor.
+ * will not block the application's main loop). By default only one concurrent worker thread is
+ * used. You can modify the number of current worker threads by overriding
+ * {@link #getNumberOfThreads()}.
  *
  * @author Foxykeep
  */
 public abstract class MultiThreadedIntentService extends Service {
 
     private ExecutorService mThreadPool;
-    private int mMaxThreads;
     private boolean mRedelivery;
 
     private ArrayList<Future<?>> mFutureList;
 
     private Handler mHandler;
-
-    public MultiThreadedIntentService(final int maxThreads) {
-        mMaxThreads = maxThreads;
-    }
 
     final Runnable mWorkDoneRunnable = new Runnable() {
         @Override
@@ -93,7 +90,7 @@ public abstract class MultiThreadedIntentService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mThreadPool = Executors.newFixedThreadPool(mMaxThreads);
+        mThreadPool = Executors.newFixedThreadPool(getMaximumNumberOfThreads());
         mHandler = new Handler();
         mFutureList = new ArrayList<Future<?>>();
     }
@@ -125,6 +122,18 @@ public abstract class MultiThreadedIntentService extends Service {
     @Override
     public IBinder onBind(final Intent intent) {
         return null;
+    }
+
+    /**
+     * Define the maximum number of concurrent worker threads used to execute the incoming Intents.
+     * <p>
+     * By default only one concurrent worker thread is used at the same time. Overrides this method
+     * in subclasses to change this number.
+     *
+     * @return
+     */
+    protected int getMaximumNumberOfThreads() {
+        return 1;
     }
 
     private class IntentRunnable implements Runnable {

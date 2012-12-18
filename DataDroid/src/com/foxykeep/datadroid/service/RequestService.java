@@ -62,10 +62,6 @@ public abstract class RequestService extends MultiThreadedIntentService {
     public static final int SUCCESS_CODE = 0;
     public static final int ERROR_CODE = -1;
 
-    public RequestService(final int maxThreads) {
-        super(maxThreads);
-    }
-
     /**
      * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a success.
      *
