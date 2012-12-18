@@ -13,12 +13,12 @@ import android.support.util.Base64Compat;
 import android.util.Base64;
 import android.util.Log;
 
-import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
+import com.foxykeep.datadroid.util.DataDroidLog;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -126,25 +126,26 @@ public final class NetworkConnectionImpl {
             }
 
             // Log the request
-            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
-                Log.d(TAG, "Request url: " + urlValue);
-                Log.d(TAG, "Method: " + method.toString());
+            if (DataDroidLog.canLog(Log.DEBUG)) {
+                DataDroidLog.d(TAG, "Request url: " + urlValue);
+                DataDroidLog.d(TAG, "Method: " + method.toString());
 
                 if (parameterMap != null && !parameterMap.isEmpty()) {
-                    Log.d(TAG, "Parameters:");
+                    DataDroidLog.d(TAG, "Parameters:");
                     for (Entry<String, String> parameter : parameterMap.entrySet()) {
-                        Log.d(TAG, "- " + parameter.getKey() + " = " + parameter.getValue());
+                        String message = "- " + parameter.getKey() + " = " + parameter.getValue();
+                        DataDroidLog.d(TAG, message);
                     }
                 }
 
                 if (postText != null) {
-                    Log.d(TAG, "Post body: " + postText);
+                    DataDroidLog.d(TAG, "Post body: " + postText);
                 }
 
                 if (headerMap != null && !headerMap.isEmpty()) {
-                    Log.d(TAG, "Headers:");
+                    DataDroidLog.d(TAG, "Headers:");
                     for (Entry<String, String> header : headerMap.entrySet()) {
-                        Log.d(TAG, "- " + header.getKey() + " = " + header.getValue());
+                        DataDroidLog.d(TAG, "- " + header.getKey() + " = " + header.getValue());
                     }
                 }
             }
@@ -213,9 +214,8 @@ public final class NetworkConnectionImpl {
             }
 
             int responseCode = connection.getResponseCode();
-            if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
-                Log.d(TAG, "Response code: " + responseCode);
-            }
+            DataDroidLog.d(TAG, "Response code: " + responseCode);
+
             if (responseCode != HttpStatus.SC_OK) {
                 if (responseCode == HttpStatus.SC_MOVED_PERMANENTLY) {
                     String redirectionUrl = connection.getHeaderField(LOCATION_HEADER);
@@ -231,13 +231,13 @@ public final class NetworkConnectionImpl {
                     contentEncoding != null
                     && contentEncoding.equalsIgnoreCase("gzip"));
 
-            if (LogConfig.DD_VERBOSE_LOGS_ENABLED) {
-                Log.v(TAG, "Response body: ");
+            if (DataDroidLog.canLog(Log.VERBOSE)) {
+                DataDroidLog.v(TAG, "Response body: ");
 
                 int pos = 0;
                 int bodyLength = body.length();
                 while (pos < bodyLength) {
-                    Log.v(TAG, body.substring(pos, Math.min(bodyLength - 1, pos + 200)));
+                    DataDroidLog.v(TAG, body.substring(pos, Math.min(bodyLength - 1, pos + 200)));
                     pos = pos + 200;
                 }
             }

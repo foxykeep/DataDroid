@@ -12,14 +12,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
 
-import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
+import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
  * This class is the superclass of all the worker services you'll create.
@@ -111,9 +110,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
      * @param code The success/error code to send back.
      */
     private void sendResult(ResultReceiver receiver, Bundle data, int code) {
-        if (LogConfig.DD_DEBUG_LOGS_ENABLED) {
-            Log.d(LOG_TAG, "sendResult : " + ((code == SUCCESS_CODE) ? "Success" : "Failure"));
-        }
+        DataDroidLog.d(LOG_TAG, "sendResult : " + ((code == SUCCESS_CODE) ? "Success" : "Failure"));
 
         if (receiver != null) {
             if (data == null) {
@@ -133,24 +130,16 @@ public abstract class RequestService extends MultiThreadedIntentService {
         try {
             sendSuccess(receiver, operation.execute(this, request));
         } catch (ConnectionException e) {
-            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "ConnectionException", e);
-            }
+            DataDroidLog.e(LOG_TAG, "ConnectionException", e);
             sendConnexionFailure(receiver, null);
         } catch (DataException e) {
-            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "DataException", e);
-            }
+            DataDroidLog.e(LOG_TAG, "DataException", e);
             sendDataFailure(receiver, null);
         } catch (CustomRequestException e) {
-            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "Custom Exception", e);
-            }
+            DataDroidLog.e(LOG_TAG, "Custom Exception", e);
             sendDataFailure(receiver, onCustomRequestException(request, e));
         } catch (RuntimeException e) {
-            if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                Log.e(LOG_TAG, "RuntimeException", e);
-            }
+            DataDroidLog.e(LOG_TAG, "RuntimeException", e);
             sendDataFailure(receiver, null);
         }
 

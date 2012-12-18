@@ -9,11 +9,10 @@
 package com.foxykeep.datadroid.network;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.foxykeep.datadroid.config.LogConfig;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
+import com.foxykeep.datadroid.util.DataDroidLog;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
 
@@ -86,9 +85,7 @@ public final class NetworkConnection {
          */
         public Builder(Context context, String url) {
             if (url == null) {
-                if (LogConfig.DD_ERROR_LOGS_ENABLED) {
-                    Log.e(LOG_TAG, "NetworkConnectionBuilder - request URL cannot be null.");
-                }
+                DataDroidLog.e(LOG_TAG, "NetworkConnection.Builder - request URL cannot be null.");
                 throw new NullPointerException("Request URL has not been set.");
             }
             mContext = context;
