@@ -225,6 +225,11 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     }
 
     @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        // Never called.
+    }
+
+    @Override
     public void connectionErrorDialogCancel(Request request) {}
 
     @Override

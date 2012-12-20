@@ -156,6 +156,11 @@ public final class PersonListActivity extends DataDroidActivity implements Reque
     }
 
     @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        // Never called.
+    }
+
+    @Override
     public void connectionErrorDialogCancel(Request request) {
     }
 

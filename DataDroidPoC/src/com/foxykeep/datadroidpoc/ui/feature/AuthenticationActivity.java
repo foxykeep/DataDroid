@@ -128,6 +128,11 @@ public final class AuthenticationActivity extends DataDroidActivity implements R
     }
 
     @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        // Never called.
+    }
+
+    @Override
     public void connectionErrorDialogCancel(Request request) {}
 
     @Override

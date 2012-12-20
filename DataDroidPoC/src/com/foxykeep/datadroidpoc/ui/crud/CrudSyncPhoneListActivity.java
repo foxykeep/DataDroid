@@ -451,6 +451,11 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        // Never called.
+    }
+
+    @Override
     public void connectionErrorDialogCancel(Request request) {
         if (request.getRequestType() == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST) {
             finish();

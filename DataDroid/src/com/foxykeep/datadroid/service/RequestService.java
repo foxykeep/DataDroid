@@ -99,6 +99,21 @@ public abstract class RequestService extends MultiThreadedIntentService {
     }
 
     /**
+     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to
+     * {@link CustomRequestException} being thrown.
+     *
+     * @param intent The value passed to {@link onHandleIntent(Intent)}.
+     * @param data A {@link Bundle} the data to send back.
+     */
+    private final void sendCustomFailure(ResultReceiver receiver, Bundle data) {
+        if (data == null) {
+            data = new Bundle();
+        }
+        data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.ERROR_TYPE_CUSTOM);
+        sendResult(receiver, data, ERROR_CODE);
+    }
+
+    /**
      * Method used to send back the result to the {@link RequestManager}.
      *
      * @param intent The value passed to {@link onHandleIntent(Intent)}. It must contain the
@@ -134,7 +149,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
             sendDataFailure(receiver);
         } catch (CustomRequestException e) {
             DataDroidLog.e(LOG_TAG, "Custom Exception", e);
-            sendDataFailure(receiver, onCustomRequestException(request, e));
+            sendCustomFailure(receiver, onCustomRequestException(request, e));
         } catch (RuntimeException e) {
             DataDroidLog.e(LOG_TAG, "RuntimeException", e);
             sendDataFailure(receiver);

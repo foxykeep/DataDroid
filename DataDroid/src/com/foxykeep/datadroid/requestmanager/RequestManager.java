@@ -72,6 +72,14 @@ public abstract class RequestManager {
          * @param request The {@link Request} defining the request.
          */
         public void onRequestDataError(Request request);
+
+        /**
+         * Event fired when a request encountered a custom error.
+         *
+         * @param request The {@link Request} defining the request.
+         * @param resultData The result of the service execution.
+         */
+        public void onRequestCustomError(Request request, Bundle resultData);
     }
 
     public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.datadroid.extras.code";
@@ -81,6 +89,7 @@ public abstract class RequestManager {
             "com.foxykeep.datadroid.extras.connectionErrorStatusCode";
     public static final int ERROR_TYPE_CONNEXION = 1;
     public static final int ERROR_TYPE_DATA = 2;
+    public static final int ERROR_TYPE_CUSTOM = 3;
 
     private final Context mContext;
 
@@ -310,6 +319,9 @@ public abstract class RequestManager {
                             int statusCode =
                                     resultData.getInt(RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE);
                             listener.onRequestConnectionError(request, statusCode);
+                            break;
+                        case ERROR_TYPE_CUSTOM:
+                            listener.onRequestCustomError(request, resultData);
                             break;
                     }
                 } else {

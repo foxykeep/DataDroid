@@ -196,6 +196,11 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
     }
 
     @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        // Never called.
+    }
+
+    @Override
     public void connectionErrorDialogCancel(Request request) {}
 
     @Override

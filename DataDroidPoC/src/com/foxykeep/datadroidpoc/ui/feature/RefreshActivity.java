@@ -176,6 +176,11 @@ public class RefreshActivity extends DataDroidActivity implements RequestListene
         }
     }
 
+    @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        // Never called.
+    }
+
     class ViewHolder {
         private TextView mTextViewName;
         private TextView mTextViewPostalCode;

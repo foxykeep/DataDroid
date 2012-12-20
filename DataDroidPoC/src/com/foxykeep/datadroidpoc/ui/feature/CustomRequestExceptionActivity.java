@@ -146,18 +146,6 @@ public class CustomRequestExceptionActivity extends DataDroidActivity implements
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);
 
-            // Message returned if the CustomRequestException is thrown
-            String errorMessage = resultData
-                    .getString(PoCRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE);
-            if (errorMessage != null) {
-                ErrorDialogFragmentBuilder builder = new ErrorDialogFragmentBuilder(this);
-                builder.setTitle(R.string.dialog_error_title);
-                builder.setMessage(errorMessage);
-                builder.show();
-                return;
-            }
-
-            // Normal case
             ArrayList<City> cityList = resultData
                     .getParcelableArrayList(PoCRequestFactory.BUNDLE_EXTRA_CITY_LIST);
 
@@ -187,6 +175,15 @@ public class CustomRequestExceptionActivity extends DataDroidActivity implements
 
             showBadDataErrorDialog();
         }
+    }
+
+    @Override
+    public void onRequestCustomError(Request request, Bundle resultData) {
+        String errorMessage = resultData.getString(PoCRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE);
+        ErrorDialogFragmentBuilder builder = new ErrorDialogFragmentBuilder(this);
+        builder.setTitle(R.string.dialog_error_title);
+        builder.setMessage(errorMessage);
+        builder.show();
     }
 
     @Override
