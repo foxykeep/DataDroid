@@ -21,6 +21,8 @@ import android.support.v4.util.LruCache;
 import com.foxykeep.datadroid.service.RequestService;
 import com.foxykeep.datadroid.util.DataDroidLog;
 
+import org.apache.http.HttpStatus;
+
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.EventListener;
@@ -50,11 +52,6 @@ public abstract class RequestManager {
          * Event fired when a request is finished.
          *
          * @param request The {@link Request} defining the request.
-         * @param resultCode The result code. Possible values :
-         *            <ul>
-         *            <li>{@link RequestService#SUCCESS_CODE} if succeeded.</li>
-         *            <li>{@link RequestService#ERROR_CODE} if there was an error.</li>
-         *            </ul>
          * @param resultData The result of the service execution.
          */
         public void onRequestFinished(Request request, Bundle resultData);
@@ -63,8 +60,11 @@ public abstract class RequestManager {
          * Event fired when a request encountered a connection error.
          *
          * @param request The {@link Request} defining the request.
+         * @param statusCode The HTTP status code returned by the server (if the request succeeded
+         *            by the HTTP status code was not {@link HttpStatus#SC_OK}) or -1 if it was a
+         *            connection problem
          */
-        public void onRequestConnectionError(Request request);
+        public void onRequestConnectionError(Request request, int statusCode);
 
         /**
          * Event fired when a request encountered a data error.
@@ -77,6 +77,8 @@ public abstract class RequestManager {
     public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.datadroid.extras.code";
     public static final String RECEIVER_EXTRA_PAYLOAD = "com.foxykeep.datadroid.extras.payload";
     public static final String RECEIVER_EXTRA_ERROR_TYPE = "com.foxykeep.datadroid.extras.error";
+    public static final String RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE =
+            "com.foxykeep.datadroid.extras.connectionErrorStatusCode";
     public static final int ERROR_TYPE_CONNEXION = 1;
     public static final int ERROR_TYPE_DATA = 2;
 
@@ -95,9 +97,8 @@ public abstract class RequestManager {
     }
 
     /**
-     * Add a {@link RequestListener} to this {@link RequestManager} to a specific
-     * {@link Request}. Clients may use it in order to be notified when the corresponding request is
-     * completed.
+     * Add a {@link RequestListener} to this {@link RequestManager} to a specific {@link Request}.
+     * Clients may use it in order to be notified when the corresponding request is completed.
      * <p>
      * The listener is automatically removed when the request is completed and they are notified.
      * <p>
@@ -124,8 +125,8 @@ public abstract class RequestManager {
     }
 
     /**
-     * Remove a {@link RequestListener} to this {@link RequestManager} from every
-     * {@link Request}s which it is listening to.
+     * Remove a {@link RequestListener} to this {@link RequestManager} from every {@link Request}s
+     * which it is listening to.
      *
      * @param listener The listener to remove.
      */
@@ -194,7 +195,7 @@ public abstract class RequestManager {
             if (bundle != null) {
                 listener.onRequestFinished(request, bundle);
             } else {
-                listener.onRequestConnectionError(request);
+                listener.onRequestConnectionError(request, -1);
             }
         }
     }
@@ -301,11 +302,15 @@ public abstract class RequestManager {
             RequestListener listener = mListenerRef.get();
             if (listener != null) {
                 if (resultCode == RequestService.ERROR_CODE) {
-                    final int errorType = resultData.getInt(RECEIVER_EXTRA_ERROR_TYPE);
-                    if (errorType == ERROR_TYPE_DATA) {
-                        listener.onRequestDataError(request);
-                    } else if (errorType == ERROR_TYPE_CONNEXION) {
-                        listener.onRequestConnectionError(request);
+                    switch(resultData.getInt(RECEIVER_EXTRA_ERROR_TYPE)){
+                        case ERROR_TYPE_DATA:
+                            listener.onRequestDataError(request);
+                            break;
+                        case ERROR_TYPE_CONNEXION:
+                            int statusCode =
+                                    resultData.getInt(RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE);
+                            listener.onRequestConnectionError(request, statusCode);
+                            break;
                     }
                 } else {
                     listener.onRequestFinished(request, resultData);

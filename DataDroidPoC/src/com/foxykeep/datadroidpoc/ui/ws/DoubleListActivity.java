@@ -218,7 +218,7 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
     }
 
     @Override
-    public void onRequestConnectionError(Request request) {
+    public void onRequestConnectionError(Request request, int statusCode) {
         if (mRequestList.contains(request)) {
             switch (request.getRequestType()) {
                 case PoCRequestFactory.REQUEST_TYPE_CITY_LIST:

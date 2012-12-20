@@ -67,7 +67,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} with the data to send back.
      */
-    protected final void sendSuccess(ResultReceiver receiver, Bundle data) {
+    private final void sendSuccess(ResultReceiver receiver, Bundle data) {
         sendResult(receiver, data, SUCCESS_CODE);
     }
 
@@ -78,11 +78,10 @@ public abstract class RequestService extends MultiThreadedIntentService {
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} the data to send back.
      */
-    protected final void sendConnexionFailure(ResultReceiver receiver, Bundle data) {
-        if (data == null) {
-            data = new Bundle();
-        }
+    private final void sendConnexionFailure(ResultReceiver receiver, ConnectionException e) {
+        Bundle data = new Bundle();
         data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.ERROR_TYPE_CONNEXION);
+        data.putInt(RequestManager.RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE, e.getStatusCode());
         sendResult(receiver, data, ERROR_CODE);
     }
 
@@ -93,10 +92,8 @@ public abstract class RequestService extends MultiThreadedIntentService {
      * @param intent The value passed to {@link onHandleIntent(Intent)}.
      * @param data A {@link Bundle} the data to send back.
      */
-    protected final void sendDataFailure(ResultReceiver receiver, Bundle data) {
-        if (data == null) {
-            data = new Bundle();
-        }
+    private final void sendDataFailure(ResultReceiver receiver) {
+        Bundle data = new Bundle();
         data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.ERROR_TYPE_DATA);
         sendResult(receiver, data, ERROR_CODE);
     }
@@ -131,16 +128,16 @@ public abstract class RequestService extends MultiThreadedIntentService {
             sendSuccess(receiver, operation.execute(this, request));
         } catch (ConnectionException e) {
             DataDroidLog.e(LOG_TAG, "ConnectionException", e);
-            sendConnexionFailure(receiver, null);
+            sendConnexionFailure(receiver, e);
         } catch (DataException e) {
             DataDroidLog.e(LOG_TAG, "DataException", e);
-            sendDataFailure(receiver, null);
+            sendDataFailure(receiver);
         } catch (CustomRequestException e) {
             DataDroidLog.e(LOG_TAG, "Custom Exception", e);
             sendDataFailure(receiver, onCustomRequestException(request, e));
         } catch (RuntimeException e) {
             DataDroidLog.e(LOG_TAG, "RuntimeException", e);
-            sendDataFailure(receiver, null);
+            sendDataFailure(receiver);
         }
 
     }

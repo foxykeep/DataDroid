@@ -108,7 +108,7 @@ public final class AuthenticationActivity extends DataDroidActivity implements R
     }
 
     @Override
-    public void onRequestConnectionError(Request request) {
+    public void onRequestConnectionError(Request request, int statusCode) {
         if (mRequestList.contains(request)) {
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);

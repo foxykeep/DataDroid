@@ -150,7 +150,7 @@ public final class CityListActivity extends DataDroidActivity implements Request
     }
 
     @Override
-    public void onRequestConnectionError(Request request) {
+    public void onRequestConnectionError(Request request, int statusCode) {
         if (mRequestList.contains(request)) {
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);

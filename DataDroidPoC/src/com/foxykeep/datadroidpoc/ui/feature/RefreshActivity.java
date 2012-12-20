@@ -157,7 +157,7 @@ public class RefreshActivity extends DataDroidActivity implements RequestListene
     }
 
     @Override
-    public void onRequestConnectionError(Request request) {
+    public void onRequestConnectionError(Request request, int statusCode) {
         if (mRequestList.contains(request)) {
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);

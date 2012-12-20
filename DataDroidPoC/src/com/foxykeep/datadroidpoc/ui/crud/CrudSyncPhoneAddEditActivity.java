@@ -205,7 +205,7 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
     }
 
     @Override
-    public void onRequestConnectionError(Request request) {
+    public void onRequestConnectionError(Request request, int statusCode) {
         if (mRequestList.contains(request)) {
             ProgressDialogFragment.dismiss(this);
             mRequestList.remove(request);

@@ -18,7 +18,7 @@ public final class ConnectionException extends Exception {
     private static final long serialVersionUID = 4658308128254827562L;
 
     private String mRedirectionUrl;
-    private int mErrorStatusCode = -1;
+    private int mStatusCode = -1;
 
     /**
      * Constructs a new {@link ConnectionException} that includes the current stack trace.
@@ -58,6 +58,7 @@ public final class ConnectionException extends Exception {
     public ConnectionException(final String detailMessage, final String redirectionUrl) {
         super(detailMessage);
         mRedirectionUrl = redirectionUrl;
+        mStatusCode = 301;
     }
 
     /**
@@ -65,11 +66,11 @@ public final class ConnectionException extends Exception {
      * specified detail message and the error status code
      *
      * @param detailMessage The detail message for this exception.
-     * @param errorStatusCode The HTTP status code
+     * @param statusCode The HTTP status code
      */
-    public ConnectionException(final String detailMessage, final int errorStatusCode) {
+    public ConnectionException(final String detailMessage, final int statusCode) {
         super(detailMessage);
-        mErrorStatusCode = errorStatusCode;
+        mStatusCode = statusCode;
     }
 
     /**
@@ -86,8 +87,8 @@ public final class ConnectionException extends Exception {
         return mRedirectionUrl;
     }
 
-    public int getErrorStatusCode() {
-        return mErrorStatusCode;
+    public int getStatusCode() {
+        return mStatusCode;
     }
 
 }

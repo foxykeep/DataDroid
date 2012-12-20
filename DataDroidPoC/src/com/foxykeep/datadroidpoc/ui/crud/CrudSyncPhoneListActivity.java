@@ -421,7 +421,7 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
     }
 
     @Override
-    public void onRequestConnectionError(Request request) {
+    public void onRequestConnectionError(Request request, int statusCode) {
         if (mRequestList.contains(request)) {
             int requestType = request.getRequestType();
             if (requestType == PoCRequestFactory.REQUEST_TYPE_CRUD_SYNC_PHONE_LIST) {
