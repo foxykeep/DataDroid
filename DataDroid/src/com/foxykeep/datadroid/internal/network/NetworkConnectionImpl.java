@@ -50,7 +50,6 @@ import javax.net.ssl.X509TrustManager;
  * Implementation of {@link NetworkConnection}.
  *
  * @author Foxykeep
- * @see NetworkConnectionImplGB
  */
 public final class NetworkConnectionImpl {
 
