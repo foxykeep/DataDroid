@@ -13,7 +13,6 @@ import android.support.util.Base64;
 import android.util.Log;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
@@ -46,7 +45,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Implementation of {@link NetworkConnection}.
+ * Implementation of the network connection.
  *
  * @author Foxykeep
  */

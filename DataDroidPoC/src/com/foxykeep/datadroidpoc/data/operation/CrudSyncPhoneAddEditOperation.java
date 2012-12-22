@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -54,9 +54,10 @@ public final class CrudSyncPhoneAddEditOperation implements Operation {
         params.put(WSConfig.WS_CRUD_PHONE_ADD_EDIT_PROPERTY_PRICE,
                 String.valueOf(request.getInt(PARAM_PRICE)));
 
-        Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_ADD_EDIT_URL);
-        builder.setParameters(params);
-        ConnectionResult result = builder.execute();
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_CRUD_PHONE_ADD_EDIT_URL);
+        networkConnection.setParameters(params);
+        ConnectionResult result = networkConnection.execute();
 
         Phone phone = PhoneAddEditFactory.parseResult(result.body);
 

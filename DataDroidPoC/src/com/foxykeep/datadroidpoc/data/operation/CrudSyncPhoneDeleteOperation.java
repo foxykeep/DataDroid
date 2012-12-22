@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -37,10 +37,10 @@ public final class CrudSyncPhoneDeleteOperation implements Operation {
         params.put(WSConfig.WS_CRUD_PHONE_DELETE_PROPERTY_IDS,
                 request.getString(PARAM_PHONE_ID_LIST));
 
-        Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_DELETE_URL);
-        builder.setParameters(params);
-
-        ConnectionResult result = builder.execute();
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_CRUD_PHONE_DELETE_URL);
+        networkConnection.setParameters(params);
+        ConnectionResult result = networkConnection.execute();
 
         long[] deletedPhoneIdArray = PhoneDeleteFactory.parseResult(result.body);
 

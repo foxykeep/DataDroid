@@ -16,7 +16,7 @@ import android.os.RemoteException;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -43,8 +43,8 @@ public final class PersonListOperation implements Operation {
 
         String url = returnFormat == RETURN_FORMAT_XML ? WSConfig.WS_PERSON_LIST_URL_XML
                 : WSConfig.WS_PERSON_LIST_URL_JSON;
-        Builder builder = new Builder(context, url);
-        ConnectionResult result = builder.execute();
+        NetworkConnection networkConnection = new NetworkConnection(context, url);
+        ConnectionResult result = networkConnection.execute();
 
         ArrayList<Person> personList = null;
         if (returnFormat == RETURN_FORMAT_XML) {

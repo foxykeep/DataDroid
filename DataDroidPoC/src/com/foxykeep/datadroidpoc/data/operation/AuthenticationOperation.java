@@ -12,7 +12,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -32,11 +32,12 @@ public class AuthenticationOperation implements Operation {
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {
-        Builder builder = new Builder(context, WSConfig.WS_AUTHENTICATION_URL);
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_AUTHENTICATION_URL);
         if (request.getBoolean(PARAM_WITH_AUTHENTICATE)) {
-            builder.setCredentials(new UsernamePasswordCredentials(LOGIN, PASSWD));
+            networkConnection.setCredentials(new UsernamePasswordCredentials(LOGIN, PASSWD));
         }
-        ConnectionResult result = builder.execute();
+        ConnectionResult result = networkConnection.execute();
 
         Bundle bundle = new Bundle();
         bundle.putString(PoCRequestFactory.BUNDLE_EXTRA_AUTHENTICATION_RESULT, result.body);

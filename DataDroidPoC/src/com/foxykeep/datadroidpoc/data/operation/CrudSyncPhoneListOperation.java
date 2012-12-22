@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -36,10 +36,11 @@ public final class CrudSyncPhoneListOperation implements Operation {
         params.put(WSConfig.WS_CRUD_PHONE_LIST_PROPERTY_USER_UDID,
                 request.getString(PARAM_USER_ID));
 
-        Builder builder = new Builder(context, WSConfig.WS_CRUD_PHONE_LIST_URL);
-        builder.setParameters(params);
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_CRUD_PHONE_LIST_URL);
+        networkConnection.setParameters(params);
 
-        ConnectionResult result = builder.execute();
+        ConnectionResult result = networkConnection.execute();
 
         ArrayList<Phone> phoneList = PhoneListFactory.parseResult(result.body);
 

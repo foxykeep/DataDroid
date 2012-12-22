@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
@@ -32,10 +32,11 @@ public final class CityListOperation implements Operation {
         HashMap<String, String> parameterMap = new HashMap<String, String>();
         parameterMap.put(WSConfig.WS_CITY_PROPERTY_VERSION, "2");
 
-        Builder builder = new Builder(context, WSConfig.WS_CITY_LIST_URL);
-        builder.setMethod(Method.POST);
-        builder.setParameters(parameterMap);
-        ConnectionResult result = builder.execute();
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_CITY_LIST_URL);
+        networkConnection.setMethod(Method.POST);
+        networkConnection.setParameters(parameterMap);
+        ConnectionResult result = networkConnection.execute();
 
         return CityListJsonFactory.parseResult(result.body);
     }

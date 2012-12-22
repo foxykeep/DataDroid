@@ -13,7 +13,7 @@ import android.os.Bundle;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -42,8 +42,9 @@ public class CustomRequestExceptionOperation implements Operation {
             throw new MyCustomRequestException();
         }
 
-        Builder builder = new Builder(context, WSConfig.WS_CITY_LIST_2_URL);
-        ConnectionResult result = builder.execute();
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_CITY_LIST_2_URL);
+        ConnectionResult result = networkConnection.execute();
 
         return CityListJsonFactory.parseResult(result.body);
     }

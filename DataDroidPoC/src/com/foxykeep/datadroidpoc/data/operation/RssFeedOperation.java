@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -28,7 +28,7 @@ public final class RssFeedOperation implements Operation {
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {
-        ConnectionResult result = new Builder(context, request.getString(PARAM_FEED_URL))
+        ConnectionResult result = new NetworkConnection(context, request.getString(PARAM_FEED_URL))
                 .execute();
 
         Bundle bundle = new Bundle();

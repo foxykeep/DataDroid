@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection.Builder;
+import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
@@ -25,8 +25,9 @@ public final class CityList2Operation implements Operation {
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {
-        Builder builder = new Builder(context, WSConfig.WS_CITY_LIST_2_URL);
-        ConnectionResult result = builder.execute();
+        NetworkConnection networkConnection = new NetworkConnection(context,
+                WSConfig.WS_CITY_LIST_2_URL);
+        ConnectionResult result = networkConnection.execute();
 
         return CityListJsonFactory.parseResult(result.body);
     }
