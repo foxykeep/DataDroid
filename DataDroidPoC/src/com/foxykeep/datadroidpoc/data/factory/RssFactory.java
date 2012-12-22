@@ -6,13 +6,13 @@
  * day, and you think this stuff is worth it, you can buy me a beer in return
  */
 
-package com.foxykeep.datadroid.factory;
+package com.foxykeep.datadroidpoc.data.factory;
 
 import android.text.TextUtils;
 
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.model.RssFeed;
-import com.foxykeep.datadroid.model.RssItem;
+import com.foxykeep.datadroidpoc.data.model.RssFeed;
+import com.foxykeep.datadroidpoc.data.model.RssItem;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;

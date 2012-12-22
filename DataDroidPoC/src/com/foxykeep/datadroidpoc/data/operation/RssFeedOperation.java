@@ -13,12 +13,12 @@ import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.factory.RssFactory;
-import com.foxykeep.datadroid.model.RssFeed;
 import com.foxykeep.datadroid.network.NetworkConnection.Builder;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
+import com.foxykeep.datadroidpoc.data.factory.RssFactory;
+import com.foxykeep.datadroidpoc.data.model.RssFeed;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 public final class RssFeedOperation implements Operation {

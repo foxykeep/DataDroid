@@ -6,7 +6,7 @@
  * day, and you think this stuff is worth it, you can buy me a beer in return
  */
 
-package com.foxykeep.datadroid.model;
+package com.foxykeep.datadroidpoc.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,10 +17,7 @@ import java.util.ArrayList;
  * Class defining an RSS feed.
  * <p>
  * Fields are based on this definition : http://www.w3schools.com/rss/rss_channel.asp
- * <p>
- * If you need to add more fields, subclass this class and add your fields. (Don't forget to call
- * the corresponding <code>super</code> method in both constructors).
- * 
+ *
  * @author Foxykeep
  */
 public final class RssFeed implements Parcelable {
@@ -108,7 +105,7 @@ public final class RssFeed implements Parcelable {
      * <p>
      * If you subclass {@link RssItem} in your project, subclass also {@link RssFeed} and modify
      * this method to use your CREATOR instead of the one from {@link RssItem}.
-     * 
+     *
      * @param in The Parcel in which to read the list.
      */
     protected void readRssItemList(final Parcel in) {

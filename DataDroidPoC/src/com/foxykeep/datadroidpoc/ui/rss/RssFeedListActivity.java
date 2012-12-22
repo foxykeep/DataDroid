@@ -26,11 +26,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.foxykeep.datadroid.model.RssFeed;
-import com.foxykeep.datadroid.model.RssItem;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.model.RssFeed;
+import com.foxykeep.datadroidpoc.data.model.RssItem;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
