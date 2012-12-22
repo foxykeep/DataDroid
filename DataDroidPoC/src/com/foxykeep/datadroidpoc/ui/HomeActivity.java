@@ -69,6 +69,9 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
                 R.string.home_person_list_description, PersonListActivity.class));
         mListAdapter.add(new Sample(R.string.home_city_list_title,
                 R.string.home_city_list_description, CityListActivity.class));
+        mListAdapter.add(new Sample(R.string.home_crud_phone_list_sync_title,
+                R.string.home_crud_phone_list_sync_description, CrudSyncPhoneListActivity.class));
+
         mListAdapter.add(new Sample(R.string.home_double_list_title,
                 R.string.home_double_list_description, DoubleListActivity.class));
         mListAdapter.add(new Sample(R.string.home_authentication_title,
@@ -78,9 +81,6 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
         mListAdapter.add(new Sample(R.string.home_custom_request_exception_title,
                 R.string.home_custom_request_exception_description,
                 CustomRequestExceptionActivity.class));
-
-        mListAdapter.add(new Sample(R.string.home_crud_phone_list_sync_title,
-                R.string.home_crud_phone_list_sync_description, CrudSyncPhoneListActivity.class));
 
         mListAdapter.add(new Sample(R.string.home_rss_feed_title,
                 R.string.home_rss_feed_description, RssFeedListActivity.class));

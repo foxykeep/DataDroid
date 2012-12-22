@@ -28,6 +28,11 @@
     <string name="home_city_list_title">City List (Memory)</string>
     <string name="home_city_list_description">This sample shows you how to make a webservice
         without a database by saving the data in memory.</string>
+    <string name="home_crud_phone_list_sync_title">Phones (CRUD)</string>
+    <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
+        (Create / Read / Update / Delete) model. The data is only managed on the server.
+        \n\nThe data set you have in the application is only for you so you can modify it as you
+        want.</string>
     <string name="home_double_list_title">Double List</string>
     <string name="home_double_list_description">This sample shows you how to manage 2 webservices
         either just in the same Activity or called at the same time.\n\nAlso one of them uses
@@ -44,14 +49,9 @@
     <string name="home_custom_request_exception_title">Custom Exception</string>
     <string name="home_custom_request_exception_description">This sample shows what you can do and
         how to use the CustomRequestException.</string>
-    <string name="home_crud_phone_list_sync_title">Phones (CRUD) (Sync)</string>
-    <string name="home_crud_phone_list_sync_description">This sample shows you a full CRUD
-        (Create / Read / Update / Delete) model. The data is only managed on the server.
-        \n\nThe data set you have in the application is only for you so you can modify it as you
-        want.</string>
     <string name="home_rss_feed_title">Rss Feed</string>
     <string name="home_rss_feed_description">This sample shows you how to use the RSS Feed parser
-        provided with the DataDroid library if you want to display a RSS Feed in your
+        provided with the DataDroid sample application if you want to display a RSS Feed in your
         application.</string>
     <string name="home_tv_sample_description_hint">Long press on a sample name to show a
         description</string>
