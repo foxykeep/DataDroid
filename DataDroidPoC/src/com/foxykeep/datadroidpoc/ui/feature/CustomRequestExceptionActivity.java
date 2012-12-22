@@ -179,11 +179,17 @@ public class CustomRequestExceptionActivity extends DataDroidActivity implements
 
     @Override
     public void onRequestCustomError(Request request, Bundle resultData) {
-        String errorMessage = resultData.getString(PoCRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE);
-        ErrorDialogFragmentBuilder builder = new ErrorDialogFragmentBuilder(this);
-        builder.setTitle(R.string.dialog_error_title);
-        builder.setMessage(errorMessage);
-        builder.show();
+        if (mRequestList.contains(request)) {
+            setProgressBarIndeterminateVisibility(false);
+            mRequestList.remove(request);
+
+            String errorMessage = resultData
+                    .getString(PoCRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE);
+            ErrorDialogFragmentBuilder builder = new ErrorDialogFragmentBuilder(this);
+            builder.setTitle(R.string.dialog_error_title);
+            builder.setMessage(errorMessage);
+            builder.show();
+        }
     }
 
     @Override
