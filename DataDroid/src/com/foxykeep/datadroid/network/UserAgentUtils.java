@@ -39,7 +39,7 @@ public final class UserAgentUtils {
      * @param context The context to use to generate the User-Agent.
      * @return The User-Agent.
      */
-    public static String get(Context context) {
+    public synchronized static String get(Context context) {
         if (context == null) {
             throw new NullPointerException("Context cannot be null");
         }
