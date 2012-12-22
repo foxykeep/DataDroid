@@ -9,8 +9,7 @@
 package com.foxykeep.datadroid.internal.network;
 
 import android.content.Context;
-import android.support.util.Base64Compat;
-import android.util.Base64;
+import android.support.util.Base64;
 import android.util.Log;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -261,7 +260,7 @@ public final class NetworkConnectionImpl {
     private static String createAuthenticationHeader(UsernamePasswordCredentials credentials) {
         StringBuilder sb = new StringBuilder();
         sb.append(credentials.getUserName()).append(":").append(credentials.getPassword());
-        return "Basic " + Base64Compat.encodeToString(sb.toString().getBytes(), Base64.NO_WRAP);
+        return "Basic " + Base64.encodeToString(sb.toString().getBytes(), Base64.NO_WRAP);
     }
 
     private static SSLSocketFactory sAllHostsValidSocketFactory;

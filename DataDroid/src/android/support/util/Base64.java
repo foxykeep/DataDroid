@@ -16,7 +16,6 @@
 
 package android.support.util;
 
-import android.util.Base64;
 import android.util.Base64OutputStream;
 
 import java.io.UnsupportedEncodingException;
@@ -28,7 +27,7 @@ import java.io.UnsupportedEncodingException;
  * <p>
  * Implementation copied from the Froyo implementation of {@link Base64}
  */
-public final class Base64Compat {
+public final class Base64 {
     /**
      * Default values for encoder/decoder flags.
      */
@@ -728,6 +727,6 @@ public final class Base64Compat {
         }
     }
 
-    private Base64Compat() {
+    private Base64() {
     } // don't instantiate
 }
