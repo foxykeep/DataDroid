@@ -55,8 +55,8 @@ public abstract class RequestService extends MultiThreadedIntentService {
 
     public static final String LOG_TAG = RequestService.class.getSimpleName();
 
-    public static final String INTENT_EXTRA_RECEIVER = "com.foxykeep.datadroid.extras.receiver";
-    public static final String INTENT_EXTRA_REQUEST = "com.foxykeep.datadroid.extras.request";
+    public static final String INTENT_EXTRA_RECEIVER = "com.foxykeep.datadroid.extra.receiver";
+    public static final String INTENT_EXTRA_REQUEST = "com.foxykeep.datadroid.extra.request";
 
     public static final int SUCCESS_CODE = 0;
     public static final int ERROR_CODE = -1;

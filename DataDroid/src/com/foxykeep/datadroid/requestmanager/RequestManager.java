@@ -82,11 +82,11 @@ public abstract class RequestManager {
         public void onRequestCustomError(Request request, Bundle resultData);
     }
 
-    public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.datadroid.extras.code";
-    public static final String RECEIVER_EXTRA_PAYLOAD = "com.foxykeep.datadroid.extras.payload";
-    public static final String RECEIVER_EXTRA_ERROR_TYPE = "com.foxykeep.datadroid.extras.error";
+    public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.datadroid.extra.code";
+    public static final String RECEIVER_EXTRA_PAYLOAD = "com.foxykeep.datadroid.extra.payload";
+    public static final String RECEIVER_EXTRA_ERROR_TYPE = "com.foxykeep.datadroid.extra.error";
     public static final String RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE =
-            "com.foxykeep.datadroid.extras.connectionErrorStatusCode";
+            "com.foxykeep.datadroid.extra.connectionErrorStatusCode";
     public static final int ERROR_TYPE_CONNEXION = 1;
     public static final int ERROR_TYPE_DATA = 2;
     public static final int ERROR_TYPE_CUSTOM = 3;

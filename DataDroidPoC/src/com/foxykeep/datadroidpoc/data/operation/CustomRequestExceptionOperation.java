@@ -31,7 +31,7 @@ import com.foxykeep.datadroidpoc.data.service.PoCService;
 public class CustomRequestExceptionOperation implements Operation {
 
     public static final String PARAM_WITH_EXCEPTION =
-            "com.foxykeep.datadroidpoc.extras.withException";
+            "com.foxykeep.datadroidpoc.extra.withException";
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,

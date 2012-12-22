@@ -35,7 +35,7 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
     private static final String SAVED_STATE_PHONE = "savedStatePhone";
     private static final String SAVED_STATE_IS_PHONE_EDITED = "savedStateIsPhoneEdited";
 
-    public static final String INTENT_EXTRA_PHONE = "com.foxykeep.datadroidpoc.ui.extras.phone";
+    public static final String INTENT_EXTRA_PHONE = "com.foxykeep.datadroidpoc.ui.extra.phone";
 
     private static final int ACTIVITY_FOR_RESULT_EDIT = 1;
 

@@ -41,19 +41,19 @@ public final class PoCRequestFactory {
 
     // Response data
     public static final String BUNDLE_EXTRA_CITY_LIST =
-            "com.foxykeep.datadroidpoc.extras.cityList";
+            "com.foxykeep.datadroidpoc.extra.cityList";
     public static final String BUNDLE_EXTRA_PHONE_LIST =
-            "com.foxykeep.datadroidpoc.extras.phoneList";
+            "com.foxykeep.datadroidpoc.extra.phoneList";
     public static final String BUNDLE_EXTRA_AUTHENTICATION_RESULT =
-            "com.foxykeep.datadroidpoc.extras.authenticationResult";
+            "com.foxykeep.datadroidpoc.extra.authenticationResult";
     public static final String BUNDLE_EXTRA_PHONE_DELETE_DATA =
-            "com.foxykeep.datadroidpoc.extras.phoneDeleteData";
+            "com.foxykeep.datadroidpoc.extra.phoneDeleteData";
     public static final String BUNDLE_EXTRA_PHONE_ADD_EDIT_DATA =
-            "com.foxykeep.datadroidpoc.extras.phoneAddEditData";
+            "com.foxykeep.datadroidpoc.extra.phoneAddEditData";
     public static final String BUNDLE_EXTRA_RSS_FEED_DATA =
-            "com.foxykeep.datadroidpoc.extras.rssFeed";
+            "com.foxykeep.datadroidpoc.extra.rssFeed";
     public static final String BUNDLE_EXTRA_ERROR_MESSAGE =
-            "com.foxykeep.datadroidpoc.extras.errorMessage";
+            "com.foxykeep.datadroidpoc.extra.errorMessage";
 
     private PoCRequestFactory() {
         // no public constructor

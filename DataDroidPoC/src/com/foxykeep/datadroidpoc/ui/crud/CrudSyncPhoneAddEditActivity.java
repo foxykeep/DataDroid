@@ -33,7 +33,7 @@ import com.foxykeep.datadroidpoc.util.UserManager;
 public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implements
         RequestListener, OnClickListener, TextWatcher, ConnectionErrorDialogListener {
 
-    public static final String INTENT_EXTRA_PHONE = "com.foxykeep.datadroidpoc.ui.extras.phone";
+    public static final String INTENT_EXTRA_PHONE = "com.foxykeep.datadroidpoc.ui.extra.phone";
 
     private EditText mEditTextName;
     private EditText mEditTextManufacturer;

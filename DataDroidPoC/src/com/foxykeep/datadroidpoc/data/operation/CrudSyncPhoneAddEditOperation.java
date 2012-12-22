@@ -26,15 +26,15 @@ import java.util.HashMap;
 
 public final class CrudSyncPhoneAddEditOperation implements Operation {
 
-    public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extras.userId";
-    public static final String PARAM_PHONE_ID = "com.foxykeep.datadroidpoc.extras.phoneId";
-    public static final String PARAM_NAME = "com.foxykeep.datadroidpoc.extras.name";
+    public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extra.userId";
+    public static final String PARAM_PHONE_ID = "com.foxykeep.datadroidpoc.extra.phoneId";
+    public static final String PARAM_NAME = "com.foxykeep.datadroidpoc.extra.name";
     public static final String PARAM_MANUFACTURER =
-            "com.foxykeep.datadroidpoc.extras.manufacturer";
+            "com.foxykeep.datadroidpoc.extra.manufacturer";
     public static final String PARAM_ANDROID_VERSION =
-            "com.foxykeep.datadroidpoc.extras.androidVersion";
-    public static final String PARAM_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extras.screenSize";
-    public static final String PARAM_PRICE = "com.foxykeep.datadroidpoc.extras.price";
+            "com.foxykeep.datadroidpoc.extra.androidVersion";
+    public static final String PARAM_SCREEN_SIZE = "com.foxykeep.datadroidpoc.extra.screenSize";
+    public static final String PARAM_PRICE = "com.foxykeep.datadroidpoc.extra.price";
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,

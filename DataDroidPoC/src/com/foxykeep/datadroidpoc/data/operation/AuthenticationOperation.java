@@ -24,7 +24,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 public class AuthenticationOperation implements Operation {
 
     public static final String PARAM_WITH_AUTHENTICATE =
-            "com.foxykeep.datadroidpoc.extras.authenticate";
+            "com.foxykeep.datadroidpoc.extra.authenticate";
 
     private static final String LOGIN = "admin";
     private static final String PASSWD = "admin"; // Worst password ever \o/

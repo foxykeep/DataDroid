@@ -25,8 +25,8 @@ import java.util.HashMap;
 
 public final class CrudSyncPhoneDeleteOperation implements Operation {
 
-    public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extras.userId";
-    public static final String PARAM_PHONE_ID_LIST = "com.foxykeep.datadroidpoc.extras.phoneIdList";
+    public static final String PARAM_USER_ID = "com.foxykeep.datadroidpoc.extra.userId";
+    public static final String PARAM_PHONE_ID_LIST = "com.foxykeep.datadroidpoc.extra.phoneIdList";
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,

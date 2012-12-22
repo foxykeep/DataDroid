@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public final class PersonListOperation implements Operation {
 
     public static final String PARAM_RETURN_FORMAT =
-            "com.foxykeep.datadroidpoc.extras.returnFormat";
+            "com.foxykeep.datadroidpoc.extra.returnFormat";
     public static final int RETURN_FORMAT_XML = 0;
     public static final int RETURN_FORMAT_JSON = 1;
 

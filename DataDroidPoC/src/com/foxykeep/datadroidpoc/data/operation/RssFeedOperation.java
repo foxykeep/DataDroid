@@ -23,7 +23,7 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 
 public final class RssFeedOperation implements Operation {
 
-    public static final String PARAM_FEED_URL = "com.foxykeep.datadroidpoc.extras.feedUrl";
+    public static final String PARAM_FEED_URL = "com.foxykeep.datadroidpoc.extra.feedUrl";
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
