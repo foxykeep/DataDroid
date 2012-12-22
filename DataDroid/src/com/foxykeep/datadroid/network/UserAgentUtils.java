@@ -22,7 +22,7 @@ import java.util.Locale;
  *
  * Utility class to generate and cache a User-Agent header for HTTP requests.
  */
-public class UserAgentUtils {
+public final class UserAgentUtils {
 
     private static String sUserAgent;
 

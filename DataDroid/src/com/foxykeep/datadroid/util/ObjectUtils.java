@@ -14,9 +14,10 @@ package com.foxykeep.datadroid.util;
  *
  * @author Foxykeep
  */
-public class ObjectUtils {
+public final class ObjectUtils {
 
     private ObjectUtils() {
+        // No public constructor
     }
 
     /**

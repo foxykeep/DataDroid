@@ -22,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author Foxykeep
  */
-public class Request implements Parcelable {
+public final class Request implements Parcelable {
 
     private static final int TYPE_BOOLEAN = 1;
     private static final int TYPE_BYTE = 2;
