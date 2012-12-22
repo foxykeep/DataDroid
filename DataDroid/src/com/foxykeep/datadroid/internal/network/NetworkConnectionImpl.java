@@ -241,13 +241,13 @@ public final class NetworkConnectionImpl {
 
             return new ConnectionResult(connection.getHeaderFields(), body);
         } catch (IOException e) {
-            e.printStackTrace();
+            DataDroidLog.e(TAG, "IOException", e);
             throw new ConnectionException(e);
         } catch (KeyManagementException e) {
-            e.printStackTrace();
+            DataDroidLog.e(TAG, "KeyManagementException", e);
             throw new ConnectionException(e);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            DataDroidLog.e(TAG, "NoSuchAlgorithmException", e);
             throw new ConnectionException(e);
         } finally {
             if (connection != null) {

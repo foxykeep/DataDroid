@@ -8,6 +8,8 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
+import android.util.Log;
+
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
 import com.foxykeep.datadroidpoc.data.model.Phone;
@@ -16,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public final class PhoneAddEditFactory {
+
+    private static final String TAG = PhoneAddEditFactory.class.getSimpleName();
 
     private PhoneAddEditFactory() {
         // No public constructor
@@ -37,6 +41,7 @@ public final class PhoneAddEditFactory {
             phone.screenSize = jsonPhone.getDouble(JSONTag.CRUD_PHONE_ADD_EDIT_ELEM_SCREEN_SIZE);
             phone.price = jsonPhone.getInt(JSONTag.CRUD_PHONE_ADD_EDIT_ELEM_PRICE);
         } catch (JSONException e) {
+            Log.e(TAG, "JSONException", e);
             throw new DataException(e);
         }
 

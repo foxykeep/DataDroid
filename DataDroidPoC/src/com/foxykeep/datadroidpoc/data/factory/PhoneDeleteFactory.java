@@ -8,6 +8,8 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
+import android.util.Log;
+
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
 
@@ -16,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public final class PhoneDeleteFactory {
+
+    private static final String TAG = PhoneDeleteFactory.class.getSimpleName();
 
     private PhoneDeleteFactory() {
         // No public constructor
@@ -39,6 +43,7 @@ public final class PhoneDeleteFactory {
                         JSONTag.CRUD_PHONE_DELETE_ELEM_ID);
             }
         } catch (JSONException e) {
+            Log.e(TAG, "JSONException", e);
             throw new DataException(e);
         }
 

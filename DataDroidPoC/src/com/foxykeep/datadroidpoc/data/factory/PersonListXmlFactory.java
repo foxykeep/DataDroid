@@ -8,6 +8,8 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
+import android.util.Log;
+
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.XMLTag;
 import com.foxykeep.datadroidpoc.data.model.Person;
@@ -28,6 +30,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 public final class PersonListXmlFactory {
 
+    private static final String TAG = PersonListXmlFactory.class.getSimpleName();
+
     private PersonListXmlFactory() {
         // No public constructor
     }
@@ -45,10 +49,13 @@ public final class PersonListXmlFactory {
             InputSource is = new InputSource(sr);
             xr.parse(is);
         } catch (ParserConfigurationException e) {
+            Log.e(TAG, "ParserConfigurationException", e);
             throw new DataException(e);
         } catch (SAXException e) {
+            Log.e(TAG, "SAXException", e);
             throw new DataException(e);
         } catch (IOException e) {
+            Log.e(TAG, "IOException", e);
             throw new DataException(e);
         }
         return parser.mPersonList;

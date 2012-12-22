@@ -9,6 +9,7 @@
 package com.foxykeep.datadroidpoc.data.factory;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.data.model.RssFeed;
@@ -38,6 +39,8 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public final class RssFactory {
 
+    private static final String TAG = RssFactory.class.getSimpleName();
+
     private RssFactory() {
         // No public constructor
     }
@@ -55,10 +58,13 @@ public final class RssFactory {
             InputSource is = new InputSource(sr);
             xr.parse(is);
         } catch (ParserConfigurationException e) {
+            Log.e(TAG, "ParserConfigurationException", e);
             throw new DataException(e);
         } catch (SAXException e) {
+            Log.e(TAG, "SAXException", e);
             throw new DataException(e);
         } catch (IOException e) {
+            Log.e(TAG, "IOException", e);
             throw new DataException(e);
         }
 

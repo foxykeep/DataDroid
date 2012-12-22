@@ -9,6 +9,7 @@
 package com.foxykeep.datadroidpoc.data.factory;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public final class CityListJsonFactory {
+
+    private static final String TAG = CityListJsonFactory.class.getSimpleName();
 
     private CityListJsonFactory() {
         // No public constructor
@@ -47,6 +50,7 @@ public final class CityListJsonFactory {
                 cityList.add(city);
             }
         } catch (JSONException e) {
+            Log.e(TAG, "JSONException", e);
             throw new DataException(e);
         }
 
