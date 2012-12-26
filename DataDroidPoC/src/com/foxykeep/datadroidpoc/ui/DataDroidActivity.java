@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Foxykeep
  *
  */
-public class DataDroidActivity extends FragmentActivity {
+public abstract class DataDroidActivity extends FragmentActivity {
 
     private static final String SAVED_STATE_REQUEST_LIST = "savedStateRequestList";
 
