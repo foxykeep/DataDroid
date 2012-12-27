@@ -215,22 +215,18 @@ public final class NetworkConnectionImpl {
             
             String contentEncoding = connection.getHeaderField(CONTENT_ENCODING_HEADER);
 
-            if (responseCode != HttpStatus.SC_OK) {
-                if (responseCode == HttpStatus.SC_MOVED_PERMANENTLY) {
-                    String redirectionUrl = connection.getHeaderField(LOCATION_HEADER);
-                    throw new ConnectionException("New location : " + redirectionUrl,
-                            redirectionUrl);
-                } else {
-                    InputStream errorStream = connection.getErrorStream();
-                    if(errorStream != null){
-                        String error = convertStreamToString(connection.getInputStream(),
-                                contentEncoding != null
-                                && contentEncoding.equalsIgnoreCase("gzip"));
-                        throw new ConnectionException(error, responseCode);
-                    } else {
-                        throw new ConnectionException("Invalid response from server.", responseCode);
-                    }
-                }
+            InputStream errorStream = connection.getErrorStream();
+            if(errorStream != null){
+                String error = convertStreamToString(connection.getInputStream(),
+                        contentEncoding != null
+                        && contentEncoding.equalsIgnoreCase("gzip"));
+                throw new ConnectionException(error, responseCode);
+            } 
+            
+            if (responseCode == HttpStatus.SC_MOVED_PERMANENTLY) {
+                String redirectionUrl = connection.getHeaderField(LOCATION_HEADER);
+                throw new ConnectionException("New location : " + redirectionUrl,
+                        redirectionUrl);
             }
 
             String body = convertStreamToString(connection.getInputStream(),
