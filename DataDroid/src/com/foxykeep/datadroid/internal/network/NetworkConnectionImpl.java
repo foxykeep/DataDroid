@@ -212,6 +212,8 @@ public final class NetworkConnectionImpl {
 
             int responseCode = connection.getResponseCode();
             DataDroidLog.d(TAG, "Response code: " + responseCode);
+            
+            String contentEncoding = connection.getHeaderField(CONTENT_ENCODING_HEADER);
 
             if (responseCode != HttpStatus.SC_OK) {
                 if (responseCode == HttpStatus.SC_MOVED_PERMANENTLY) {
@@ -219,11 +221,18 @@ public final class NetworkConnectionImpl {
                     throw new ConnectionException("New location : " + redirectionUrl,
                             redirectionUrl);
                 } else {
-                    throw new ConnectionException("Invalid response from server.", responseCode);
+                    InputStream errorStream = connection.getErrorStream();
+                    if(errorStream != null){
+                        String error = convertStreamToString(connection.getInputStream(),
+                                contentEncoding != null
+                                && contentEncoding.equalsIgnoreCase("gzip"));
+                        throw new ConnectionException(error, responseCode);
+                    } else {
+                        throw new ConnectionException("Invalid response from server.", responseCode);
+                    }
                 }
             }
 
-            String contentEncoding = connection.getHeaderField(CONTENT_ENCODING_HEADER);
             String body = convertStreamToString(connection.getInputStream(),
                     contentEncoding != null
                     && contentEncoding.equalsIgnoreCase("gzip"));
