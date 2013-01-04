@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
-import android.support.v4.util.LruCache;
+import android.support.util.LruCache;
 
 import com.foxykeep.datadroid.service.RequestService;
 import com.foxykeep.datadroid.util.DataDroidLog;
