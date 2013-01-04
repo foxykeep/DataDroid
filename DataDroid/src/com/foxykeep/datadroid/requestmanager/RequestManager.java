@@ -34,6 +34,10 @@ import java.util.Set;
  * This class allows to send requests through a {@link RequestService}.
  * <p>
  * This class needs to be subclassed in your project.
+ * <p>
+ * You can check the following page to see a tutorial on how to implement a webservice call using
+ * the {@link RequestManager} : <a
+ * href="http://www.datadroidlib.com/installation">http://www.datadroidlib.com/installation</a>.
  *
  * @author Foxykeep
  */

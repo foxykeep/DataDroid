@@ -129,6 +129,9 @@ public abstract class MultiThreadedIntentService extends Service {
      * <p>
      * By default only one concurrent worker thread is used at the same time. Overrides this method
      * in subclasses to change this number.
+     * <p>
+     * This method is called once in the {@link #onCreate()}. Modifying the value returned after the
+     * {@link #onCreate()} is called will have no effect.
      *
      * @return
      */
