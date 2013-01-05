@@ -48,7 +48,7 @@ public abstract class MultiThreadedIntentService extends Service {
 
     private Handler mHandler;
 
-    final Runnable mWorkDoneRunnable = new Runnable() {
+    private final Runnable mWorkDoneRunnable = new Runnable() {
         @Override
         public void run() {
             if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
@@ -148,6 +148,7 @@ public abstract class MultiThreadedIntentService extends Service {
 
         public void run() {
             onHandleIntent(mIntent);
+            mHandler.removeCallbacks(mWorkDoneRunnable);
             mHandler.post(mWorkDoneRunnable);
         }
     }
