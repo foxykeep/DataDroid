@@ -18,7 +18,9 @@ public class DataDroidApplication extends Application {
 
     @Override
     public void onCreate() {
-        ACRA.init(this);
+        if (!BuildConfig.DEBUG) {
+            ACRA.init(this);
+        }
         super.onCreate();
     }
 }
