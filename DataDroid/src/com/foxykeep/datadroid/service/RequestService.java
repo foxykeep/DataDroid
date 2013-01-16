@@ -136,6 +136,8 @@ public abstract class RequestService extends MultiThreadedIntentService {
     @Override
     protected final void onHandleIntent(Intent intent) {
         Request request = intent.getParcelableExtra(INTENT_EXTRA_REQUEST);
+        request.setClassLoader(getClassLoader());
+
         ResultReceiver receiver = intent.getParcelableExtra(INTENT_EXTRA_RECEIVER);
 
         Operation operation = getOperationForType(request.getRequestType());
@@ -154,7 +156,6 @@ public abstract class RequestService extends MultiThreadedIntentService {
             DataDroidLog.e(LOG_TAG, "RuntimeException", e);
             sendDataFailure(receiver);
         }
-
     }
 
     /**

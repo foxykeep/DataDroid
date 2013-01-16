@@ -490,6 +490,16 @@ public final class Request implements Parcelable {
         return mBundle.getParcelable(name);
     }
 
+    /**
+     * Sets the ClassLoader to use by the underlying Bundle when getting Parcelable objects.
+     *
+     * @param classLoader The ClassLoader to use by the underlying Bundle when getting Parcelable
+     *            objects.
+     */
+    public void setClassLoader(ClassLoader classLoader) {
+        mBundle.setClassLoader(classLoader);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Request) {
