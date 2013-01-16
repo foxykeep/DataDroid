@@ -20,8 +20,7 @@ public final class Phone implements Parcelable {
     public double screenSize;
     public int price;
 
-    public Phone() {
-    }
+    public Phone() {}
 
     // Parcelable management
     private Phone(Parcel in) {

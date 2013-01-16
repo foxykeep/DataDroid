@@ -10,6 +10,7 @@ package com.foxykeep.datadroidpoc.data.requestmanager;
 
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
@@ -195,12 +196,15 @@ public final class PoCRequestFactory {
             double screenSize, int price) {
         request.setMemoryCacheEnabled(true);
         request.put(CrudSyncPhoneAddEditOperation.PARAM_USER_ID, userId);
-        request.put(CrudSyncPhoneAddEditOperation.PARAM_PHONE_ID, phoneId);
-        request.put(CrudSyncPhoneAddEditOperation.PARAM_NAME, name);
-        request.put(CrudSyncPhoneAddEditOperation.PARAM_MANUFACTURER, manufacturer);
-        request.put(CrudSyncPhoneAddEditOperation.PARAM_ANDROID_VERSION, androidVersion);
-        request.put(CrudSyncPhoneAddEditOperation.PARAM_SCREEN_SIZE, screenSize);
-        request.put(CrudSyncPhoneAddEditOperation.PARAM_PRICE, price);
+
+        Phone phone = new Phone();
+        phone.serverId = phoneId;
+        phone.name = name;
+        phone.manufacturer = manufacturer;
+        phone.androidVersion = androidVersion;
+        phone.screenSize = screenSize;
+        phone.price = price;
+        request.put(CrudSyncPhoneAddEditOperation.PARAM_PHONE, phone);
         return request;
     }
 
