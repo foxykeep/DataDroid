@@ -602,7 +602,7 @@ public final class Request implements Parcelable {
     // Parcelable management
     private Request(final Parcel in) {
         mRequestType = in.readInt();
-        mMemoryCacheDataEnabled = (in.readByte() == 1);
+        mMemoryCacheDataEnabled = in.readInt() == 1;
         in.readStringList(mParamList);
         for (int i = 0, n = in.readInt(); i < n; i++) {
             mTypeList.add(in.readInt());
@@ -618,7 +618,7 @@ public final class Request implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mRequestType);
-        dest.writeByte((byte) (mMemoryCacheDataEnabled ? 1 : 0));
+        dest.writeInt(mMemoryCacheDataEnabled ? 1 : 0);
         dest.writeStringList(mParamList);
         dest.writeInt(mTypeList.size());
         for (int i = 0, length = mTypeList.size(); i < length; i++) {
