@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * MultiThreadIntentService is a base class for {@link Service}s that handle asynchronous requests
@@ -36,10 +37,16 @@ import java.util.concurrent.Future;
  * will not block the application's main loop). By default only one concurrent worker thread is
  * used. You can modify the number of current worker threads by overriding
  * {@link #getNumberOfThreads()}.
+ * <p>
+ * For obvious efficiency reasons, MultiThreadedIntentService won't stop itself as soon as all tasks
+ * has been processed. It will only stop itself after a certain delay (about 30s). This optimization
+ * prevents the system from creating new instances over and over again when tasks are sent.
  *
  * @author Foxykeep
  */
 public abstract class MultiThreadedIntentService extends Service {
+    
+    private static final long STOP_SELF_DELAY = TimeUnit.SECONDS.toMillis(30L);
 
     private ExecutorService mThreadPool;
     private boolean mRedelivery;
@@ -47,6 +54,13 @@ public abstract class MultiThreadedIntentService extends Service {
     private ArrayList<Future<?>> mFutureList;
 
     private Handler mHandler;
+    
+    private final Runnable mStopSelfRunnable = new Runnable() {
+        @Override
+        public void run() {
+            stopSelf();
+        }
+    };
 
     private final Runnable mWorkDoneRunnable = new Runnable() {
         @Override
@@ -65,7 +79,7 @@ public abstract class MultiThreadedIntentService extends Service {
             }
 
             if (futureList.isEmpty()) {
-                stopSelf();
+                mHandler.postDelayed(mStopSelfRunnable, STOP_SELF_DELAY);
             }
         }
     };
@@ -97,8 +111,8 @@ public abstract class MultiThreadedIntentService extends Service {
 
     @Override
     public void onStart(final Intent intent, final int startId) {
-        IntentRunnable runnable = new IntentRunnable(intent);
-        mFutureList.add(mThreadPool.submit(runnable));
+        mHandler.removeCallbacks(mStopSelfRunnable);
+        mFutureList.add(mThreadPool.submit(new IntentRunnable(intent)));
     }
 
     @Override
