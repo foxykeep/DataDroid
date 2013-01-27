@@ -35,7 +35,7 @@ import java.util.concurrent.Future;
  * All requests are handled on multiple worker threads -- they may take as long as necessary (and
  * will not block the application's main loop). By default only one concurrent worker thread is
  * used. You can modify the number of current worker threads by overriding
- * {@link #getNumberOfThreads()}.
+ * {@link #getMaximumNumberOfThreads()}.
  *
  * @author Foxykeep
  */
@@ -133,7 +133,7 @@ public abstract class MultiThreadedIntentService extends Service {
      * This method is called once in the {@link #onCreate()}. Modifying the value returned after the
      * {@link #onCreate()} is called will have no effect.
      *
-     * @return
+     * @return The maximum number of concurrent worker threads
      */
     protected int getMaximumNumberOfThreads() {
         return 1;

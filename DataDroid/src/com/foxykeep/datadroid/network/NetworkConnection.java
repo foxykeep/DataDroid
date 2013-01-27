@@ -115,7 +115,7 @@ public final class NetworkConnection {
     /**
      * Set the headers to add to the request.
      *
-     * @param headerList The headers to add to the request.
+     * @param headerMap The headers to add to the request.
      * @return The networkConnection.
      */
     public NetworkConnection setHeaderList(HashMap<String, String> headerMap) {
