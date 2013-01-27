@@ -350,7 +350,7 @@ public final class Request implements Parcelable {
 
     /**
      * Returns the value associated with the given name transformed as a String (using
-     * {@link String#valueOf(short)}), or "0" if no mapping of the desired type exists for the given
+     * {@link String#valueOf(int)}), or "0" if no mapping of the desired type exists for the given
      * name.
      *
      * @param name The parameter name.
@@ -504,6 +504,10 @@ public final class Request implements Parcelable {
     public boolean equals(Object o) {
         if (o instanceof Request) {
             Request oParams = (Request) o;
+            if (mRequestType != oParams.mRequestType) {
+                return false;
+            }
+
             if (mParamList.size() != oParams.mParamList.size()) {
                 return false;
             }
