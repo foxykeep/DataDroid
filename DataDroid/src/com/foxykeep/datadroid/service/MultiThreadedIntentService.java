@@ -90,7 +90,12 @@ public abstract class MultiThreadedIntentService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mThreadPool = Executors.newFixedThreadPool(getMaximumNumberOfThreads());
+        int maximumNumberOfThreads = getMaximumNumberOfThreads();
+        if (maximumNumberOfThreads <= 0) {
+            throw new IllegalArgumentException("Maximum number of threads must be " +
+                    "strictly positive");
+        }
+        mThreadPool = Executors.newFixedThreadPool(maximumNumberOfThreads);
         mHandler = new Handler();
         mFutureList = new ArrayList<Future<?>>();
     }
