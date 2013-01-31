@@ -86,8 +86,6 @@ public abstract class RequestManager {
         public void onRequestCustomError(Request request, Bundle resultData);
     }
 
-    public static final String RECEIVER_EXTRA_RESULT_CODE = "com.foxykeep.datadroid.extra.code";
-    public static final String RECEIVER_EXTRA_PAYLOAD = "com.foxykeep.datadroid.extra.payload";
     public static final String RECEIVER_EXTRA_ERROR_TYPE = "com.foxykeep.datadroid.extra.error";
     public static final String RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE =
             "com.foxykeep.datadroid.extra.connectionErrorStatusCode";
@@ -189,8 +187,8 @@ public abstract class RequestManager {
      * The method called in the listener will be
      * {@link RequestListener#onRequestFinished(Request, Bundle)}.
      * <p>
-     * If no cached data is found, {@link RequestListener#onRequestConnectionError(Request)} will be
-     * called instead
+     * If no cached data is found, {@link RequestListener#onRequestConnectionError(Request, int)}
+     * will be called instead
      *
      * @param listener The listener to call with the data if any.
      * @param request The request associated with the memory cached data.
@@ -315,7 +313,7 @@ public abstract class RequestManager {
             RequestListener listener = mListenerRef.get();
             if (listener != null) {
                 if (resultCode == RequestService.ERROR_CODE) {
-                    switch(resultData.getInt(RECEIVER_EXTRA_ERROR_TYPE)){
+                    switch (resultData.getInt(RECEIVER_EXTRA_ERROR_TYPE)) {
                         case ERROR_TYPE_DATA:
                             listener.onRequestDataError(request);
                             break;
