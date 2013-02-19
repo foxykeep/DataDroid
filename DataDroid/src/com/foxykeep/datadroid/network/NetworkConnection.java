@@ -42,8 +42,8 @@ public final class NetworkConnection {
      */
     public static final class ConnectionResult {
 
-        public Map<String, List<String>> headerMap;
-        public String body;
+        public final Map<String, List<String>> headerMap;
+        public final String body;
 
         public ConnectionResult(Map<String, List<String>> headerMap, String body) {
             this.headerMap = headerMap;

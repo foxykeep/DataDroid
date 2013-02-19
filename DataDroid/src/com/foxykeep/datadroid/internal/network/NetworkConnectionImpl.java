@@ -35,7 +35,6 @@ import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -76,7 +75,7 @@ public final class NetworkConnectionImpl {
      *
      * @param context The context to use for this operation. Used to generate the user agent if
      *            needed.
-     * @param url The webservice URL.
+     * @param urlValue The webservice URL.
      * @param method The request method to use.
      * @param parameterMap The parameters to add to the request.
      * @param headerMap The headers to add to the request.
