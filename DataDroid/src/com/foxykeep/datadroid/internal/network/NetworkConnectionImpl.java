@@ -8,19 +8,6 @@
 
 package com.foxykeep.datadroid.internal.network;
 
-import android.content.Context;
-import android.support.util.Base64;
-import android.util.Log;
-
-import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
-import com.foxykeep.datadroid.network.NetworkConnection.Method;
-import com.foxykeep.datadroid.network.UserAgentUtils;
-import com.foxykeep.datadroid.util.DataDroidLog;
-
-import org.apache.http.HttpStatus;
-import org.apache.http.auth.UsernamePasswordCredentials;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +20,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
@@ -43,6 +31,20 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.content.Context;
+import android.support.util.Base64;
+import android.util.Log;
+
+import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
+import com.foxykeep.datadroid.network.NetworkConnection.Method;
+import com.foxykeep.datadroid.network.UserAgentUtils;
+import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
  * Implementation of the network connection.
@@ -90,7 +92,7 @@ public final class NetworkConnectionImpl {
      * @return The result of the webservice call.
      */
     public static ConnectionResult execute(Context context, String urlValue, Method method,
-            HashMap<String, String> parameterMap, HashMap<String, String> headerMap,
+            List<BasicNameValuePair> parameterMap, HashMap<String, String> headerMap,
             boolean isGzipEnabled, String userAgent, String postText,
             UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) throws
             ConnectionException {
@@ -114,8 +116,8 @@ public final class NetworkConnectionImpl {
 
             StringBuilder paramBuilder = new StringBuilder();
             if (parameterMap != null && !parameterMap.isEmpty()) {
-                for (Entry<String, String> parameter : parameterMap.entrySet()) {
-                    paramBuilder.append(URLEncoder.encode(parameter.getKey(), UTF8_CHARSET));
+                for (BasicNameValuePair parameter : parameterMap) {
+                    paramBuilder.append(URLEncoder.encode(parameter.getName(), UTF8_CHARSET));
                     paramBuilder.append("=");
                     paramBuilder.append(URLEncoder.encode(parameter.getValue(), UTF8_CHARSET));
                     paramBuilder.append("&");
@@ -129,8 +131,8 @@ public final class NetworkConnectionImpl {
 
                 if (parameterMap != null && !parameterMap.isEmpty()) {
                     DataDroidLog.d(TAG, "Parameters:");
-                    for (Entry<String, String> parameter : parameterMap.entrySet()) {
-                        String message = "- " + parameter.getKey() + " = " + parameter.getValue();
+                    for (BasicNameValuePair parameter : parameterMap) {
+                        String message = "- " + parameter.getName() + " = " + parameter.getValue();
                         DataDroidLog.d(TAG, message);
                     }
                 }
