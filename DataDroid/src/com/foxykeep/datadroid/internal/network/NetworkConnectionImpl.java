@@ -8,6 +8,20 @@
 
 package com.foxykeep.datadroid.internal.network;
 
+import android.content.Context;
+import android.support.util.Base64;
+import android.util.Log;
+
+import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
+import com.foxykeep.datadroid.network.NetworkConnection.Method;
+import com.foxykeep.datadroid.network.UserAgentUtils;
+import com.foxykeep.datadroid.util.DataDroidLog;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +33,8 @@ import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
@@ -31,20 +45,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import org.apache.http.HttpStatus;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.message.BasicNameValuePair;
-
-import android.content.Context;
-import android.support.util.Base64;
-import android.util.Log;
-
-import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
-import com.foxykeep.datadroid.network.NetworkConnection.Method;
-import com.foxykeep.datadroid.network.UserAgentUtils;
-import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
  * Implementation of the network connection.
@@ -80,7 +80,7 @@ public final class NetworkConnectionImpl {
      *            needed.
      * @param url The webservice URL.
      * @param method The request method to use.
-     * @param parameterMap The parameters to add to the request.
+     * @param parameterList The parameters to add to the request.
      * @param headerMap The headers to add to the request.
      * @param isGzipEnabled Whether the request will use gzip compression if available on the
      *            server.
@@ -92,7 +92,7 @@ public final class NetworkConnectionImpl {
      * @return The result of the webservice call.
      */
     public static ConnectionResult execute(Context context, String urlValue, Method method,
-            List<BasicNameValuePair> parameterMap, HashMap<String, String> headerMap,
+            ArrayList<BasicNameValuePair> parameterList, HashMap<String, String> headerMap,
             boolean isGzipEnabled, String userAgent, String postText,
             UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) throws
             ConnectionException {
@@ -115,8 +115,10 @@ public final class NetworkConnectionImpl {
             }
 
             StringBuilder paramBuilder = new StringBuilder();
-            if (parameterMap != null && !parameterMap.isEmpty()) {
-                for (BasicNameValuePair parameter : parameterMap) {
+            if (parameterList != null && !parameterList.isEmpty()) {
+                int parameterListLength = parameterList.size();
+                for (int i=0;i<parameterListLength;i++) {
+                    BasicNameValuePair parameter = parameterList.get(i);
                     paramBuilder.append(URLEncoder.encode(parameter.getName(), UTF8_CHARSET));
                     paramBuilder.append("=");
                     paramBuilder.append(URLEncoder.encode(parameter.getValue(), UTF8_CHARSET));
@@ -129,9 +131,11 @@ public final class NetworkConnectionImpl {
                 DataDroidLog.d(TAG, "Request url: " + urlValue);
                 DataDroidLog.d(TAG, "Method: " + method.toString());
 
-                if (parameterMap != null && !parameterMap.isEmpty()) {
+                if (parameterList != null && !parameterList.isEmpty()) {
                     DataDroidLog.d(TAG, "Parameters:");
-                    for (BasicNameValuePair parameter : parameterMap) {
+                    int parameterListLength = parameterList.size();
+                    for (int i=0;i<parameterListLength;i++) {
+                        BasicNameValuePair parameter = parameterList.get(i);
                         String message = "- " + parameter.getName() + " = " + parameter.getValue();
                         DataDroidLog.d(TAG, message);
                     }

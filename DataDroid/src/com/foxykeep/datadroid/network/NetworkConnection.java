@@ -56,7 +56,7 @@ public final class NetworkConnection {
     private final Context mContext;
     private final String mUrl;
     private Method mMethod = Method.GET;
-    private List<BasicNameValuePair> mParameterMap = null;
+    private ArrayList<BasicNameValuePair> mParameterList = null;
     private HashMap<String, String> mHeaderMap = null;
     private boolean mIsGzipEnabled = true;
     private String mUserAgent = null;
@@ -105,14 +105,12 @@ public final class NetworkConnection {
      * The POSTDATA text will be reset as they cannot be used at the same time.
      *
      * @see #setPostText(String)
+     * @see #setParameters(ArrayList)
      * @param parameterMap The parameters to add to the request.
      * @return The networkConnection.
-     * 
-     * @deprecated Use {@link #setParameters(List)}
      */
-    @Deprecated
     public NetworkConnection setParameters(HashMap<String, String> parameterMap) {
-        List<BasicNameValuePair> parameterList = new ArrayList<BasicNameValuePair>();
+        ArrayList<BasicNameValuePair> parameterList = new ArrayList<BasicNameValuePair>();
         for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
           parameterList.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
@@ -125,14 +123,16 @@ public final class NetworkConnection {
      * Set the parameters to add to the request. This is meant to be a "key" => "value" Map.
      * <p>
      * The POSTDATA text will be reset as they cannot be used at the same time.
+     * <p>
+     * This method allows you to have multiple values for a single key in contrary to the HashMap version of the method ({@link #setParameters(HashMap)})
      *
      * @see #setPostText(String)
-     * @param parameterMap The parameters to add to the request.
+     * @see #setParameters(HashMap)
+     * @param parameterList The parameters to add to the request.
      * @return The networkConnection.
-     * 
      */
-    public NetworkConnection setParameters(List<BasicNameValuePair> parameterList) {
-      mParameterMap = parameterList;
+    public NetworkConnection setParameters(ArrayList<BasicNameValuePair> parameterList) {
+      mParameterList = parameterList;
       mPostText = null;
       return this;
     }
@@ -185,7 +185,7 @@ public final class NetworkConnection {
     public NetworkConnection setPostText(String postText) {
         mPostText = postText;
         mMethod = Method.POST;
-        mParameterMap = null;
+        mParameterList = null;
         return this;
     }
 
@@ -207,8 +207,7 @@ public final class NetworkConnection {
      * @return The networkConnection.
      */
     public NetworkConnection setSslValidationEnabled(boolean enabled) {
-        mIsSslValidationEnabled = enabled;
-        
+        mIsSslValidationEnabled = enabled;        
         return this;
     }
 
@@ -218,7 +217,7 @@ public final class NetworkConnection {
      * @return The result of the webservice call.
      */
     public ConnectionResult execute() throws ConnectionException {
-        return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterMap,
+        return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterList,
                 mHeaderMap, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
                 mIsSslValidationEnabled);
     }
