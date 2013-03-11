@@ -124,7 +124,8 @@ public final class NetworkConnection {
      * <p>
      * The POSTDATA text will be reset as they cannot be used at the same time.
      * <p>
-     * This method allows you to have multiple values for a single key in contrary to the HashMap version of the method ({@link #setParameters(HashMap)})
+     * This method allows you to have multiple values for a single key in contrary to the HashMap
+     * version of the method ({@link #setParameters(HashMap)})
      *
      * @see #setPostText(String)
      * @see #setParameters(HashMap)

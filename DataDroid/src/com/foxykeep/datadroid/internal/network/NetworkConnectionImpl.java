@@ -115,8 +115,7 @@ public final class NetworkConnectionImpl {
 
             StringBuilder paramBuilder = new StringBuilder();
             if (parameterList != null && !parameterList.isEmpty()) {
-                int parameterListLength = parameterList.size();
-                for (int i=0;i<parameterListLength;i++) {
+                for (int i = 0, size = parameterList.size(); i < size; i++) {
                     BasicNameValuePair parameter = parameterList.get(i);
                     paramBuilder.append(URLEncoder.encode(parameter.getName(), UTF8_CHARSET));
                     paramBuilder.append("=");
@@ -132,8 +131,7 @@ public final class NetworkConnectionImpl {
 
                 if (parameterList != null && !parameterList.isEmpty()) {
                     DataDroidLog.d(TAG, "Parameters:");
-                    int parameterListLength = parameterList.size();
-                    for (int i=0;i<parameterListLength;i++) {
+                    for (int i = 0, size = parameterList.size(); i < size; i++) {
                         BasicNameValuePair parameter = parameterList.get(i);
                         String message = "- " + parameter.getName() + " = " + parameter.getValue();
                         DataDroidLog.d(TAG, message);
