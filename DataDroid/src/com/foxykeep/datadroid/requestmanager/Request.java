@@ -8,12 +8,12 @@
 
 package com.foxykeep.datadroid.requestmanager;
 
+import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroid.util.ObjectUtils;
+
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.foxykeep.datadroid.service.RequestService;
-import com.foxykeep.datadroid.util.ObjectUtils;
 
 import java.util.ArrayList;
 

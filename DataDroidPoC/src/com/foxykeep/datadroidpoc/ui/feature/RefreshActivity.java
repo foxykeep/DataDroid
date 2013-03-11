@@ -7,6 +7,13 @@
  */
 package com.foxykeep.datadroidpoc.ui.feature;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
+import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.model.City;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,13 +26,6 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
-import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.data.model.City;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
 import java.util.ArrayList;
 

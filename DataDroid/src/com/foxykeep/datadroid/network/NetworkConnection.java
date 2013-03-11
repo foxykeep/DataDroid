@@ -8,11 +8,11 @@
 
 package com.foxykeep.datadroid.network;
 
-import android.content.Context;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
 import com.foxykeep.datadroid.util.DataDroidLog;
+
+import android.content.Context;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.message.BasicNameValuePair;

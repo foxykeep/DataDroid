@@ -8,15 +8,15 @@
 
 package com.foxykeep.datadroid.internal.network;
 
-import android.content.Context;
-import android.support.util.Base64;
-import android.util.Log;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
 import com.foxykeep.datadroid.util.DataDroidLog;
+
+import android.content.Context;
+import android.support.util.Base64;
+import android.util.Log;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.UsernamePasswordCredentials;

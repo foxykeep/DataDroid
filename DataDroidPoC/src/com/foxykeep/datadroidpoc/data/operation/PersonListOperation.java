@@ -8,12 +8,6 @@
 
 package com.foxykeep.datadroidpoc.data.operation;
 
-import android.content.ContentProviderOperation;
-import android.content.Context;
-import android.content.OperationApplicationException;
-import android.os.Bundle;
-import android.os.RemoteException;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.network.NetworkConnection;
@@ -26,6 +20,12 @@ import com.foxykeep.datadroidpoc.data.factory.PersonListXmlFactory;
 import com.foxykeep.datadroidpoc.data.model.Person;
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
 import com.foxykeep.datadroidpoc.data.provider.PoCProvider;
+
+import android.content.ContentProviderOperation;
+import android.content.Context;
+import android.content.OperationApplicationException;
+import android.os.Bundle;
+import android.os.RemoteException;
 
 import java.util.ArrayList;
 

@@ -1,5 +1,7 @@
 package com.foxykeep.datadroidpoc.data.provider;
 
+import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
+
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -15,8 +17,6 @@ import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
-
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
 
 import java.util.ArrayList;
 

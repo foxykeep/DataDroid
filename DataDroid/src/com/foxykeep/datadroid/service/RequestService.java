@@ -8,17 +8,17 @@
 
 package com.foxykeep.datadroid.service;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.ResultReceiver;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.foxykeep.datadroid.util.DataDroidLog;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 
 /**
  * This class is the superclass of all the worker services you'll create.

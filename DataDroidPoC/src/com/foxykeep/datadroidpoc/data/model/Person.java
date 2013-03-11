@@ -8,9 +8,9 @@
 
 package com.foxykeep.datadroidpoc.data.model;
 
-import android.content.ContentValues;
-
 import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
+
+import android.content.ContentValues;
 
 public final class Person {
 

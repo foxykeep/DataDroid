@@ -1,6 +1,9 @@
 
 package com.foxykeep.datadroidpoc.dialogs;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroidpoc.R;
+
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -10,9 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroidpoc.R;
 
 public final class ConnectionErrorDialogFragment extends DialogFragment {
 

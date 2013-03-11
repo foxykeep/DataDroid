@@ -8,6 +8,20 @@
 
 package com.foxykeep.datadroidpoc.ui.crud;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
+import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.model.Phone;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
+import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
+import com.foxykeep.datadroidpoc.util.ArrayUtils;
+import com.foxykeep.datadroidpoc.util.UserManager;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,20 +41,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
-import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
-import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
-import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
-import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
-import com.foxykeep.datadroidpoc.util.ArrayUtils;
-import com.foxykeep.datadroidpoc.util.UserManager;
 
 import java.util.ArrayList;
 

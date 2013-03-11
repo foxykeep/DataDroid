@@ -8,9 +8,6 @@
 
 package com.foxykeep.datadroidpoc.data.service;
 
-import android.content.Intent;
-import android.os.Bundle;
-
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService;
@@ -26,6 +23,9 @@ import com.foxykeep.datadroidpoc.data.operation.PersonListOperation;
 import com.foxykeep.datadroidpoc.data.operation.RssFeedOperation;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
+
+import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * This class is called by the {@link PoCRequestManager} through the {@link Intent} system.

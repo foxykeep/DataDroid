@@ -8,10 +8,10 @@
 
 package com.foxykeep.datadroidpoc.util;
 
+import com.foxykeep.datadroidpoc.config.SharedPrefsConfig;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.foxykeep.datadroidpoc.config.SharedPrefsConfig;
 
 import java.util.UUID;
 

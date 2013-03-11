@@ -7,6 +7,17 @@
  */
 package com.foxykeep.datadroidpoc.ui;
 
+import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.dialogs.SampleDescriptionDialogFragment;
+import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
+import com.foxykeep.datadroidpoc.ui.feature.AuthenticationActivity;
+import com.foxykeep.datadroidpoc.ui.feature.CustomRequestExceptionActivity;
+import com.foxykeep.datadroidpoc.ui.feature.RefreshActivity;
+import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
+import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,17 +32,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.dialogs.SampleDescriptionDialogFragment;
-import com.foxykeep.datadroidpoc.ui.crud.CrudSyncPhoneListActivity;
-import com.foxykeep.datadroidpoc.ui.feature.AuthenticationActivity;
-import com.foxykeep.datadroidpoc.ui.feature.CustomRequestExceptionActivity;
-import com.foxykeep.datadroidpoc.ui.feature.RefreshActivity;
-import com.foxykeep.datadroidpoc.ui.rss.RssFeedListActivity;
-import com.foxykeep.datadroidpoc.ui.ws.CityListActivity;
-import com.foxykeep.datadroidpoc.ui.ws.DoubleListActivity;
-import com.foxykeep.datadroidpoc.ui.ws.PersonListActivity;
 
 public final class HomeActivity extends FragmentActivity implements OnItemClickListener,
         OnItemLongClickListener {

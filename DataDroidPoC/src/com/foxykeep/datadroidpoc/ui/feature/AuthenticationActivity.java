@@ -7,13 +7,6 @@
  */
 package com.foxykeep.datadroidpoc.ui.feature;
 
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
@@ -21,6 +14,13 @@ import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
 import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 
 public final class AuthenticationActivity extends DataDroidActivity implements RequestListener,
         OnClickListener, ConnectionErrorDialogListener {

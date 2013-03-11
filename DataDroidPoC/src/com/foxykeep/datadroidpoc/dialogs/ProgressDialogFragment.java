@@ -1,6 +1,8 @@
 
 package com.foxykeep.datadroidpoc.dialogs;
 
+import com.foxykeep.datadroidpoc.R;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -11,8 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
-import com.foxykeep.datadroidpoc.R;
 
 public final class ProgressDialogFragment extends DialogFragment {
 

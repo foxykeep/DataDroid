@@ -8,6 +8,9 @@
 
 package com.foxykeep.datadroid.requestmanager;
 
+import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroid.util.DataDroidLog;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -17,9 +20,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 import android.support.util.LruCache;
-
-import com.foxykeep.datadroid.service.RequestService;
-import com.foxykeep.datadroid.util.DataDroidLog;
 
 import org.apache.http.HttpStatus;
 

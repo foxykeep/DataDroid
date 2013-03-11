@@ -8,10 +8,10 @@
 
 package com.foxykeep.datadroidpoc.skeleton.data.requestmanager;
 
-import android.content.Context;
-
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.foxykeep.datadroidpoc.skeleton.data.service.SkeletonService;
+
+import android.content.Context;
 
 /**
  * This class is used as a proxy to call the Service. It provides easy-to-use methods to call the
