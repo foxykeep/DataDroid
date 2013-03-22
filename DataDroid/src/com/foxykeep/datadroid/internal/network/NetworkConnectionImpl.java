@@ -201,7 +201,7 @@ public final class NetworkConnectionImpl {
             connection.setConnectTimeout(OPERATION_TIMEOUT);
             connection.setReadTimeout(OPERATION_TIMEOUT);
 
-            // Set the outputStream content for POST requests
+            // Set the outputStream content for POST and PUT requests
             if ((method == Method.POST || method == Method.PUT) && outputText != null) {
                 OutputStream output = null;
                 try {
