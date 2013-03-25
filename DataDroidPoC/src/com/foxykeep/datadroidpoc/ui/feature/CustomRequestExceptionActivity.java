@@ -62,9 +62,9 @@ public class CustomRequestExceptionActivity extends DataDroidActivity implements
                 mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }

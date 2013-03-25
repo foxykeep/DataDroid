@@ -73,9 +73,9 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
                 if (requestType == PoCRequestFactory.REQUEST_TYPE_CITY_LIST_2) {
                     ProgressDialogFragment.dismiss(this);
                 }
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }

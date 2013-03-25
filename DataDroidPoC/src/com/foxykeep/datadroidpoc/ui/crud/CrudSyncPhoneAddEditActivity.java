@@ -75,9 +75,9 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 mRequestManager.addRequestListener(this, request);
             } else {
                 ProgressDialogFragment.dismiss(this);
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }

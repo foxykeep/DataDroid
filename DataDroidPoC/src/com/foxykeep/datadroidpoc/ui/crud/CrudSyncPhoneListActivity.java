@@ -114,9 +114,8 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                 if (requestType != PoCRequestFactory.REQUEST_TYPE_CITY_LIST) {
                     ProgressDialogFragment.dismiss(this);
                 }
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
             }
         }
 
@@ -259,11 +258,11 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                 b.setTitle(R.string.crud_phone_list_dialog_delete_all_confirm_title);
                 b.setMessage(R.string.crud_phone_list_dialog_delete_all_confirm_message);
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                callSyncPhoneDeleteAllWS();
-                            }
-                        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        callSyncPhoneDeleteAllWS();
+                    }
+                });
                 b.setNegativeButton(android.R.string.cancel, null);
                 b.show();
                 return true;

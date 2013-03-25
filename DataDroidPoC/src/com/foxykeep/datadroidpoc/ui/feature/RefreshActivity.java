@@ -60,9 +60,9 @@ public class RefreshActivity extends DataDroidActivity implements RequestListene
                 mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
         if (mListAdapter.isEmpty()) {

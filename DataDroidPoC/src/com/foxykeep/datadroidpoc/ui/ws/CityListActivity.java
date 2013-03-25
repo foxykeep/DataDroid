@@ -62,9 +62,9 @@ public final class CityListActivity extends DataDroidActivity implements Request
                 mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }

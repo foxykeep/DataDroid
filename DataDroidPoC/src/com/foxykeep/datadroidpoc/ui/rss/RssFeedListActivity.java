@@ -74,9 +74,9 @@ public final class RssFeedListActivity extends DataDroidActivity implements Requ
                 mRequestManager.addRequestListener(this, request);
                 setProgressBarIndeterminateVisibility(true);
             } else {
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }
