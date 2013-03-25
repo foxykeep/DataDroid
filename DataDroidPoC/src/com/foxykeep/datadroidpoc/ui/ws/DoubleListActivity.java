@@ -8,6 +8,17 @@
 
 package com.foxykeep.datadroidpoc.ui.ws;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
+import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.model.City;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,17 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
-import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.data.model.City;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
-import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
-import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
 import java.util.ArrayList;
 
@@ -73,9 +73,9 @@ public final class DoubleListActivity extends DataDroidActivity implements Reque
                 if (requestType == PoCRequestFactory.REQUEST_TYPE_CITY_LIST_2) {
                     ProgressDialogFragment.dismiss(this);
                 }
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }

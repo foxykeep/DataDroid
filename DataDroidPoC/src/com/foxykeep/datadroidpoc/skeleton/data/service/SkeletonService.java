@@ -8,10 +8,10 @@
 
 package com.foxykeep.datadroidpoc.skeleton.data.service;
 
-import android.content.Intent;
-
 import com.foxykeep.datadroid.service.RequestService;
 import com.foxykeep.datadroidpoc.skeleton.data.requestmanager.SkeletonRequestManager;
+
+import android.content.Intent;
 
 /**
  * This class is called by the {@link SkeletonRequestManager} through the {@link Intent} system.

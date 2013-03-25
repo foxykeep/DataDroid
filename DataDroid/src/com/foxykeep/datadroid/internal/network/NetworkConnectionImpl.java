@@ -8,15 +8,15 @@
 
 package com.foxykeep.datadroid.internal.network;
 
-import android.content.Context;
-import android.support.util.Base64;
-import android.util.Log;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
 import com.foxykeep.datadroid.util.DataDroidLog;
+
+import android.content.Context;
+import android.support.util.Base64;
+import android.util.Log;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -59,10 +58,7 @@ public final class NetworkConnectionImpl {
     private static final String ACCEPT_CHARSET_HEADER = "Accept-Charset";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String CONTENT_ENCODING_HEADER = "Content-Encoding";
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String LOCATION_HEADER = "Location";
-    private static final String USER_AGENT_HEADER = "User-Agent";
 
     private static final String UTF8_CHARSET = "UTF-8";
 
@@ -79,7 +75,7 @@ public final class NetworkConnectionImpl {
      *
      * @param context The context to use for this operation. Used to generate the user agent if
      *            needed.
-     * @param url The webservice URL.
+     * @param urlValue The webservice URL.
      * @param method The request method to use.
      * @param parameterList The parameters to add to the request.
      * @param headerMap The headers to add to the request.
@@ -106,7 +102,7 @@ public final class NetworkConnectionImpl {
             if (headerMap == null) {
                 headerMap = new HashMap<String, String>();
             }
-            headerMap.put(USER_AGENT_HEADER, userAgent);
+            headerMap.put(HTTP.USER_AGENT, userAgent);
             if (isGzipEnabled) {
                 headerMap.put(ACCEPT_ENCODING_HEADER, "gzip");
             }
@@ -117,8 +113,7 @@ public final class NetworkConnectionImpl {
 
             StringBuilder paramBuilder = new StringBuilder();
             if (parameterList != null && !parameterList.isEmpty()) {
-                int parameterListLength = parameterList.size();
-                for (int i=0;i<parameterListLength;i++) {
+                for (int i = 0, size = parameterList.size(); i < size; i++) {
                     BasicNameValuePair parameter = parameterList.get(i);
                     paramBuilder.append(URLEncoder.encode(parameter.getName(), UTF8_CHARSET));
                     paramBuilder.append("=");
@@ -134,8 +129,7 @@ public final class NetworkConnectionImpl {
 
                 if (parameterList != null && !parameterList.isEmpty()) {
                     DataDroidLog.d(TAG, "Parameters:");
-                    int parameterListLength = parameterList.size();
-                    for (int i=0;i<parameterListLength;i++) {
+                    for (int i = 0, size = parameterList.size(); i < size; i++) {
                         BasicNameValuePair parameter = parameterList.get(i);
                         String message = "- " + parameter.getName() + " = " + parameter.getValue();
                         DataDroidLog.d(TAG, message);
@@ -160,9 +154,9 @@ public final class NetworkConnectionImpl {
             switch (method) {
                 case GET:
                 case DELETE:
-                  url = new URL(urlValue + "?" + paramBuilder.toString());
-                  connection = (HttpURLConnection) url.openConnection();
-                  break;
+                    url = new URL(urlValue + "?" + paramBuilder.toString());
+                    connection = (HttpURLConnection) url.openConnection();
+                    break;
                 case PUT:
                 case POST:
                     url = new URL(urlValue);
@@ -171,8 +165,9 @@ public final class NetworkConnectionImpl {
 
                     if (paramBuilder.length() > 0) {
                         outputText = paramBuilder.toString();
-                        headerMap.put(CONTENT_TYPE_HEADER, "application/x-www-form-urlencoded");
-                        headerMap.put(HTTP.CONTENT_LEN, String.valueOf(outputText.getBytes().length));
+                        headerMap.put(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+                        headerMap.put(HTTP.CONTENT_LEN,
+                                String.valueOf(outputText.getBytes().length));
                     } else if (postText != null) {
                         outputText = postText;
                     }
@@ -218,7 +213,7 @@ public final class NetworkConnectionImpl {
                 }
             }
 
-            String contentEncoding = connection.getHeaderField(CONTENT_ENCODING_HEADER);
+            String contentEncoding = connection.getHeaderField(HTTP.CONTENT_ENCODING);
 
             int responseCode = connection.getResponseCode();
             boolean isGzip = contentEncoding != null

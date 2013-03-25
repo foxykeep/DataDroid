@@ -8,12 +8,12 @@
 
 package com.foxykeep.datadroid.requestmanager;
 
+import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroid.util.ObjectUtils;
+
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.foxykeep.datadroid.service.RequestService;
-import com.foxykeep.datadroid.util.ObjectUtils;
 
 import java.util.ArrayList;
 
@@ -38,8 +38,8 @@ public final class Request implements Parcelable {
 
     private int mRequestType = -1;
     private boolean mMemoryCacheDataEnabled = false;
-    private ArrayList<String> mParamList = new ArrayList<String>();
-    private ArrayList<Integer> mTypeList = new ArrayList<Integer>();
+    private final ArrayList<String> mParamList = new ArrayList<String>();
+    private final ArrayList<Integer> mTypeList = new ArrayList<Integer>();
     private Bundle mBundle = new Bundle();
 
     /**

@@ -8,16 +8,6 @@
 
 package com.foxykeep.datadroidpoc.ui.crud;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
@@ -29,6 +19,16 @@ import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
 import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.UserManager;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
 public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implements
         RequestListener, OnClickListener, TextWatcher, ConnectionErrorDialogListener {
@@ -75,9 +75,9 @@ public final class CrudSyncPhoneAddEditActivity extends DataDroidActivity implem
                 mRequestManager.addRequestListener(this, request);
             } else {
                 ProgressDialogFragment.dismiss(this);
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }

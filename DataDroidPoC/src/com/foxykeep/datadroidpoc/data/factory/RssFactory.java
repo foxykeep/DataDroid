@@ -8,12 +8,12 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.data.model.RssFeed;
 import com.foxykeep.datadroidpoc.data.model.RssItem;
+
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;

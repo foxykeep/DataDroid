@@ -1,5 +1,7 @@
 package com.foxykeep.datadroidpoc.data.provider;
 
+import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
+
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -15,8 +17,6 @@ import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
-
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
 
 import java.util.ArrayList;
 
@@ -35,8 +35,9 @@ public final class PoCProvider extends ContentProvider {
 
     public static final String AUTHORITY = "com.foxykeep.datadroidpoc.provider.PoCProvider";
 
-    public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY 
-            + "/integrityCheck");
+    static {
+        Uri.parse("content://" + AUTHORITY + "/integrityCheck");
+    }
 
     // Version 1 : Creation of the database
     public static final int DATABASE_VERSION = 1;
@@ -140,7 +141,7 @@ public final class PoCProvider extends ContentProvider {
 
         // Pick the correct database for this operation
         SQLiteDatabase db = getDatabase(context);
-        String id = "0";
+        String id;
 
         if (ACTIVATE_ALL_LOGS) {
             Log.d(LOG_TAG, "delete: uri=" + uri + ", match is " + uriType.name());
@@ -151,8 +152,8 @@ public final class PoCProvider extends ContentProvider {
         switch (uriType) {
             case DB_PERSON_ID:
                 id = uri.getPathSegments().get(1);
-                result = db.delete(uriType.getTableName(), whereWithId(id, selection), 
-                        selectionArgs);
+                result = db.delete(uriType.getTableName(), whereWithId(selection),
+                        addIdToSelectionArgs(id, selectionArgs));
                 break;
             case DB_PERSON:
                 result = db.delete(uriType.getTableName(), selection, selectionArgs);
@@ -182,7 +183,7 @@ public final class PoCProvider extends ContentProvider {
             Log.d(LOG_TAG, "insert: uri=" + uri + ", match is " + uriType.name());
         }
 
-        Uri resultUri = null;
+        Uri resultUri;
 
         switch (uriType) {
             case DB_PERSON:
@@ -285,8 +286,8 @@ public final class PoCProvider extends ContentProvider {
         switch (uriType) {
             case DB_PERSON_ID:
                 id = uri.getPathSegments().get(1);
-                c = db.query(uriType.getTableName(), projection, whereWithId(id, selection),
-                        selectionArgs, null, null, sortOrder);
+                c = db.query(uriType.getTableName(), projection, whereWithId(selection),
+                        addIdToSelectionArgs(id, selectionArgs), null, null, sortOrder);
                 break;
             case DB_PERSON:
                 c = db.query(uriType.getTableName(), projection, selection, selectionArgs,
@@ -300,17 +301,29 @@ public final class PoCProvider extends ContentProvider {
         return c;
     }
 
-    private String whereWithId(String id, String selection) {
+    private String whereWithId(String selection) {
         StringBuilder sb = new StringBuilder(256);
         sb.append(BaseColumns._ID);
-        sb.append(" = ");
-        sb.append(id);
+        sb.append(" = ?");
         if (selection != null) {
             sb.append(" AND (");
             sb.append(selection);
             sb.append(')');
         }
         return sb.toString();
+    }
+
+    private String[] addIdToSelectionArgs(String id, String[] selectionArgs) {
+
+        if (selectionArgs == null) {
+            return new String[] { id };
+        }
+
+        int length = selectionArgs.length;
+        String[] newSelectionArgs = new String[length + 1];
+        newSelectionArgs[0] = id;
+        System.arraycopy(selectionArgs, 0, newSelectionArgs, 1, length);
+        return newSelectionArgs;
     }
 
     @Override
@@ -331,8 +344,8 @@ public final class PoCProvider extends ContentProvider {
         switch (uriType) {
             case DB_PERSON_ID:
                 String id = uri.getPathSegments().get(1);
-                result = db.update(uriType.getTableName(), values, whereWithId(id, selection),
-                        selectionArgs);
+                result = db.update(uriType.getTableName(), values, whereWithId(selection),
+                    addIdToSelectionArgs(id, selectionArgs));
                 break;
             case DB_PERSON:
                 result = db.update(uriType.getTableName(), values, selection, selectionArgs);

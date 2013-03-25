@@ -8,17 +8,17 @@
 
 package com.foxykeep.datadroid.service;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.ResultReceiver;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.foxykeep.datadroid.util.DataDroidLog;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 
 /**
  * This class is the superclass of all the worker services you'll create.
@@ -46,66 +46,67 @@ public abstract class RequestService extends MultiThreadedIntentService {
          *             webservice. It will be propagated to the {@link RequestManager} as a
          *             {@link RequestManager#ERROR_TYPE_DATA}.
          * @throws CustomRequestException Any other exception you may have to throw. A call to
-         *             {@link RequestService#onCustomError(Exception)} will be made with the
-         *             Exception thrown.
+         *             {@link RequestService#onCustomRequestException(Request,
+         *             CustomRequestException)} will be made with the Exception thrown.
          */
         public Bundle execute(Context context, Request request) throws ConnectionException,
                 DataException, CustomRequestException;
     }
 
-    public static final String LOG_TAG = RequestService.class.getSimpleName();
+    private static final String LOG_TAG = RequestService.class.getSimpleName();
 
     public static final String INTENT_EXTRA_RECEIVER = "com.foxykeep.datadroid.extra.receiver";
     public static final String INTENT_EXTRA_REQUEST = "com.foxykeep.datadroid.extra.request";
 
-    public static final int SUCCESS_CODE = 0;
+    private static final int SUCCESS_CODE = 0;
     public static final int ERROR_CODE = -1;
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a success.
+     * Proxy method for {@link #sendResult(ResultReceiver, Bundle, int)} when the work is a
+     * success.
      *
-     * @param intent The value passed to {@link onHandleIntent(Intent)}.
+     * @param receiver The result receiver received inside the {@link Intent}.
      * @param data A {@link Bundle} with the data to send back.
      */
-    private final void sendSuccess(ResultReceiver receiver, Bundle data) {
+    private void sendSuccess(ResultReceiver receiver, Bundle data) {
         sendResult(receiver, data, SUCCESS_CODE);
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to
-     * the network.
+     * Proxy method for {@link #sendResult(ResultReceiver, Bundle, int)} when the work is a failure
+     * due to the network.
      *
-     * @param intent The value passed to {@link onHandleIntent(Intent)}.
-     * @param data A {@link Bundle} the data to send back.
+     * @param receiver The result receiver received inside the {@link Intent}.
+     * @param exception The {@link ConnectionException} triggered.
      */
-    private final void sendConnexionFailure(ResultReceiver receiver, ConnectionException e) {
+    private void sendConnexionFailure(ResultReceiver receiver, ConnectionException exception) {
         Bundle data = new Bundle();
         data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.ERROR_TYPE_CONNEXION);
-        data.putInt(RequestManager.RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE, e.getStatusCode());
+        data.putInt(RequestManager.RECEIVER_EXTRA_CONNECTION_ERROR_STATUS_CODE,
+                exception.getStatusCode());
         sendResult(receiver, data, ERROR_CODE);
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to
-     * the data (parsing for example).
+     * Proxy method for {@link #sendResult(ResultReceiver, Bundle, int)} when the work is a failure
+     * due to the data (parsing for example).
      *
-     * @param intent The value passed to {@link onHandleIntent(Intent)}.
-     * @param data A {@link Bundle} the data to send back.
+     * @param receiver The result receiver received inside the {@link Intent}.
      */
-    private final void sendDataFailure(ResultReceiver receiver) {
+    private void sendDataFailure(ResultReceiver receiver) {
         Bundle data = new Bundle();
         data.putInt(RequestManager.RECEIVER_EXTRA_ERROR_TYPE, RequestManager.ERROR_TYPE_DATA);
         sendResult(receiver, data, ERROR_CODE);
     }
 
     /**
-     * Proxy method for {@link #sendResult(Intent, Bundle, int)} when the work is a failure due to
-     * {@link CustomRequestException} being thrown.
+     * Proxy method for {@link #sendResult(ResultReceiver, Bundle, int)} when the work is a failure
+     * due to {@link CustomRequestException} being thrown.
      *
-     * @param intent The value passed to {@link onHandleIntent(Intent)}.
+     * @param receiver The result receiver received inside the {@link Intent}.
      * @param data A {@link Bundle} the data to send back.
      */
-    private final void sendCustomFailure(ResultReceiver receiver, Bundle data) {
+    private void sendCustomFailure(ResultReceiver receiver, Bundle data) {
         if (data == null) {
             data = new Bundle();
         }
@@ -116,8 +117,7 @@ public abstract class RequestService extends MultiThreadedIntentService {
     /**
      * Method used to send back the result to the {@link RequestManager}.
      *
-     * @param intent The value passed to {@link onHandleIntent(Intent)}. It must contain the
-     *            {@link ResultReceiver} and the requestId.
+     * @param receiver The result receiver received inside the {@link Intent}.
      * @param data A {@link Bundle} the data to send back.
      * @param code The success/error code to send back.
      */

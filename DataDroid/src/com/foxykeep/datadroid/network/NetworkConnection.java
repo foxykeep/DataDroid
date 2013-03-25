@@ -8,11 +8,11 @@
 
 package com.foxykeep.datadroid.network;
 
-import android.content.Context;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
 import com.foxykeep.datadroid.util.DataDroidLog;
+
+import android.content.Context;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.message.BasicNameValuePair;
@@ -44,8 +44,8 @@ public final class NetworkConnection {
      */
     public static final class ConnectionResult {
 
-        public Map<String, List<String>> headerMap;
-        public String body;
+        public final Map<String, List<String>> headerMap;
+        public final String body;
 
         public ConnectionResult(Map<String, List<String>> headerMap, String body) {
             this.headerMap = headerMap;
@@ -124,7 +124,8 @@ public final class NetworkConnection {
      * <p>
      * The POSTDATA text will be reset as they cannot be used at the same time.
      * <p>
-     * This method allows you to have multiple values for a single key in contrary to the HashMap version of the method ({@link #setParameters(HashMap)})
+     * This method allows you to have multiple values for a single key in contrary to the HashMap
+     * version of the method ({@link #setParameters(HashMap)})
      *
      * @see #setPostText(String)
      * @see #setParameters(HashMap)

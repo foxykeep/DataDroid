@@ -8,6 +8,16 @@
 
 package com.foxykeep.datadroidpoc.ui.ws;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
+import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
+import com.foxykeep.datadroidpoc.data.provider.util.ProviderCriteria;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
+
 import android.content.Context;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
@@ -25,16 +35,6 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
-import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.data.provider.PoCContent.DbPerson;
-import com.foxykeep.datadroidpoc.data.provider.util.ProviderCriteria;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
-import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 
 public final class PersonListActivity extends DataDroidActivity implements RequestListener,
         OnClickListener, ConnectionErrorDialogListener, LoaderCallbacks<Cursor> {

@@ -8,6 +8,20 @@
 
 package com.foxykeep.datadroidpoc.ui.crud;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
+import com.foxykeep.datadroidpoc.R;
+import com.foxykeep.datadroidpoc.data.model.Phone;
+import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
+import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
+import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
+import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
+import com.foxykeep.datadroidpoc.util.ArrayUtils;
+import com.foxykeep.datadroidpoc.util.UserManager;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,20 +41,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
-import com.foxykeep.datadroidpoc.R;
-import com.foxykeep.datadroidpoc.data.model.Phone;
-import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
-import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment;
-import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFragmentBuilder;
-import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
-import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
-import com.foxykeep.datadroidpoc.util.ArrayUtils;
-import com.foxykeep.datadroidpoc.util.UserManager;
 
 import java.util.ArrayList;
 
@@ -114,9 +114,8 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                 if (requestType != PoCRequestFactory.REQUEST_TYPE_CITY_LIST) {
                     ProgressDialogFragment.dismiss(this);
                 }
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
             }
         }
 
@@ -259,11 +258,11 @@ public final class CrudSyncPhoneListActivity extends DataDroidActivity implement
                 b.setTitle(R.string.crud_phone_list_dialog_delete_all_confirm_title);
                 b.setMessage(R.string.crud_phone_list_dialog_delete_all_confirm_message);
                 b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                callSyncPhoneDeleteAllWS();
-                            }
-                        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        callSyncPhoneDeleteAllWS();
+                    }
+                });
                 b.setNegativeButton(android.R.string.cancel, null);
                 b.show();
                 return true;

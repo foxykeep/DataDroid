@@ -115,13 +115,14 @@ public abstract class MultiThreadedIntentService extends Service {
     }
 
     @Override
-    public void onStart(final Intent intent, final int startId) {
+    @SuppressWarnings("deprecation")
+    public void onStart(Intent intent, int startId) {
         mHandler.removeCallbacks(mStopSelfRunnable);
         mFutureList.add(mThreadPool.submit(new IntentRunnable(intent)));
     }
 
     @Override
-    public int onStartCommand(final Intent intent, final int flags, final int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         onStart(intent, startId);
         return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;
     }
@@ -139,7 +140,7 @@ public abstract class MultiThreadedIntentService extends Service {
      * @see android.app.Service#onBind
      */
     @Override
-    public IBinder onBind(final Intent intent) {
+    public IBinder onBind(Intent intent) {
         return null;
     }
 
@@ -159,9 +160,9 @@ public abstract class MultiThreadedIntentService extends Service {
     }
 
     private class IntentRunnable implements Runnable {
-        private Intent mIntent;
+        private final Intent mIntent;
 
-        public IntentRunnable(final Intent intent) {
+        public IntentRunnable(Intent intent) {
             mIntent = intent;
         }
 

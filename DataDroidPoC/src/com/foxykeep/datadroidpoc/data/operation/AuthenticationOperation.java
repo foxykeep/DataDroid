@@ -7,9 +7,6 @@
  */
 package com.foxykeep.datadroidpoc.data.operation;
 
-import android.content.Context;
-import android.os.Bundle;
-
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.network.NetworkConnection;
@@ -18,6 +15,9 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.foxykeep.datadroidpoc.config.WSConfig;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+
+import android.content.Context;
+import android.os.Bundle;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
 

@@ -8,13 +8,13 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.JSONTag;
 import com.foxykeep.datadroidpoc.data.model.City;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestFactory;
+
+import android.os.Bundle;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -8,11 +8,11 @@
 
 package com.foxykeep.datadroidpoc.data.factory;
 
-import android.util.Log;
-
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroidpoc.config.XMLTag;
 import com.foxykeep.datadroidpoc.data.model.Person;
+
+import android.util.Log;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -23,7 +23,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;

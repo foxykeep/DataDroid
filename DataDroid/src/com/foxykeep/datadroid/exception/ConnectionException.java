@@ -53,7 +53,7 @@ public final class ConnectionException extends Exception {
      * specified detail message.
      *
      * @param detailMessage The detail message for this exception.
-     * @param redirection The redirection URL.
+     * @param redirectionUrl The redirection URL.
      */
     public ConnectionException(final String detailMessage, final String redirectionUrl) {
         super(detailMessage);

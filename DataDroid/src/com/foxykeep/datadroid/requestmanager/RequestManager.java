@@ -8,6 +8,9 @@
 
 package com.foxykeep.datadroid.requestmanager;
 
+import com.foxykeep.datadroid.service.RequestService;
+import com.foxykeep.datadroid.util.DataDroidLog;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -17,9 +20,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 import android.support.util.LruCache;
-
-import com.foxykeep.datadroid.service.RequestService;
-import com.foxykeep.datadroid.util.DataDroidLog;
 
 import org.apache.http.HttpStatus;
 
@@ -43,7 +43,7 @@ import java.util.Set;
  */
 public abstract class RequestManager {
 
-    public static final String TAG = RequestManager.class.getSimpleName();
+    private static final String TAG = RequestManager.class.getSimpleName();
 
     /**
      * Clients may implements this interface to be notified when a request is finished.
@@ -253,7 +253,7 @@ public abstract class RequestManager {
         private final Set<ListenerHolder> mListenerHolderSet;
         private boolean mMemoryCacheEnabled;
 
-        /* package */RequestReceiver(Request request) {
+        /* package */ RequestReceiver(Request request) {
             super(new Handler(Looper.getMainLooper()));
 
             mRequest = request;
@@ -264,17 +264,17 @@ public abstract class RequestManager {
             mMemoryCache.remove(request);
         }
 
-        /* package */void enableMemoryCache() {
+        /* package */ void enableMemoryCache() {
             mMemoryCacheEnabled = true;
         }
 
-        /* package */void addListenerHolder(ListenerHolder listenerHolder) {
+        /* package */ void addListenerHolder(ListenerHolder listenerHolder) {
             synchronized (mListenerHolderSet) {
                 mListenerHolderSet.add(listenerHolder);
             }
         }
 
-        /* package */void removeListenerHolder(ListenerHolder listenerHolder) {
+        /* package */ void removeListenerHolder(ListenerHolder listenerHolder) {
             synchronized (mListenerHolderSet) {
                 mListenerHolderSet.remove(listenerHolder);
             }
@@ -302,12 +302,12 @@ public abstract class RequestManager {
         private final WeakReference<RequestListener> mListenerRef;
         private final int mHashCode;
 
-        /* package */ListenerHolder(RequestListener listener) {
+        /* package */ ListenerHolder(RequestListener listener) {
             mListenerRef = new WeakReference<RequestListener>(listener);
             mHashCode = 31 + listener.hashCode();
         }
 
-        /* package */void onRequestFinished(Request request, int resultCode, Bundle resultData) {
+        /* package */ void onRequestFinished(Request request, int resultCode, Bundle resultData) {
             mRequestReceiverMap.remove(request);
 
             RequestListener listener = mListenerRef.get();

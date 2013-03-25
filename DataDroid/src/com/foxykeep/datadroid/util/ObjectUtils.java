@@ -29,7 +29,7 @@ public final class ObjectUtils {
      * @param o1 First object to check.
      * @param o2 Second object to check.
      * @return <code>true</code> if both objects are equal. <code>false</code> otherwise
-     * @see java.lang.Object#equals()
+     * @see java.lang.Object#equals(Object) uals()
      */
     public static boolean safeEquals(Object o1, Object o2) {
         if (o1 == null) {

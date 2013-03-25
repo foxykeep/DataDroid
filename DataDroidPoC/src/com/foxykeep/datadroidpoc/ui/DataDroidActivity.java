@@ -3,13 +3,13 @@
  */
 package com.foxykeep.datadroidpoc.ui;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.R;
 import com.foxykeep.datadroidpoc.data.requestmanager.PoCRequestManager;
 import com.foxykeep.datadroidpoc.dialogs.ErrorDialogFragment.ErrorDialogFragmentBuilder;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import java.util.ArrayList;
 

@@ -8,14 +8,6 @@
 
 package com.foxykeep.datadroidpoc.ui.crud;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.TextView;
-
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.foxykeep.datadroidpoc.R;
@@ -28,6 +20,14 @@ import com.foxykeep.datadroidpoc.dialogs.ProgressDialogFragment.ProgressDialogFr
 import com.foxykeep.datadroidpoc.dialogs.QuestionDialogFragment.QuestionDialogFragmentBuilder;
 import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import com.foxykeep.datadroidpoc.util.UserManager;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 public final class CrudSyncPhoneViewActivity extends DataDroidActivity implements RequestListener,
         ConnectionErrorDialogListener {
@@ -76,9 +76,9 @@ public final class CrudSyncPhoneViewActivity extends DataDroidActivity implement
                 mRequestManager.addRequestListener(this, request);
             } else {
                 ProgressDialogFragment.dismiss(this);
-                mRequestList.remove(request);
-                i--;
                 mRequestManager.callListenerWithCachedData(this, request);
+                i--;
+                mRequestList.remove(request);
             }
         }
     }
