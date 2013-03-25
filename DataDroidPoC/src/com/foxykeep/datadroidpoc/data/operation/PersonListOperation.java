@@ -46,7 +46,7 @@ public final class PersonListOperation implements Operation {
         NetworkConnection networkConnection = new NetworkConnection(context, url);
         ConnectionResult result = networkConnection.execute();
 
-        ArrayList<Person> personList = null;
+        ArrayList<Person> personList;
         if (returnFormat == RETURN_FORMAT_XML) {
             personList = PersonListXmlFactory.parseResult(result.body);
         } else {
@@ -58,7 +58,7 @@ public final class PersonListOperation implements Operation {
 
         // Adds the persons in the database
         int personListSize = personList.size();
-        if (personList != null && personListSize > 0) {
+        if (personListSize > 0) {
             ArrayList<ContentProviderOperation> operationList =
                     new ArrayList<ContentProviderOperation>();
 
