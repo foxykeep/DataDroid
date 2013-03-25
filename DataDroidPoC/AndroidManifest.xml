@@ -61,7 +61,7 @@
             android:label="@string/rss_feed_list_title" />
 
         <service
-            android:name=".data.service.PoCService"
+            android:name=".data.service.PoCRequestService"
             android:exported="false" />
 
         <provider

@@ -9,7 +9,7 @@
 package com.foxykeep.datadroidpoc.data.requestmanager;
 
 import com.foxykeep.datadroid.requestmanager.RequestManager;
-import com.foxykeep.datadroidpoc.data.service.PoCService;
+import com.foxykeep.datadroidpoc.data.service.PoCRequestService;
 
 import android.content.Context;
 
@@ -34,6 +34,6 @@ public final class PoCRequestManager extends RequestManager {
     }
 
     private PoCRequestManager(Context context) {
-        super(context, PoCService.class);
+        super(context, PoCRequestService.class);
     }
 }

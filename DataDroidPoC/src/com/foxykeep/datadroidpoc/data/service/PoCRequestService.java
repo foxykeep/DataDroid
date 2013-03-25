@@ -32,7 +32,7 @@ import android.os.Bundle;
  *
  * @author Foxykeep
  */
-public final class PoCService extends RequestService {
+public final class PoCRequestService extends RequestService {
 
     @Override
     protected int getMaximumNumberOfThreads() {
