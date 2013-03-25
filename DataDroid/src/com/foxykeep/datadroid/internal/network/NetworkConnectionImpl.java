@@ -21,6 +21,7 @@ import android.util.Log;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,10 +58,7 @@ public final class NetworkConnectionImpl {
     private static final String ACCEPT_CHARSET_HEADER = "Accept-Charset";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String CONTENT_ENCODING_HEADER = "Content-Encoding";
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String LOCATION_HEADER = "Location";
-    private static final String USER_AGENT_HEADER = "User-Agent";
 
     private static final String UTF8_CHARSET = "UTF-8";
 
@@ -104,7 +102,7 @@ public final class NetworkConnectionImpl {
             if (headerMap == null) {
                 headerMap = new HashMap<String, String>();
             }
-            headerMap.put(USER_AGENT_HEADER, userAgent);
+            headerMap.put(HTTP.USER_AGENT, userAgent);
             if (isGzipEnabled) {
                 headerMap.put(ACCEPT_ENCODING_HEADER, "gzip");
             }
@@ -156,10 +154,10 @@ public final class NetworkConnectionImpl {
             switch (method) {
                 case GET:
                 case DELETE:
-                case PUT:
                     url = new URL(urlValue + "?" + paramBuilder.toString());
                     connection = (HttpURLConnection) url.openConnection();
                     break;
+                case PUT:
                 case POST:
                     url = new URL(urlValue);
                     connection = (HttpURLConnection) url.openConnection();
@@ -167,7 +165,9 @@ public final class NetworkConnectionImpl {
 
                     if (paramBuilder.length() > 0) {
                         outputText = paramBuilder.toString();
-                        headerMap.put(CONTENT_TYPE_HEADER, "application/x-www-form-urlencoded");
+                        headerMap.put(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+                        headerMap.put(HTTP.CONTENT_LEN,
+                                String.valueOf(outputText.getBytes().length));
                     } else if (postText != null) {
                         outputText = postText;
                     }
@@ -196,8 +196,8 @@ public final class NetworkConnectionImpl {
             connection.setConnectTimeout(OPERATION_TIMEOUT);
             connection.setReadTimeout(OPERATION_TIMEOUT);
 
-            // Set the outputStream content for POST requests
-            if (method == Method.POST && outputText != null) {
+            // Set the outputStream content for POST and PUT requests
+            if ((method == Method.POST || method == Method.PUT) && outputText != null) {
                 OutputStream output = null;
                 try {
                     output = connection.getOutputStream();
@@ -213,7 +213,7 @@ public final class NetworkConnectionImpl {
                 }
             }
 
-            String contentEncoding = connection.getHeaderField(CONTENT_ENCODING_HEADER);
+            String contentEncoding = connection.getHeaderField(HTTP.CONTENT_ENCODING);
 
             int responseCode = connection.getResponseCode();
             boolean isGzip = contentEncoding != null
