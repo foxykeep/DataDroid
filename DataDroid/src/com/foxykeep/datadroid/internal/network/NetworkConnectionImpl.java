@@ -21,6 +21,7 @@ import android.util.Log;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -156,10 +157,10 @@ public final class NetworkConnectionImpl {
             switch (method) {
                 case GET:
                 case DELETE:
+                  url = new URL(urlValue + "?" + paramBuilder.toString());
+                  connection = (HttpURLConnection) url.openConnection();
+                  break;
                 case PUT:
-                    url = new URL(urlValue + "?" + paramBuilder.toString());
-                    connection = (HttpURLConnection) url.openConnection();
-                    break;
                 case POST:
                     url = new URL(urlValue);
                     connection = (HttpURLConnection) url.openConnection();
@@ -168,6 +169,7 @@ public final class NetworkConnectionImpl {
                     if (paramBuilder.length() > 0) {
                         outputText = paramBuilder.toString();
                         headerMap.put(CONTENT_TYPE_HEADER, "application/x-www-form-urlencoded");
+                        headerMap.put(HTTP.CONTENT_LEN, String.valueOf(outputText.getBytes().length));
                     } else if (postText != null) {
                         outputText = postText;
                     }
@@ -196,8 +198,8 @@ public final class NetworkConnectionImpl {
             connection.setConnectTimeout(OPERATION_TIMEOUT);
             connection.setReadTimeout(OPERATION_TIMEOUT);
 
-            // Set the outputStream content for POST requests
-            if (method == Method.POST && outputText != null) {
+            // Set the outputStream content for POST and PUT requests
+            if ((method == Method.POST || method == Method.PUT) && outputText != null) {
                 OutputStream output = null;
                 try {
                     output = connection.getOutputStream();
