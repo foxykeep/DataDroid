@@ -23,6 +23,7 @@
         android:gravity="bottom|center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="10dp"
         android:text="@string/home_tv_sample_description_hint"
         android:textStyle="italic" />
 
