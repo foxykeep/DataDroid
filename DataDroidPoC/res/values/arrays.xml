@@ -21,5 +21,11 @@
         <item>Foxykeep on Android</item>
         <item>TechCrunch</item>
     </string-array>
+    <string-array name="request_types">
+        <item>GET</item>
+        <item>POST</item>
+        <item>PUT</item>
+        <item>DELETE</item>
+    </string-array>
 
 </resources>

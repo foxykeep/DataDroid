@@ -41,6 +41,9 @@
             android:name=".ui.ws.DoubleListActivity"
             android:label="@string/double_list_title" />
         <activity
+            android:name=".ui.requesttype.RequestTypesActivity"
+            android:label="@string/request_types_title" />
+        <activity
             android:name=".ui.feature.AuthenticationActivity"
             android:label="@string/authentication_title" />
         <activity

@@ -37,6 +37,10 @@
     <string name="home_double_list_description">This sample shows you how to manage 2 webservices
         either just in the same Activity or called at the same time.\n\nAlso one of them uses
         a ProgressDialog while the other uses a ProgressBar in the ActionBar.</string>
+    <string name="home_request_types_title">Request Types</string>
+    <string name="home_request_types_description">This sample shows you an example using the
+        different type of requests available (GET, POST, PUT, DELETE)\nCheck ComputeSquareOperation
+        for more information.</string>
     <string name="home_authentication_title">Authentication</string>
     <string name="home_authentication_description">This sample shows you how to use the basic HTTP
         authentication in a WS call.\nCheck AuthenticationOperation for more information.</string>
@@ -143,5 +147,13 @@
     <string name="rss_feed_list_b_load">Load</string>
     <string name="rss_feed_list_b_clear_memory">Clear memory</string>
     <string name="rss_feed_list_sp_url_prompt">Feed URL</string>
+
+    <!-- RequestTypesActivity texts -->
+    <string name="request_types_title">DataDroid PoC > Request types</string>
+    <string name="request_types_sp_request_type_prompt">Request method</string>
+    <string name="request_types_b_load">Load</string>
+    <string name="request_types_tv_empty">Enter a number and press Load to compute its
+        square value.</string>
+    <string name="request_types_tv_result_format">The square value is: %1$d</string>
 
 </resources>
