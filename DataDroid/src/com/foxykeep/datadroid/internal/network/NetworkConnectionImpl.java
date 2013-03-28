@@ -154,7 +154,10 @@ public final class NetworkConnectionImpl {
             switch (method) {
                 case GET:
                 case DELETE:
-                    url = new URL(urlValue + "?" + paramBuilder.toString());
+		    if (paramBuilder.length() > 0)
+                        url = new URL(urlValue + "?" + paramBuilder.toString());
+		    else
+			url = new URL(urlValue);
                     connection = (HttpURLConnection) url.openConnection();
                     break;
                 case PUT:
