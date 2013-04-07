@@ -47,12 +47,20 @@ public final class ComputeSquareOperation implements RequestService.Operation {
                 method = NetworkConnection.Method.POST;
                 break;
             case 2: // PUT
-                url = WSConfig.WS_REQUEST_TYPES_PUT;
-                method = NetworkConnection.Method.PUT;
+                // TODO for now hack to keep it as a GET method as my server doesn't accept PUT
+                // requests
+                url = WSConfig.WS_REQUEST_TYPES_GET;
+                method = NetworkConnection.Method.GET;
+//                url = WSConfig.WS_REQUEST_TYPES_PUT;
+//                method = NetworkConnection.Method.PUT;
                 break;
             case 3: // DELETE
-                url = WSConfig.WS_REQUEST_TYPES_DELETE;
-                method = NetworkConnection.Method.DELETE;
+                // TODO for now hack to keep it as a GET method as my server doesn't accept
+                // DELETE requests
+                url = WSConfig.WS_REQUEST_TYPES_GET;
+                method = NetworkConnection.Method.GET;
+//                url = WSConfig.WS_REQUEST_TYPES_DELETE;
+//                method = NetworkConnection.Method.DELETE;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown method: "

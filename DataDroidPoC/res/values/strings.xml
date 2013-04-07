@@ -155,5 +155,6 @@
     <string name="request_types_tv_empty">Enter a number and press Load to compute its
         square value.</string>
     <string name="request_types_tv_result_format">The square value is: %1$d</string>
+    <string name="request_types_et_number_default_value">0</string>
 
 </resources>
