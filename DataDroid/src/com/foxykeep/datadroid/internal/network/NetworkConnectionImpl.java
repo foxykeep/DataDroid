@@ -10,6 +10,8 @@ package com.foxykeep.datadroid.internal.network;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,7 +40,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.util.Base64;
 import android.util.Log;
 
@@ -46,7 +47,6 @@ import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
-import com.foxykeep.datadroid.util.BitmapNameValuePair;
 import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
@@ -109,7 +109,7 @@ public final class NetworkConnectionImpl {
 	 */
 	public static ConnectionResult execute(Context context, String urlValue,
 			Method method, ArrayList<BasicNameValuePair> parameterList,
-			ArrayList<BitmapNameValuePair> bitmapList,
+			ArrayList<BasicNameValuePair> bitmapList,
 			HashMap<String, String> headerMap, boolean isGzipEnabled,
 			String userAgent, String postText,
 			UsernamePasswordCredentials credentials,
@@ -321,22 +321,39 @@ public final class NetworkConnectionImpl {
 	}
 
 	private static void writeFileField(DataOutputStream dataStream,
-			BitmapNameValuePair parameter)
-			throws IOException {
+			BasicNameValuePair parameter) throws IOException {
+		File file = new File(parameter.getValue());
+		String mimeType = (file.getName().endsWith("png")) ? "image/png"
+				: "image/jpeg";
+
 		// opening boundary line
 		dataStream.writeBytes(TWO_HYPHENS + BOUNDARY + CR_LF);
 		dataStream.writeBytes("Content-Disposition: form-data; name=\""
-				+ parameter.getName() + "\";filename=\""
-				+ parameter.getFileName() + ".jpg\"" + CR_LF);
-		dataStream.writeBytes("Content-Type: image/jpeg" + CR_LF);
+				+ parameter.getName() + "\";filename=\"" + file.getName()
+				+ "\"" + CR_LF);
+		dataStream.writeBytes("Content-Type: " + mimeType + CR_LF);
 		dataStream.writeBytes(CR_LF);
 
-		parameter.getBitmap().compress(Bitmap.CompressFormat.JPEG, 0,
-				dataStream);
+		Log.i(TAG, "Send file with " + (file.length() / 1024) + "kb");
+
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			byte[] buffer = new byte[1024];
+			int read;
+			while ((read = in.read(buffer)) != -1) {
+				dataStream.write(buffer, 0, read);
+			}
+		} finally {
+			if (in != null) {
+				in.close();
+			}
+		}
 
 		// closing CRLF
 		dataStream.writeBytes(CR_LF);
 	}
+
 
     private static String createAuthenticationHeader(UsernamePasswordCredentials credentials) {
         StringBuilder sb = new StringBuilder();

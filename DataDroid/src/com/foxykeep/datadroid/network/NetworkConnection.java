@@ -20,7 +20,6 @@ import android.content.Context;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
-import com.foxykeep.datadroid.util.BitmapNameValuePair;
 import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
@@ -58,7 +57,7 @@ public final class NetworkConnection {
     private final String mUrl;
     private Method mMethod = Method.GET;
     private ArrayList<BasicNameValuePair> mParameterList = null;
-	private ArrayList<BitmapNameValuePair> mBitmapList = null;
+	private ArrayList<BasicNameValuePair> mBitmapList = null;
     private HashMap<String, String> mHeaderMap = null;
     private boolean mIsGzipEnabled = true;
     private String mUserAgent = null;
@@ -140,8 +139,7 @@ public final class NetworkConnection {
       return this;
     }
     
-	public NetworkConnection setBitmaps(
-			ArrayList<BitmapNameValuePair> bitmapList) {
+	public NetworkConnection setBitmaps(ArrayList<BasicNameValuePair> bitmapList) {
 		mBitmapList = bitmapList;
 		mMethod = Method.POST;
 		mPostText = null;
