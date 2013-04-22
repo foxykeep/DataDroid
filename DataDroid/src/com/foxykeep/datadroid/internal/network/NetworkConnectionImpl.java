@@ -331,7 +331,7 @@ public final class NetworkConnectionImpl {
 		dataStream.writeBytes("Content-Type: image/jpeg" + CR_LF);
 		dataStream.writeBytes(CR_LF);
 
-		parameter.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100,
+		parameter.getBitmap().compress(Bitmap.CompressFormat.JPEG, 0,
 				dataStream);
 
 		// closing CRLF
