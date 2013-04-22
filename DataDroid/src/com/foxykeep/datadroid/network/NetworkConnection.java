@@ -8,19 +8,20 @@
 
 package com.foxykeep.datadroid.network;
 
-import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
-import com.foxykeep.datadroid.util.DataDroidLog;
-
-import android.content.Context;
-
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.message.BasicNameValuePair;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.content.Context;
+
+import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.internal.network.NetworkConnectionImpl;
+import com.foxykeep.datadroid.util.BitmapNameValuePair;
+import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
  * This class gives the user an API to easily call a webservice and return the received response.
@@ -57,6 +58,7 @@ public final class NetworkConnection {
     private final String mUrl;
     private Method mMethod = Method.GET;
     private ArrayList<BasicNameValuePair> mParameterList = null;
+	private ArrayList<BitmapNameValuePair> mBitmapList = null;
     private HashMap<String, String> mHeaderMap = null;
     private boolean mIsGzipEnabled = true;
     private String mUserAgent = null;
@@ -138,6 +140,14 @@ public final class NetworkConnection {
       return this;
     }
     
+	public NetworkConnection setBitmaps(
+			ArrayList<BitmapNameValuePair> bitmapList) {
+		mBitmapList = bitmapList;
+		mMethod = Method.POST;
+		mPostText = null;
+		return this;
+	}
+
     /**
      * Set the headers to add to the request.
      *
@@ -187,6 +197,7 @@ public final class NetworkConnection {
         mPostText = postText;
         mMethod = Method.POST;
         mParameterList = null;
+		mBitmapList = null;
         return this;
     }
 
@@ -218,8 +229,8 @@ public final class NetworkConnection {
      * @return The result of the webservice call.
      */
     public ConnectionResult execute() throws ConnectionException {
-        return NetworkConnectionImpl.execute(mContext, mUrl, mMethod, mParameterList,
-                mHeaderMap, mIsGzipEnabled, mUserAgent, mPostText, mCredentials,
-                mIsSslValidationEnabled);
+		return NetworkConnectionImpl.execute(mContext, mUrl, mMethod,
+				mParameterList, mBitmapList, mHeaderMap, mIsGzipEnabled,
+				mUserAgent, mPostText, mCredentials, mIsSslValidationEnabled);
     }
 }

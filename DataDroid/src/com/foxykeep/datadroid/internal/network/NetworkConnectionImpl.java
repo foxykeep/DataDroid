@@ -8,26 +8,11 @@
 
 package com.foxykeep.datadroid.internal.network;
 
-import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
-import com.foxykeep.datadroid.network.NetworkConnection.Method;
-import com.foxykeep.datadroid.network.UserAgentUtils;
-import com.foxykeep.datadroid.util.DataDroidLog;
-
-import android.content.Context;
-import android.support.util.Base64;
-import android.util.Log;
-
-import org.apache.http.HttpStatus;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -38,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -45,6 +31,23 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.util.Base64;
+import android.util.Log;
+
+import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
+import com.foxykeep.datadroid.network.NetworkConnection.Method;
+import com.foxykeep.datadroid.network.UserAgentUtils;
+import com.foxykeep.datadroid.util.BitmapNameValuePair;
+import com.foxykeep.datadroid.util.DataDroidLog;
 
 /**
  * Implementation of the network connection.
@@ -65,34 +68,52 @@ public final class NetworkConnectionImpl {
     // Default connection and socket timeout of 60 seconds. Tweak to taste.
     private static final int OPERATION_TIMEOUT = 60 * 1000;
 
+	private static String CR_LF = "\r\n";
+	private static String TWO_HYPHENS = "--";
+	private static final String BOUNDARY = "*****";
+
     private NetworkConnectionImpl() {
         // No public constructor
     }
 
     /**
-     * Call the webservice using the given parameters to construct the request and return the
-     * result.
-     *
-     * @param context The context to use for this operation. Used to generate the user agent if
-     *            needed.
-     * @param urlValue The webservice URL.
-     * @param method The request method to use.
-     * @param parameterList The parameters to add to the request.
-     * @param headerMap The headers to add to the request.
-     * @param isGzipEnabled Whether the request will use gzip compression if available on the
-     *            server.
-     * @param userAgent The user agent to set in the request. If null, a default Android one will be
-     *            created.
-     * @param postText The POSTDATA text to add in the request.
-     * @param credentials The credentials to use for authentication.
-     * @param isSslValidationEnabled Whether the request will validate the SSL certificates.
-     * @return The result of the webservice call.
-     */
-    public static ConnectionResult execute(Context context, String urlValue, Method method,
-            ArrayList<BasicNameValuePair> parameterList, HashMap<String, String> headerMap,
-            boolean isGzipEnabled, String userAgent, String postText,
-            UsernamePasswordCredentials credentials, boolean isSslValidationEnabled) throws
-            ConnectionException {
+	 * Call the webservice using the given parameters to construct the request
+	 * and return the result.
+	 * 
+	 * @param context
+	 *            The context to use for this operation. Used to generate the
+	 *            user agent if needed.
+	 * @param urlValue
+	 *            The webservice URL.
+	 * @param method
+	 *            The request method to use.
+	 * @param parameterList
+	 *            The parameters to add to the request.
+	 * @param bitmapList
+	 *            The bitmaps to add to the request.
+	 * @param headerMap
+	 *            The headers to add to the request.
+	 * @param isGzipEnabled
+	 *            Whether the request will use gzip compression if available on
+	 *            the server.
+	 * @param userAgent
+	 *            The user agent to set in the request. If null, a default
+	 *            Android one will be created.
+	 * @param postText
+	 *            The POSTDATA text to add in the request.
+	 * @param credentials
+	 *            The credentials to use for authentication.
+	 * @param isSslValidationEnabled
+	 *            Whether the request will validate the SSL certificates.
+	 * @return The result of the webservice call.
+	 */
+	public static ConnectionResult execute(Context context, String urlValue,
+			Method method, ArrayList<BasicNameValuePair> parameterList,
+			ArrayList<BitmapNameValuePair> bitmapList,
+			HashMap<String, String> headerMap, boolean isGzipEnabled,
+			String userAgent, String postText,
+			UsernamePasswordCredentials credentials,
+			boolean isSslValidationEnabled) throws ConnectionException {
         HttpURLConnection connection = null;
         try {
             // Prepare the request information
@@ -150,7 +171,7 @@ public final class NetworkConnectionImpl {
 
             // Create the connection object
             URL url = null;
-            String outputText = null;
+			String outputText = null;
             switch (method) {
                 case GET:
                 case DELETE:
@@ -167,14 +188,18 @@ public final class NetworkConnectionImpl {
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setDoOutput(true);
 
-                    if (paramBuilder.length() > 0) {
-                        outputText = paramBuilder.toString();
-                        headerMap.put(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
-                        headerMap.put(HTTP.CONTENT_LEN,
-                                String.valueOf(outputText.getBytes().length));
-                    } else if (postText != null) {
-                        outputText = postText;
-                    }
+				if (bitmapList != null && !bitmapList.isEmpty()) {
+					headerMap.put(HTTP.CONTENT_TYPE,
+							"multipart/form-data;boundary=" + BOUNDARY);
+				} else if (paramBuilder.length() > 0) {
+					outputText = paramBuilder.toString();
+					headerMap.put(HTTP.CONTENT_TYPE,
+							"application/x-www-form-urlencoded");
+					headerMap.put(HTTP.CONTENT_LEN,
+							String.valueOf(outputText.getBytes().length));
+				} else if (postText != null) {
+					outputText = postText;
+				}
                     break;
             }
 
@@ -201,11 +226,27 @@ public final class NetworkConnectionImpl {
             connection.setReadTimeout(OPERATION_TIMEOUT);
 
             // Set the outputStream content for POST and PUT requests
-            if ((method == Method.POST || method == Method.PUT) && outputText != null) {
-                OutputStream output = null;
+			if ((method == Method.POST || method == Method.PUT)
+					&& ((bitmapList != null && !bitmapList.isEmpty()) || outputText != null)) {
+				DataOutputStream output = null;
                 try {
-                    output = connection.getOutputStream();
-                    output.write(outputText.getBytes());
+					output = new DataOutputStream(connection.getOutputStream());
+					if (bitmapList != null && !bitmapList.isEmpty()) {
+						if (parameterList != null && !parameterList.isEmpty()) {
+							for (int i = 0, size = parameterList.size(); i < size; i++) {
+								writeFormField(output, parameterList.get(i));
+							}
+						}
+
+						for (int i = 0, size = bitmapList.size(); i < size; i++) {
+							writeFileField(output, bitmapList.get(i));
+						}
+
+						output.writeBytes(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS
+								+ CR_LF);
+					} else if (outputText != null) {
+						output.write(outputText.getBytes());
+					}
                 } finally {
                     if (output != null) {
                         try {
@@ -266,6 +307,36 @@ public final class NetworkConnectionImpl {
             }
         }
     }
+
+	private static void writeFormField(DataOutputStream dataStream,
+			BasicNameValuePair parameter) throws IOException {
+		dataStream.writeBytes(TWO_HYPHENS + BOUNDARY + CR_LF);
+		dataStream.writeBytes("Content-Disposition: form-data; name=\""
+				+ URLEncoder.encode(parameter.getName(), UTF8_CHARSET) + "\""
+				+ CR_LF);
+		dataStream.writeBytes(CR_LF);
+		dataStream.writeBytes(URLEncoder.encode(parameter.getValue(),
+				UTF8_CHARSET));
+		dataStream.writeBytes(CR_LF);
+	}
+
+	private static void writeFileField(DataOutputStream dataStream,
+			BitmapNameValuePair parameter)
+			throws IOException {
+		// opening boundary line
+		dataStream.writeBytes(TWO_HYPHENS + BOUNDARY + CR_LF);
+		dataStream.writeBytes("Content-Disposition: form-data; name=\""
+				+ parameter.getName() + "\";filename=\""
+				+ parameter.getFileName() + ".jpg\"" + CR_LF);
+		dataStream.writeBytes("Content-Type: image/jpeg" + CR_LF);
+		dataStream.writeBytes(CR_LF);
+
+		parameter.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100,
+				dataStream);
+
+		// closing CRLF
+		dataStream.writeBytes(CR_LF);
+	}
 
     private static String createAuthenticationHeader(UsernamePasswordCredentials credentials) {
         StringBuilder sb = new StringBuilder();
