@@ -16,6 +16,7 @@ import com.foxykeep.datadroid.util.DataDroidLog;
 
 import android.content.Context;
 import android.support.util.Base64;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.http.HttpStatus;
@@ -115,10 +116,12 @@ public final class NetworkConnectionImpl {
             if (parameterList != null && !parameterList.isEmpty()) {
                 for (int i = 0, size = parameterList.size(); i < size; i++) {
                     BasicNameValuePair parameter = parameterList.get(i);
-                    paramBuilder.append(URLEncoder.encode(parameter.getName(), UTF8_CHARSET));
-                    paramBuilder.append("=");
-                    paramBuilder.append(URLEncoder.encode(parameter.getValue(), UTF8_CHARSET));
-                    paramBuilder.append("&");
+                    if(!TextUtils.isEmpty(parameter.getName()) && !TextUtils.isEmpty(parameter.getValue())){
+                      paramBuilder.append(URLEncoder.encode(parameter.getName(), UTF8_CHARSET));
+                      paramBuilder.append("=");
+                      paramBuilder.append(URLEncoder.encode(parameter.getValue(), UTF8_CHARSET));
+                      paramBuilder.append("&");
+                    }
                 }
             }
 
