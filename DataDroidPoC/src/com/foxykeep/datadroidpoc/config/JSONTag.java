@@ -56,4 +56,7 @@ public final class JSONTag {
     public static final String CRUD_PHONE_ADD_EDIT_ELEM_ANDROID_VERSION = "androidVersion";
     public static final String CRUD_PHONE_ADD_EDIT_ELEM_SCREEN_SIZE = "screenSize";
     public static final String CRUD_PHONE_ADD_EDIT_ELEM_PRICE = "price";
+
+    // RequestTypes WS tags
+    public static final String REQUEST_TYPE_VALUE = "value";
 }

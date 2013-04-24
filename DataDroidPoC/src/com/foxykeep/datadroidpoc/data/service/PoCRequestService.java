@@ -15,6 +15,7 @@ import com.foxykeep.datadroidpoc.data.exception.MyCustomRequestException;
 import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
 import com.foxykeep.datadroidpoc.data.operation.CityList2Operation;
 import com.foxykeep.datadroidpoc.data.operation.CityListOperation;
+import com.foxykeep.datadroidpoc.data.operation.ComputeSquareOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
@@ -32,7 +33,7 @@ import android.os.Bundle;
  *
  * @author Foxykeep
  */
-public final class PoCService extends RequestService {
+public final class PoCRequestService extends RequestService {
 
     @Override
     protected int getMaximumNumberOfThreads() {
@@ -48,6 +49,8 @@ public final class PoCService extends RequestService {
                 return new CityListOperation();
             case PoCRequestFactory.REQUEST_TYPE_CITY_LIST_2:
                 return new CityList2Operation();
+            case PoCRequestFactory.REQUEST_TYPE_COMPUTE_SQUARE:
+                return new ComputeSquareOperation();
             case PoCRequestFactory.REQUEST_TYPE_AUTHENTICATION:
                 return new AuthenticationOperation();
             case PoCRequestFactory.REQUEST_TYPE_CUSTOM_REQUEST_EXCEPTION:

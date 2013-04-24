@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    2013 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License : 
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
+    day, and you think this stuff is worth it, you can buy me a beer in return
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <Spinner
+        android:id="@+id/sp_request_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/request_types"
+        android:prompt="@string/request_types_sp_request_type_prompt" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:text="@string/request_types_et_number_default_value"/>
+
+        <Button
+            android:id="@+id/b_load"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/request_types_b_load" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:text="@string/request_types_tv_empty" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:textSize="16sp" />
+
+</LinearLayout>

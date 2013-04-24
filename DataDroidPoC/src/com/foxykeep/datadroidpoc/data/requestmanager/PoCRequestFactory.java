@@ -12,6 +12,7 @@ import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
+import com.foxykeep.datadroidpoc.data.operation.ComputeSquareOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
@@ -40,6 +41,8 @@ public final class PoCRequestFactory {
 
     public static final int REQUEST_TYPE_RSS_FEED = 20;
 
+    public static final int REQUEST_TYPE_COMPUTE_SQUARE = 30;
+
     // Response data
     public static final String BUNDLE_EXTRA_CITY_LIST =
             "com.foxykeep.datadroidpoc.extra.cityList";
@@ -53,6 +56,8 @@ public final class PoCRequestFactory {
             "com.foxykeep.datadroidpoc.extra.phoneAddEditData";
     public static final String BUNDLE_EXTRA_RSS_FEED_DATA =
             "com.foxykeep.datadroidpoc.extra.rssFeed";
+    public static final String BUNDLE_EXTRA_SQUARE =
+            "com.foxykeep.datadroidpoc.extra.square";
     public static final String BUNDLE_EXTRA_ERROR_MESSAGE =
             "com.foxykeep.datadroidpoc.extra.errorMessage";
 
@@ -218,6 +223,14 @@ public final class PoCRequestFactory {
         Request request = new Request(REQUEST_TYPE_RSS_FEED);
         request.setMemoryCacheEnabled(true);
         request.put(RssFeedOperation.PARAM_FEED_URL, feedUrl);
+        return request;
+    }
+
+    public static Request getComputeSquareRequest(int method, int number) {
+        Request request = new Request(REQUEST_TYPE_COMPUTE_SQUARE);
+        request.setMemoryCacheEnabled(true);
+        request.put(ComputeSquareOperation.PARAM_METHOD, method);
+        request.put(ComputeSquareOperation.PARAM_NUMBER, number);
         return request;
     }
 
