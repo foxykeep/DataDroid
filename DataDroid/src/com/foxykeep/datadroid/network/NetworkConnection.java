@@ -140,9 +140,11 @@ public final class NetworkConnection {
     }
     
 	public NetworkConnection setBitmaps(ArrayList<BasicNameValuePair> bitmapList) {
-		mBitmapList = bitmapList;
-		mMethod = Method.POST;
-		mPostText = null;
+		if (bitmapList != null) {
+			mBitmapList = bitmapList;
+			mMethod = Method.POST;
+			mPostText = null;
+		}
 		return this;
 	}
 
