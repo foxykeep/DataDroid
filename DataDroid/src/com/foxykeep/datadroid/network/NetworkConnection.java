@@ -179,13 +179,33 @@ public final class NetworkConnection {
      * <p>
      * The parameters will be reset as they cannot be used at the same time.
      *
-     * @see #setParameters(HashMap)
      * @param postText The POSTDATA text that will be added in the request.
      * @return The networkConnection.
+     * @see #setParameters(HashMap)
+     * @see #setPostText(String)
      */
     public NetworkConnection setPostText(String postText) {
+        return setPostText(postText, Method.POST);
+    }
+
+    /**
+     * Set the POSTDATA text that will be added in the request and also set the {@link Method}
+     * to use. The Method can only be {@link Method#POST} or {@link Method#PUT}.
+     * <p>
+     * The parameters will be reset as they cannot be used at the same time.
+     *
+     * @param postText The POSTDATA text that will be added in the request.
+     * @param method The method to use.
+     * @return The networkConnection.
+     * @see #setParameters(HashMap)
+     * @see #setPostText(String)
+     */
+    public NetworkConnection setPostText(String postText, Method method) {
+        if (method != Method.POST && method != Method.PUT) {
+            throw new IllegalArgumentException("Method must be POST or PUT");
+        }
         mPostText = postText;
-        mMethod = Method.POST;
+        mMethod = method;
         mParameterList = null;
         return this;
     }
