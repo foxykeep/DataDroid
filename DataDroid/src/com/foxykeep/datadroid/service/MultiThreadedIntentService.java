@@ -8,18 +8,18 @@
 
 package com.foxykeep.datadroid.service;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * MultiThreadIntentService is a base class for {@link Service}s that handle asynchronous requests
@@ -115,7 +115,6 @@ public abstract class MultiThreadedIntentService extends Service {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onStart(Intent intent, int startId) {
         mHandler.removeCallbacks(mStopSelfRunnable);
         mFutureList.add(mThreadPool.submit(new IntentRunnable(intent)));
