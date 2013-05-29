@@ -10,43 +10,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="5dp" >
-
-    <Spinner
-        android:id="@+id/sp_request_types"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/request_types"
-        android:prompt="@string/request_types_sp_request_type_prompt" />
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_number"
+        <Spinner
+            android:id="@+id/sp_request_types"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="number"
-            android:text="@string/request_types_et_number_default_value"/>
+            android:layout_height="wrap_content"
+            android:entries="@array/request_types"
+            android:prompt="@string/request_types_sp_request_type_prompt" />
 
         <Button
             android:id="@+id/b_load"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/request_types_b_load" />
-    </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:textStyle="italic"
-        android:textSize="16sp"
-        android:text="@string/request_types_tv_empty" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_result"

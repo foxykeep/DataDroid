@@ -15,6 +15,7 @@ public final class WSConfig {
     }
 
     public static final String ROOT_URL = "http://foxykeep.com/projects/datadroid/";
+    public static final String HTTPBIN_ROOT_URL = "https://httpbin.org/";
 
     // PersonList WS
     public static final String WS_PERSON_LIST_URL_XML = ROOT_URL + "personListXml.php";
@@ -54,13 +55,12 @@ public final class WSConfig {
     public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_SCREEN_SIZE = "screenSize";
     public static final String WS_CRUD_PHONE_ADD_EDIT_PROPERTY_PRICE = "price";
 
-    // CityList WS
-    private static final String WS_REQUEST_TYPES_URL_BASE = ROOT_URL + "requesttype/";
-
-    public static final String WS_REQUEST_TYPES_GET = WS_REQUEST_TYPES_URL_BASE + "get.php";
-    public static final String WS_REQUEST_TYPES_POST = WS_REQUEST_TYPES_URL_BASE + "post.php";
-    public static final String WS_REQUEST_TYPES_PUT = WS_REQUEST_TYPES_URL_BASE + "put.php";
-    public static final String WS_REQUEST_TYPES_DELETE = WS_REQUEST_TYPES_URL_BASE + "delete.php";
+    // Request Types WS
+    public static final String WS_REQUEST_TYPES_GET = "https://github" +
+            ".com/foxykeep/DataDroid/issues/33"; //HTTPBIN_ROOT_URL + "get";
+    public static final String WS_REQUEST_TYPES_POST = HTTPBIN_ROOT_URL + "post";
+    public static final String WS_REQUEST_TYPES_PUT = HTTPBIN_ROOT_URL + "put";
+    public static final String WS_REQUEST_TYPES_DELETE = HTTPBIN_ROOT_URL + "delete";
 
     public static final String WS_REQUEST_TYPE_NUMBER = "number";
 }

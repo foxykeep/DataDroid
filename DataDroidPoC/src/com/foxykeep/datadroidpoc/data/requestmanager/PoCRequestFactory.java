@@ -12,7 +12,7 @@ import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroidpoc.data.model.Phone;
 import com.foxykeep.datadroidpoc.data.operation.AuthenticationOperation;
-import com.foxykeep.datadroidpoc.data.operation.ComputeSquareOperation;
+import com.foxykeep.datadroidpoc.data.operation.RequestTypesOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneAddEditOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneDeleteOperation;
 import com.foxykeep.datadroidpoc.data.operation.CrudSyncPhoneListOperation;
@@ -41,7 +41,7 @@ public final class PoCRequestFactory {
 
     public static final int REQUEST_TYPE_RSS_FEED = 20;
 
-    public static final int REQUEST_TYPE_COMPUTE_SQUARE = 30;
+    public static final int REQUEST_TYPE_REQUEST_TYPES = 30;
 
     // Response data
     public static final String BUNDLE_EXTRA_CITY_LIST =
@@ -56,8 +56,8 @@ public final class PoCRequestFactory {
             "com.foxykeep.datadroidpoc.extra.phoneAddEditData";
     public static final String BUNDLE_EXTRA_RSS_FEED_DATA =
             "com.foxykeep.datadroidpoc.extra.rssFeed";
-    public static final String BUNDLE_EXTRA_SQUARE =
-            "com.foxykeep.datadroidpoc.extra.square";
+    public static final String BUNDLE_EXTRA_RESULT =
+            "com.foxykeep.datadroidpoc.extra.result";
     public static final String BUNDLE_EXTRA_ERROR_MESSAGE =
             "com.foxykeep.datadroidpoc.extra.errorMessage";
 
@@ -226,11 +226,11 @@ public final class PoCRequestFactory {
         return request;
     }
 
-    public static Request getComputeSquareRequest(int method, int number) {
-        Request request = new Request(REQUEST_TYPE_COMPUTE_SQUARE);
+
+    public static Request getRequestTypesRequest(int method) {
+        Request request = new Request(REQUEST_TYPE_REQUEST_TYPES);
         request.setMemoryCacheEnabled(true);
-        request.put(ComputeSquareOperation.PARAM_METHOD, method);
-        request.put(ComputeSquareOperation.PARAM_NUMBER, number);
+        request.put(RequestTypesOperation.PARAM_METHOD, method);
         return request;
     }
 

@@ -17,7 +17,6 @@ import com.foxykeep.datadroidpoc.ui.DataDroidActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ public final class RequestTypesActivity extends DataDroidActivity
         ConnectionErrorDialogFragment.ConnectionErrorDialogListener {
 
     private Spinner mSpinnerRequestTypes;
-    private EditText mETNumber;
     private TextView mTVResult;
 
     @Override
@@ -66,8 +64,6 @@ public final class RequestTypesActivity extends DataDroidActivity
     private void bindViews() {
         mSpinnerRequestTypes = (Spinner) findViewById(R.id.sp_request_types);
 
-        mETNumber = (EditText) findViewById(R.id.et_number);
-
         findViewById(R.id.b_load).setOnClickListener(this);
 
         mTVResult = (TextView) findViewById(R.id.tv_result);
@@ -77,8 +73,7 @@ public final class RequestTypesActivity extends DataDroidActivity
         setProgressBarIndeterminateVisibility(true);
         mTVResult.setText("");
         int method = mSpinnerRequestTypes.getSelectedItemPosition();
-        int number = Integer.parseInt(mETNumber.getText().toString());
-        Request request = PoCRequestFactory.getComputeSquareRequest(method, number);
+        Request request = PoCRequestFactory.getRequestTypesRequest(method);
         mRequestManager.execute(request, this);
         mRequestList.add(request);
     }
@@ -98,8 +93,7 @@ public final class RequestTypesActivity extends DataDroidActivity
             setProgressBarIndeterminateVisibility(false);
             mRequestList.remove(request);
 
-            String result = getString(R.string.request_types_tv_result_format,
-                    resultData.getInt(PoCRequestFactory.BUNDLE_EXTRA_SQUARE));
+            String result = resultData.getString(PoCRequestFactory.BUNDLE_EXTRA_RESULT);
             mTVResult.setText(result);
         }
     }
