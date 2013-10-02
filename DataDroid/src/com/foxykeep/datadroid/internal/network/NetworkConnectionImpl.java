@@ -9,6 +9,7 @@
 package com.foxykeep.datadroid.internal.network;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
+import com.foxykeep.datadroid.network.HttpUrlConnectionFactory;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
@@ -172,12 +173,12 @@ public final class NetworkConnectionImpl {
                         fullUrlValue += "?" + paramBuilder.toString();
                     }
                     url = new URL(fullUrlValue);
-                    connection = (HttpURLConnection) url.openConnection();
+                    connection = HttpUrlConnectionFactory.openUrlConnection(url);
                     break;
                 case PUT:
                 case POST:
                     url = new URL(urlValue);
-                    connection = (HttpURLConnection) url.openConnection();
+                    connection = HttpUrlConnectionFactory.openUrlConnection(url);
                     connection.setDoOutput(true);
 
                     if (paramBuilder.length() > 0) {
