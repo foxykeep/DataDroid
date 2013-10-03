@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLStreamHandlerFactory;
 import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -65,7 +64,5 @@ public class HttpUrlConnectionFactory {
     Object okHttpClientInstance = okHttpClientClass.newInstance();
     
     setSslSocketFactoryMethod.invoke(okHttpClientInstance, sslContext.getSocketFactory());
-    
-    URL.setURLStreamHandlerFactory((URLStreamHandlerFactory) okHttpClientInstance);
   }
 }
