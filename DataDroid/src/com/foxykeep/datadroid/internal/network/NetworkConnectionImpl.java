@@ -5,11 +5,10 @@
  * As long as you retain this notice you can do whatever you want with this stuff. If we meet some
  * day, and you think this stuff is worth it, you can buy me a beer in return
  */
-
 package com.foxykeep.datadroid.internal.network;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
-import com.foxykeep.datadroid.network.HttpUrlConnectionFactory;
+import com.foxykeep.datadroid.network.HttpUrlConnectionHelper;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.network.UserAgentUtils;
@@ -173,12 +172,12 @@ public final class NetworkConnectionImpl {
                         fullUrlValue += "?" + paramBuilder.toString();
                     }
                     url = new URL(fullUrlValue);
-                    connection = HttpUrlConnectionFactory.openUrlConnection(url);
+                    connection = HttpUrlConnectionHelper.openUrlConnection(url);
                     break;
                 case PUT:
                 case POST:
                     url = new URL(urlValue);
-                    connection = HttpUrlConnectionFactory.openUrlConnection(url);
+                    connection = HttpUrlConnectionHelper.openUrlConnection(url);
                     connection.setDoOutput(true);
 
                     if (paramBuilder.length() > 0) {
