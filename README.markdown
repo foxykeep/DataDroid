@@ -3,6 +3,8 @@ DataDroid
 
 This project is a development library for the Android platform. The purpose of this library is to ease the data management in an Android application. It is based on the first solution shown in the presentation "[Developing RESTful Android applications](http://www.google.com/events/io/2010/sessions/developing-RESTful-android-apps.html)" that was given at Google I/O 2010.
 
+This project is now deprecated.
+
 
 How to use DataDroid in your project
 ------------------------------------
